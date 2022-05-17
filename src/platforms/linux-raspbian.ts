@@ -562,7 +562,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     proc = child_process.spawnSync('sudo', ['hostname', hostname]);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/home/pi/.webthings/etc/hostname']);
 
       return false;
     }
@@ -570,7 +570,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'avahi-daemon.service']);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/home/pi/.webthings/etc/hostname']);
       child_process.spawnSync('sudo', ['hostname', original]);
 
       return false;
