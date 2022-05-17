@@ -275,7 +275,7 @@ function createApp(isSecure: boolean): express.Application {
   );
   app.use(
     bodyParser.json({
-      limit: '1mb',
+      limit: '10mb',
       strict: false,
     })
   );
