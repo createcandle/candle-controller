@@ -33,7 +33,7 @@ module.exports = {
 
   addonManager: {
     // URLs of add-on lists to parse, in order
-    listUrls: ['https://api.webthings.io:8443/addons'],
+    listUrls: ['https://www.candlesmarthome.com/appstore/addons'],
 
     // Whether or not to allow installation of test-only add-ons
     testAddons: false,
@@ -46,13 +46,13 @@ module.exports = {
 
   ssltunnel: {
     // Whether or not to enable the PageKite tunnel (if set up)
-    enabled: true,
+    enabled: false,
 
     // Endpoint of the PageKite server
-    registration_endpoint: 'https://api.webthings.io:8443',
+    registration_endpoint: 'https://www.candlesmarthome.com/appstore/pagekite_registration',
 
     // Base domain
-    domain: 'webthings.io',
+    domain: 'candlesmarthome.com',
 
     // Command to run PageKite
     pagekite_cmd: path.normalize(path.join(process.cwd(), 'pagekite.py')),
@@ -61,12 +61,12 @@ module.exports = {
     port: 443,
 
     // Email address to use during certificate generation
-    certemail: 'noreply@webthings.io',
+    certemail: 'noreply@candlesmarthome.com',
   },
 
   updates: {
     // URL of update server
-    url: 'https://api.webthings.io:8443/releases',
+    url: 'https://www.candlesmarthome.com/appstore/releases',
 
     // Whether or not to allow prerelease updates
     allowPrerelease: false,
@@ -79,7 +79,7 @@ module.exports = {
 
       // Base SSID to use for captive portal (suffix will include MAC address
       // components)
-      ssid_base: 'WebThings Gateway',
+      ssid_base: 'Candle',
     },
   },
 
