@@ -1,120 +1,109 @@
-
-
-body{
-    animation: candle-fadeIn 1s linear;
-    margin-bottom:10rem!important;
+body {
+  animation: candle-fadeIn 1s linear;
+  margin-bottom: 10rem !important;
 }
 
 @keyframes candle-fadeIn {
-   0% {opacity: 0;}
-   80% {opacity: 0;}
-   100% {opacity: 1;} 
-} 
-
+  0% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 #wifi-setup #mainform,
-#create-user-form{
-    top:30%;
+#create-user-form {
+  top: 30%;
 }
-
-/*
-#warning2{
-width:100%;
-background-color:rgba(0,0,0,.2);
-text-align:center;
-padding:1rem 2rem;
-font-size:1.6rem;
-}
-#warning2 a{
-color:white;
-font-weight:bold;
-}
-*/
-
-
-
-
-
-
-
 
 /*  VIRTUAL KEYBOARD  */
 
-#virtualKeyboardChromeExtension{
-    width:100%!important;
-    box-sizing:border-box;
-    height:auto!important;
-    background:black;
+#virtualKeyboardChromeExtension {
+  width: 100% !important;
+  box-sizing: border-box;
+  height: auto !important;
+  background: black;
 }
 
-
-#virtualKeyboardChromeExtension #settingsButton{
-    display:none;
+#virtualKeyboardChromeExtension #settingsButton {
+  display: none;
 }
 
-#virtualKeyboardChromeExtension table td.kdbCase span, 
-#virtualKeyboardChromeExtension table td.kbdHB span, 
-#virtualKeyboardChromeExtension table td.kbdHBS span, 
-#virtualKeyboardChromeExtension table td.kbdHBE span, 
-#virtualKeyboardChromeExtension table td.kbdH span, 
-#virtualKeyboardChromeExtension table td.kbdS span, 
-#virtualKeyboardChromeExtension table td.kbdD span, 
+#virtualKeyboardChromeExtension table td.kdbCase span,
+#virtualKeyboardChromeExtension table td.kbdHB span,
+#virtualKeyboardChromeExtension table td.kbdHBS span,
+#virtualKeyboardChromeExtension table td.kbdHBE span,
+#virtualKeyboardChromeExtension table td.kbdH span,
+#virtualKeyboardChromeExtension table td.kbdS span,
+#virtualKeyboardChromeExtension table td.kbdD span,
 #virtualKeyboardChromeExtension table td.kbdShift span {
-    -webkit-box-shadow: none;
+  -webkit-box-shadow: none;
 }
-
 
 @media only screen and (min-width: 801px) {
-    
-    
-    #virtualKeyboardChromeExtension table td.kbdD,
-    #virtualKeyboardChromeExtension table td.kbdH,
-    #virtualKeyboardChromeExtension table td.kbdS,
-    #virtualKeyboardChromeExtension table td.kbdHBE.kbdClick,
-    #virtualKeyboardChromeExtension table td.kbNumberMain,
-    #virtualKeyboardChromeExtension table td.kdbCase,
-    #virtualKeyboardChromeExtension table td.kdbClick{
-        padding-top:4rem!important;
-        padding-bottom:4rem!important;
-    }
+  #virtualKeyboardChromeExtension table td.kbdD,
+  #virtualKeyboardChromeExtension table td.kbdH,
+  #virtualKeyboardChromeExtension table td.kbdS,
+  #virtualKeyboardChromeExtension table td.kbdHBE.kbdClick,
+  #virtualKeyboardChromeExtension table td.kbNumberMain,
+  #virtualKeyboardChromeExtension table td.kdbCase,
+  #virtualKeyboardChromeExtension table td.kdbClick {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionNumberBarKbdInput table td.kbdH span,
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionNumberBarKbdInput table td.kbdD span,
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kdbCase span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHB span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHBS span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHBE span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdH span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdS span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdD span, 
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdShift span{
-        padding-top:3rem!important;
-    }
+  #virtualKeyboardChromeExtension
+    #virtualKeyboardChromeExtensionNumberBarKbdInput
+    table
+    td.kbdH
+    span,
+  #virtualKeyboardChromeExtension
+    #virtualKeyboardChromeExtensionNumberBarKbdInput
+    table
+    td.kbdD
+    span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kdbCase span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHB span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHBS span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdHBE span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdH span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdS span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdD span,
+  #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionMainKbd table td.kbdShift span {
+    padding-top: 3rem !important;
+  }
 
-    
-    /*  Tweaks to number pad  */
-    #virtualKeyboardChromeExtensionNumberBarKbdInput table{
-        width:500px!important;
-    }
-    
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionNumberBarKbdInput [_key=Enter] span,
-    #virtualKeyboardChromeExtension #virtualKeyboardChromeExtensionNumberBarKbdInput [_key=Backspace] span{
-        font-size: 0!important;
-        background-position:30px;
-    }
+  /*  Tweaks to number pad  */
+  #virtualKeyboardChromeExtensionNumberBarKbdInput table {
+    width: 500px !important;
+  }
 
-    body #virtualKeyboardChromeExtension [_key=Backspace].kbdClick span{
-        /*background-image: url(/icons/backspace.png) !important;*/
-        font-size: 0px !important;
-        color: transparent !important;
-        text-shadow: none !important;
-    }
-    body #virtualKeyboardChromeExtension [_key=Enter].kbdClick span{
-        /*background-image: url(/icons/enter.png) !important;*/
-        font-size: 0px !important;
-        color: transparent !important;
-        text-shadow: none !important;
-    }
+  #virtualKeyboardChromeExtension
+    #virtualKeyboardChromeExtensionNumberBarKbdInput
+    [_key='Enter']
+    span,
+  #virtualKeyboardChromeExtension
+    #virtualKeyboardChromeExtensionNumberBarKbdInput
+    [_key='Backspace']
+    span {
+    font-size: 0 !important;
+    background-position: 30px;
+  }
 
-
+  body #virtualKeyboardChromeExtension [_key='Backspace'].kbdClick span {
+    /*background-image: url(/icons/backspace.png) !important;*/
+    font-size: 0px !important;
+    color: transparent !important;
+    text-shadow: none !important;
+  }
+  body #virtualKeyboardChromeExtension [_key='Enter'].kbdClick span {
+    /*background-image: url(/icons/enter.png) !important;*/
+    font-size: 0px !important;
+    color: transparent !important;
+    text-shadow: none !important;
+  }
 }
