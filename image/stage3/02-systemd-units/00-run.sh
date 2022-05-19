@@ -23,7 +23,7 @@ systemctl disable dnsmasq.service
 systemctl enable webthings-gateway.service
 
 # Check for an update every day.
-systemctl enable webthings-gateway.check-for-update.timer
+###systemctl enable webthings-gateway.check-for-update.timer
 
 # Activate the iptables script so that it runs on each boot.
 #
