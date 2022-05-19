@@ -41,17 +41,17 @@ mkdir -p "${ADDONS_DIR}"
 params="?arch=${ARCHITECTURE}&node=${V8_VERSION}&python=${PYTHON_VERSIONS}&version=${GATEWAY_VERSION}"
 addon_list=$(curl "${ADDON_LIST_URL}${params}")
 tempdir=$(mktemp -d)
-zigbee_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'zigbee-adapter'][0]);")
-curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
-tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
-mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
-zwave_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'zwave-adapter'][0]);")
-curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
-tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
-mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
-thing_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'thing-url-adapter'][0]);")
-curl -L -o "${tempdir}/thing-url-adapter.tgz" "${thing_url}"
-tar xzf "${tempdir}/thing-url-adapter.tgz" -C "${ADDONS_DIR}"
-mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/thing-url-adapter"
+#zigbee_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'zigbee-adapter'][0]);")
+#curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
+#tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
+#mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
+#zwave_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'zwave-adapter'][0]);")
+#curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
+#tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
+#mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
+#thing_url=$(echo "${addon_list}" | python3 -c "import json, sys; l = json.loads(sys.stdin.read()); print([p['url'] for p in l if p['id'] == 'thing-url-adapter'][0]);")
+#curl -L -o "${tempdir}/thing-url-adapter.tgz" "${thing_url}"
+#tar xzf "${tempdir}/thing-url-adapter.tgz" -C "${ADDONS_DIR}"
+#mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/thing-url-adapter"
 rm -rf "${tempdir}"
 EOF
