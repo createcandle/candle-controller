@@ -14,7 +14,6 @@ libudev-dev
 libusb-1.0-0-dev
 mosquitto
 policykit-1
-python3-pip
 python-six
 python3-pip
 sqlite3
