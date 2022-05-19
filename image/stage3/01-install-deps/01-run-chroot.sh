@@ -6,7 +6,7 @@ su - ${FIRST_USER_NAME} << 'EOF'
 set -e -x
 
 # Allow python3 to use the Bluetooth adapter
-sudo setcap cap_net_raw+eip $(eval readlink -f $(which python3))
+#sudo setcap cap_net_raw+eip $(eval readlink -f $(which python3))
 
 NVM_VERSION="v0.37.2"
 NODE_VERSION="--lts=dubnium"
