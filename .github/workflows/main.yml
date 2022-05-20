@@ -1,0 +1,23 @@
+name: Auto Assign to Project(s)
+
+on:
+  issues:
+    types: [labeled]
+    label:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  
+  assign_one_project:
+    if: github.event.label.name == 'Integration'
+    runs-on: ubuntu-latest
+    name: Assign to One Project
+    steps:
+    - name: Assign NEW issues to project
+      uses: createcandle/assign-one-project-github-action@1.2.1
+      if: |
+        contains(github.event.issue.labels.*.name, 'bug') ||
+      with:
+        project: 'https://github.com/orgs/createcandle/projects/2'
