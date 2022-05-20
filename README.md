@@ -1,4 +1,4 @@
-# WebThings Gateway
+# Candle Controller
 
 [![Build Status](https://github.com/WebThingsIO/gateway/workflows/Build/badge.svg)](https://github.com/WebThingsIO/gateway/actions?query=workflow%3ABuild)
 [![codecov](https://codecov.io/gh/WebThingsIO/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/WebThingsIO/gateway)
