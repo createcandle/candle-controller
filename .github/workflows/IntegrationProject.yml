@@ -17,7 +17,5 @@ jobs:
     steps:
     - name: Assign Integration issues to project
       uses: srggrs/assign-one-project-github-action@1.2.1
-      if: |
-        contains(github.event.issue.labels.*.name, 'Integration')
       with:
         project: 'https://github.com/orgs/createcandle/projects/2'
