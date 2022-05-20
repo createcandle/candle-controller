@@ -18,6 +18,6 @@ jobs:
     - name: Assign NEW issues to project
       uses: createcandle/assign-one-project-github-action@1.2.1
       if: |
-        contains(github.event.issue.labels.*.name, 'bug') ||
+        contains(github.event.issue.labels.*.name, 'bug')
       with:
         project: 'https://github.com/orgs/createcandle/projects/2'
