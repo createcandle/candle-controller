@@ -19,3 +19,4 @@ jobs:
       uses: srggrs/assign-one-project-github-action@1.2.1
       with:
         project: 'https://github.com/createcandle/candle-controller/projects/3'
+        column_name: 'Unassigned'
