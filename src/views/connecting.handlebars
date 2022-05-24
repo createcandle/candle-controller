@@ -8,10 +8,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title data-l10n-id="connecting-title">Connecting to Wi-Fi</title>
     <link rel="stylesheet" type="text/css" href="/css/connecting.css" />
+    <link rel="stylesheet" type="text/css" href="/css/candle.css"/>
     <link rel="icon" href="/images/icon.png" type="image/png" />
+    <style>
+    h1{font-size:3rem}
+    #continue-button{
+      padding:1.5rem 3rem;
+      margin:2rem 4rem;
+      background-color:rgba(0,0,0,.2);
+      border-radius:.5rem;
+      display:none;
+      text-decoration:none;
+      font-size:2rem;
+    }
+    </style>
+
     <script>
       var skipped = {{skip}};
       var domain = '{{domain}}.local';
+      
+      if(document.getElementById('virtualKeyboardChromeExtension') != null){
+        document.body.classList.add('kiosk');
+        domain = '127.0.0.1:8080';
+      }
     </script>
   </head>
   <body>
@@ -19,6 +38,27 @@
       <h1 id="title" data-l10n-id="connecting-header"></h1>
       <h3 id="content"></h3>
       <div id="warning"></div>
+      <div id="warning2" style="display:none">
+        <span id="warning2-text">Please wait 30 seconds for the Wi-Fi to connect.</span>
+        <a id="continue-button" href="http://127.0.0.1:8080" class="gateway-link" onclick="this.style.display = 'none'">Continue</a>
+      </div>
     </div>
+    <script>
+      setTimeout(function(){
+        if(document.getElementById('virtualKeyboardChromeExtension') != null){
+          document.getElementById('warning').style.display = 'none';
+          document.getElementById('warning2').style.display = 'block';
+          document.getElementById('content').style.display = 'none';
+          document.getElementById('content2').style.display = 'block';
+        }
+      }, 1000);
+
+      setTimeout(function(){
+        if(document.getElementById('virtualKeyboardChromeExtension') != null){
+          document.getElementById('continue-button').style.display = 'block';
+          document.getElementById('warning2-text').innerText = 'The wifi should now be connected.';
+        }
+      }, 30000);
+    </script>
   </body>
 </html>
