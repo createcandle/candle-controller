@@ -8,7 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title data-l10n-id="wifi-setup-title">Wi-Fi Setup</title>
     <link rel="stylesheet" type="text/css" href="/css/wifi-setup.css" />
+    <link rel="stylesheet" type="text/css" href="/css/candle.css"/>
     <link rel="icon" href="/images/icon.png" type="image/png" />
+    <script>
+      window.addEventListener('load', (event) => {
+        setTimeout(function(){
+          if(document.getElementById('virtualKeyboardChromeExtension') != null){
+            document.body.classList.add('kiosk');
+          }
+        }, 200);
+      });
+    </script>
   </head>
   <body>
     <form action="/connecting" method="post" id="mainform">
