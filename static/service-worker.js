@@ -64,5 +64,5 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', (event) => {
   const payload = event.data ? event.data.text() : '';
 
-  event.waitUntil(self.registration.showNotification('WebThings Gateway', { body: payload }));
+  event.waitUntil(self.registration.showNotification('Candle Controller', { body: payload }));
 });
