@@ -1,9 +1,9 @@
 {
-  "name": "WebThings Gateway",
-  "short_name": "WebThings",
+  "name": "Candle controller",
+  "short_name": "Candle",
   "start_url": "/",
   "display": "standalone",
-  "description": "Web of Things Gateway",
+  "description": "Candle Smart Home Controller",
   "icons": [
     {
       "src": "/images/icon.svg",
@@ -42,7 +42,7 @@
       "purpose": "maskable"
     }
   ],
-  "background_color": "#5d9bc7",
+  "background_color": "#0c3b5c",
   "theme_color": "#5288af",
   "serviceworker": {
     "src": "/service-worker.js"
