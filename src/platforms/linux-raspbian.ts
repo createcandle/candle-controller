@@ -524,7 +524,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {string} The hostname.
    */
   getHostname(): string {
-    return fs.readFileSync('/etc/hostname', 'utf8').trim();
+    return fs.readFileSync('/home/pi/.webthings/etc/hostname', 'utf8').trim();
   }
 
   /**
@@ -547,14 +547,9 @@ class LinuxRaspbianPlatform extends BasePlatform {
       original = original.trim();
     }
 
-    // Do this with sed, as it's the easiest way to write the file as root.
-    let proc = child_process.spawnSync('sudo', [
-      'sed',
-      '-i',
-      '-e',
-      `s/^.*$/${hostname}/`,
-      '/etc/hostname',
-    ]);
+    // switched from sed to tee to avoid hostname file being deleted during the process.
+    let proc = child_process.default.spawnSync('echo', [hostname,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+   
     if (proc.status !== 0) {
       return false;
     }
@@ -562,15 +557,16 @@ class LinuxRaspbianPlatform extends BasePlatform {
     proc = child_process.spawnSync('sudo', ['hostname', hostname]);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
-
+      //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      child_process.default.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       return false;
     }
 
     proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'avahi-daemon.service']);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      child_process.default.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('sudo', ['hostname', original]);
 
       return false;
