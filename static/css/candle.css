@@ -2,6 +2,7 @@
 
 body {
   animation: candle-fadeIn 1s linear;
+  /*transition: opacity ease-in 0.2s;*/
   margin-bottom: 10rem !important;
 }
 
@@ -44,6 +45,10 @@ body {
 #virtualKeyboardChromeExtension table td.kbdD span,
 #virtualKeyboardChromeExtension table td.kbdShift span {
   -webkit-box-shadow: none;
+}
+
+body #virtualKeyboardChromeExtension td.kbdS span{
+  background-color: #525152 !important;
 }
 
 @media only screen and (min-width: 801px) {
