@@ -113,12 +113,11 @@ Reinitialize your terminal session.
 ```
 $ . ~/.bashrc
 ```
+Install Node.js
 
-#### Manual
-
-(If you already installed node via nvm you can skip this step)
-
-Follow the directions from [NodeJS](https://nodejs.org) to install on your platform.
+```
+$ nvm install --lts
+```
 
 ### Set up Bluetooth permissions (Linux only)
 
