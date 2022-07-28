@@ -2,13 +2,14 @@ import config from 'config';
 import fs from 'fs';
 import path from 'path';
 import { verbose, Database as SQLiteDatabase, RunResult } from 'sqlite3';
+import sqlite3 from 'sqlite3'
 import * as Constants from '../constants';
 import UserProfile from '../user-profile';
 import AddonManager from '../addon-manager';
 import { Property } from 'gateway-addon';
 import { Any } from 'gateway-addon/lib/schema';
 
-const sqlite3 = verbose();
+//const sqlite3 = verbose();
 
 const METRICS_NUMBER = 'metricsNumber';
 const METRICS_BOOLEAN = 'metricsBoolean';
