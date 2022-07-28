@@ -10,6 +10,7 @@
 
 import config from 'config';
 import { verbose, Database as SQLiteDatabase, RunResult } from 'sqlite3';
+import sqlite3 from 'sqlite3'
 import fs from 'fs';
 import path from 'path';
 import { TokenData } from './models/jsonwebtoken';
@@ -17,7 +18,7 @@ import User from './models/user';
 import UserProfile from './user-profile';
 import { PushSubscription } from 'web-push';
 
-const sqlite3 = verbose();
+//const sqlite3 = verbose();
 
 const TABLES = ['users', 'jsonwebtokens', 'things', 'groups', 'settings', 'pushSubscriptions'];
 
