@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Field for result of JSON-schema validation.
  *
