@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Validate data with JSON-schema.
  *
