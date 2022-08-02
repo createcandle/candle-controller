@@ -30,8 +30,10 @@ const RuleUtils = {
       console.warn('byProperty property undefined', new Error().stack);
       return false;
     }
-
-    const optProp = option.properties[property.id];
+    let optProp;
+    if(option.id && option.id.endsWith('/' + property.thing)){
+      optProp = option.properties[property.id];
+    }
     return optProp && optProp.forms && optProp.forms.length;
   },
   // Helper function for selecting the thing corresponding to an href
