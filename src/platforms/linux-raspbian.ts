@@ -548,7 +548,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     }
 
     // switched from sed to tee to avoid hostname file being deleted during the process.
-    let proc = child_process.default.spawnSync('echo', [hostname,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+    let proc = child_process.spawnSync('echo', [hostname,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
    
     if (proc.status !== 0) {
       return false;
@@ -558,7 +558,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     if (proc.status !== 0) {
       // Set the original hostname back
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
-      child_process.default.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+      child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       return false;
     }
 
@@ -566,7 +566,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     if (proc.status !== 0) {
       // Set the original hostname back
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
-      child_process.default.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+      child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('sudo', ['hostname', original]);
 
       return false;
