@@ -577,8 +577,9 @@ class LinuxRaspbianPlatform extends BasePlatform {
       '-i',
       '-E',
       '-e',
-      `s/(127\\.0\\.1\\.1[ \\t]+)${original}/\\1${hostname}/g`,
-      '/etc/hosts',
+      //`s/(127\\.0\\.1\\.1[ \\t]+)${original}/\\1${hostname}/g`,
+      's/127\.0\.1\.1[ \t]+.*/127\.0\.1\.1 \t' + hostname + '/g',
+      '/home/pi/.webthings/etc/hosts',
     ]);
     return proc.status === 0;
   }
