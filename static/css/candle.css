@@ -24,6 +24,10 @@ body {
   top: 30%;
 }
 
+#login-form.user-form{
+  top: 40%;
+}
+
 /*  VIRTUAL KEYBOARD  */
 
 #virtualKeyboardChromeExtension {
