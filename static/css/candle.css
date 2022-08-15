@@ -18,12 +18,12 @@ body {
   }
 }
 
-#step2 #maindiv2,
 #wifi-setup #mainform,
 #create-user-form {
   top: 30%;
 }
 
+#step2 #maindiv2,
 #login-form.user-form{
   top: 40%;
 }
