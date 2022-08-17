@@ -946,26 +946,26 @@
       ></button>
     </div>
     <div id="connectivity-scrim" class="hidden"></div>
-    <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height: 3rem;border-radius: 0.5rem;margin-top:10rem">
-      <h2>Something's wrong</h2>
-      <p>Candle did not load this page properly. This is most likely because it lost its network connection.</p>
-      <p>Here are some options:</p>
-      <ul>
-        <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your WiFi again.</li>
-        <li>If your WiFi changed, try visiting the WiFi setup page here <a href="/wifi-setup"><br/><button class="text-button">Provide new WiFi details</button></a></li>
-        <li> Scan for a WiFi network called `Candle ????`, where the ? are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><a href="/"><button class="text-button">Reload</button></a></li>
-      </ul>
-    </div>
-    <script type='text/javascript'>
+  <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;margin-top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:scroll">
+    <h2>Something's wrong</h2>
+    <p>This page did not load correctly. This is most likely because the Candle Controller could not connect to Wi-Fi.</p>
+    <p>Here are some options:</p>
+    <ul>
+      <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
+      <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem">Provide new WiFi details</button></a><br/><br/></li>
+      <li>Scan for a WiFi network called `Candle ????`, where the ? are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><a href="/"><button class="text-button" style="margin-top:.5rem">Reload</button></a><br/><br/></li>
+    </ul>
+    <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;"><button class="text-button">Close warning</button></a><br/></p>
+  </div>
+  <script type='text/javascript'>
     setTimeout(function(){
-      if(document.body.classList.contains('hiden')){
-        console.log("ERROR, body still has hidden class");
+      if(document.body.classList.contains('hidden')){
+        console.log("ERROR, body still has hidden class. Wifi issue?");
+        document.body.classList.remove('hidden);
+        document.getElementById('connectivity-scrim').classList.add('hidden');
         document.getElementById('candle-tools').style.display = 'block';
       }
-      else{
-        console.log("All is well, body does not still have the hidden class");
-      }
     }, 10000);
-    </script>
+  </script>
   </body>
 </html>
