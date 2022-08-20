@@ -946,14 +946,14 @@
       ></button>
     </div>
     <div id="connectivity-scrim" class="hidden"></div>
-  <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;margin-top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:scroll">
+  <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;margin-top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:auto">
     <h2>Something's wrong</h2>
     <p>This page did not load correctly. This is most likely because the Candle Controller could not connect to Wi-Fi.</p>
     <p>Here are some options:</p>
     <ul>
       <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
       <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem">Provide new WiFi details</button></a><br/><br/></li>
-      <li>Scan for a WiFi network called `Candle ????`, where the ? are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><a href="/"><button class="text-button" style="margin-top:.5rem">Reload</button></a><br/><br/></li>
+      <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><a href="/"><button class="text-button" style="margin-top:.5rem">Reload</button></a><br/><br/></li>
     </ul>
     <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;"><button class="text-button">Close warning</button></a><br/></p>
   </div>
@@ -965,7 +965,7 @@
         document.getElementById('connectivity-scrim').classList.add('hidden');
         document.getElementById('candle-tools').style.display = 'block';
       }
-    }, 10000);
+    }, 20000);
   </script>
   </body>
 </html>
