@@ -966,6 +966,10 @@
         document.getElementById('candle-tools').style.display = 'block';
       }
     }, 20000);
+     
+     // Could be used in a tool that can scan for local controllers through brute force
+     parent.postMessage('Candle', '*');
+     
   </script>
   </body>
 </html>
