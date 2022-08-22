@@ -946,16 +946,18 @@
       ></button>
     </div>
     <div id="connectivity-scrim" class="hidden"></div>
-  <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:auto">
+  <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:auto;font-family:sans-serif">
     <h2>Something's wrong</h2>
-    <p>This page did not load correctly. This is most likely because the Candle Controller could not connect to Wi-Fi.</p>
-    <p>Here are some options:</p>
+    <p>This page did not load correctly.</p>
+    <p>It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
     <ul>
       <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
-      <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem">Provide new WiFi details</button></a><br/><br/></li>
-      <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><a href="/"><button class="text-button" style="margin-top:.5rem">Reload</button></a><br/><br/></li>
+      <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Provide new WiFi details</button></a><br/><br/></li>
+      <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue. If your controll has a touch screen you can also drag a finger down from the top of the display to reload the page.<br/><a href="/"><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Reload</button></a><br/><br/></li>
     </ul>
-    <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;"><button class="text-button">Close warning</button></a><br/></p>
+    <p>If you just performed a system update, then it could be that the update partially failed. Restarting the controller might solve this issue, as a working backup should automatically be put back into place.</p>
+     
+    <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;"><button class="text-button" style="padding:1rem;font-size:1.6rem;">Close warning</button></a><br/></p>
   </div>
   <script type='text/javascript'>
     setTimeout(function(){
