@@ -38,5 +38,11 @@ Hotspot
 Voco
 Etc
 
+
+**Logs**
+1. You can enable developer mode under the Candle App Store settings. After a reboot you can check out settings -> developer -> internal logs. You may also have to disable Privacy Manager's periodic deleting of these logs.
+2. Plug your SD card into your computer and create a file called "generate_debug.txt" on it. Swap is back in, start the controller again, and wait a few minutes, then read the SD card in your computer again. It will now have a file called "debug.txt" that has everything needed to debug your controller.
+
+
 **Anything else?**
-Screenshots, logs
+Screenshots
