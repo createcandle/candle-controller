@@ -318,14 +318,19 @@ switch (Platform.getOS()) {
         return isWiFiConfigured();
       })
       .then((configured) => {
-        if (!configured) {
-          WiFiSetupApp.onConnection = () => {
-            stopWiFiSetup();
-            startGateway();
-          };
-          startWiFiSetup();
-        } else {
+        if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(user_profile.addonsDir, 'hotspot')) ) { 
+          console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.";
           startGateway();
+        } else {
+          if (!configured) {
+            WiFiSetupApp.onConnection = () => {
+              stopWiFiSetup();
+              startGateway();
+            };
+            startWiFiSetup();
+          } else {
+            startGateway();
+          }
         }
       });
     break;
