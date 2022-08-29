@@ -146,7 +146,13 @@ function handleConnecting(request: express.Request, response: express.Response):
 
   if (skip) {
     console.log('wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.');
-
+    response.render('connecting', {
+      skip: `${skip}`,
+      domain,
+    });
+    stopAP();
+    WiFiSetupApp.onConnection!();
+    /*
     Settings.setSetting('wifiskip', true)
       .catch((e) => {
         console.error('wifi-setup: handleConnecting: failed to store wifiskip:', e);
@@ -159,6 +165,7 @@ function handleConnecting(request: express.Request, response: express.Response):
         stopAP();
         WiFiSetupApp.onConnection!();
       });
+    */
     return;
   }
 
