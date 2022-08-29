@@ -44,7 +44,13 @@ export function getOS(): string {
   if (platform !== 'linux') {
     return platform;
   }
-
+  const raspi = child_process.spawnSync('which', ['raspi-config']);
+  if (raspi.status === 0) {
+    const raspi_string = raspi.stdout.toString().trim();
+    if(raspi_string.indexOf('raspi-config') != -1){
+      return 'linux-raspbian';
+    }
+  }
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
     const lsb_release = proc.stdout.toString().trim();
