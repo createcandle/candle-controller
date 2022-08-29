@@ -721,7 +721,8 @@ export class AddonManager extends EventEmitter {
         });
       }
     });
-
+    
+    /*
     if (process.env.NODE_ENV !== 'test') {
       // Check for add-ons in 10 seconds (allow add-ons to load first).
       this.updateTimeout = setTimeout(() => {
@@ -733,6 +734,8 @@ export class AddonManager extends EventEmitter {
         this.updateInterval = setInterval(this.updateAddons.bind(this), delay);
       }, 10000);
     }
+    */
+
   }
 
   /**
