@@ -48,6 +48,7 @@ import Things from './models/things';
 import TunnelService from './tunnel-service';
 import { WiFiSetupApp, isWiFiConfigured } from './wifi-setup';
 import { AddressInfo } from 'net';
+import UserProfile from '../user-profile';
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
@@ -318,7 +319,7 @@ switch (Platform.getOS()) {
         return isWiFiConfigured();
       })
       .then((configured) => {
-        if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(user_profile.addonsDir, 'hotspot')) ) { 
+        if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(UserProfile.addonsDir, 'hotspot')) ) { 
           console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.");
           startGateway();
         } else {
