@@ -764,8 +764,21 @@ export default class Plugin {
         return;
       }
 
+      // Candle modification to run the gateway on Node 16 but 
+      // still support Node 12 for older addons
+      // This means the gateway now relies on the existance of symlinks 
+      // called 'node12' and 'node16' in the gateway dir
+      var use_node_version = 'node12';
+      if(typeof savedSettings.schema != 'undefined'){
+        if(typeof savedSettings.schema.properties != 'undefined'){
+          if(typeof savedSettings.schema.properties.node_version != 'undefined'){
+            use_node_version = 'node' + parseInt(savedSettings.schema.properties.node_version);
+          }
+        }
+      }
+      
       const execArgs = {
-        nodeLoader: `node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        nodeLoader: `${path.join(UserProfile.gatewayDir, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,
       };
@@ -773,12 +786,20 @@ export default class Plugin {
 
       DEBUG && console.log('  Launching:', execCmd);
 
+      // Another Candle modification to provide NVM_DIR as an environment 
+      // variable for the child process
+      var home_path = UserProfile.baseDir.split("/");
+      home_path = path.slice(0, path.length-1);
+      home_path.push('.nvm');
+      const nvmPath = path.join("/");
+      
       // If we need embedded spaces, then consider changing to use the npm
       // module called splitargs
       this.restart = true;
       const args = execCmd.split(' ');
       this.process.p = spawn(args[0], args.slice(1), {
         env: Object.assign(process.env, {
+          NVM_DIR: nvmPath,
           WEBTHINGS_HOME: UserProfile.baseDir,
           NODE_PATH: path.join(UserProfile.gatewayDir, 'node_modules'),
         }),
