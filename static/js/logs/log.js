@@ -255,11 +255,11 @@ class Log {
       (this.property && this.property.title) ||
       (this.propertyId && Utils.capitalize(this.propertyId)) ||
       '';
-    const formattedName = `${thingName} ${propertyName}`;
+    const formattedName = `<span data-thing-id="${this.thingId}">${thingName}</span> <span data-property-id="${this.propertyId}">${propertyName}</span>`;
     if (this.soloView) {
-      document.querySelector('.logs-header').textContent = formattedName;
+      document.querySelector('.logs-header').innerHTML = formattedName;
     } else {
-      this.name.textContent = formattedName;
+      this.name.innerHTML = formattedName;
     }
 
     if (!this.soloView) {
