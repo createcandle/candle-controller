@@ -214,8 +214,22 @@ class LogsScreen {
 
   refreshThings(things) {
     this.createLogDevice.innerHTML = '';
-    this.things = things;
-    things.forEach((description, thingId) => {
+    //this.things = things;
+    
+    // Added by Candle to sort the logs list by title
+    this.things = new Map([...things].sort(([k, v], [k2, v2])=> {
+      if(typeof v.title != 'undefined' && typeof v2.title != 'undefined'){
+        if (v.title > v2.title) {
+          return 1;
+        }
+        if (v.title < v2.title) {
+          return -1;
+        }
+      }
+      return 0;
+    }));
+    
+    this.things.forEach((description, thingId) => {
       for (const propId in description.properties) {
         const prop = description.properties[propId];
 
