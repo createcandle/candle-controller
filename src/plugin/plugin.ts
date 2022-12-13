@@ -781,7 +781,9 @@ export default class Plugin {
       if(typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
           if(typeof savedSettings.schema.properties.node_version != 'undefined'){
-            use_node_version = 'node' + parseInt(savedSettings.schema.properties.node_version);
+            if( !isNan(parseInt(savedSettings.schema.properties.node_version) ){
+              use_node_version = 'node' + savedSettings.schema.properties.node_version;
+            }
           }
         }
       }
