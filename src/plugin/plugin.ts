@@ -781,13 +781,16 @@ export default class Plugin {
       if(typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
           if(typeof savedSettings.schema.properties.node_version != 'undefined'){
-            use_node_version = 'node' + parseInt(savedSettings.schema.properties.node_version);
+            if(!isNaN(savedSettings.schema.properties.node_version)){
+              use_node_version = 'node' + parseInt(savedSettings.schema.properties.node_version);
+            }
           }
         }
       }
       
       const execArgs = {
-        nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        //nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        nodeLoader: `${use_node_version} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,
       };
