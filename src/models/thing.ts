@@ -244,7 +244,7 @@ export default class Thing extends EventEmitter {
       for (const link of description.links) {
         // For backwards compatibility
         if (link.mediaType) {
-          console.warn('The mediaType member of Link is deprecated, please use type instead');
+          console.warn('The mediaType member of Link is deprecated, please use type instead. ThingID: ',this.id);
           link.type = link.mediaType;
           delete link.mediaType;
         }
