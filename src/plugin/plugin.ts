@@ -780,7 +780,7 @@ export default class Plugin {
       var use_node_version = 'node12';
       if(typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
-          if(typeof savedSettings.schema.properties.addon_node_version != 'undefined'){
+          if(typeof savedSettings.schema.properties.prefered_node_version != 'undefined'){
             use_node_version = 'node18';
           }
         }
