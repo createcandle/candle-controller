@@ -219,10 +219,13 @@ class LogsScreen {
     // Added by Candle to sort the logs list by title
     this.things = new Map([...things].sort(([k, v], [k2, v2])=> {
       if(typeof v.title != 'undefined' && typeof v2.title != 'undefined'){
-        if (v.title > v2.title) {
+        
+        const v_title = v.title.toLowerCase();
+        const v2_title = v2.title.toLowerCase();
+        if (v_title > v2_title) {
           return 1;
         }
-        if (v.title < v2.title) {
+        if (v_title < v2_title) {
           return -1;
         }
       }
