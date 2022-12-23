@@ -55,7 +55,7 @@ const RuleScreen = {
       selectRuleName();
     });
 
-    this.ruleName.contentEditable = true;
+    //this.ruleName.contentEditable = true;
     this.ruleName.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
@@ -64,7 +64,7 @@ const RuleScreen = {
     });
 
     this.ruleName.addEventListener('blur', () => {
-      this.rule.name = this.ruleName.textContent;
+      this.rule.name = this.ruleName.value;
       this.rule.update();
       this.onPresentationChange();
     });
@@ -489,7 +489,7 @@ const RuleScreen = {
   },
 
   onPresentationChange: function () {
-    this.ruleName.textContent = this.rule.name || 'Rule Name';
+    this.ruleName.value = this.rule.name || 'Rule Name';
     this.ruleDescription.innerHTML = this.rule.toHumanInterface();
     const ruleEffectSelect = this.ruleDescription.querySelector('.rule-effect-select');
     if (this.rule.effect && this.rule.effect.effects.length === 0) {
