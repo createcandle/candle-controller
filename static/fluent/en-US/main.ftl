@@ -55,7 +55,7 @@ domain-settings-local-label = Local Access
 domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
 domain-settings-local-name =
-    .placeholder = gateway
+    .placeholder = candle
 
 ## Network Settings
 
@@ -72,7 +72,7 @@ network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (Static IP)
 network-settings-static-ip-address = Static IP address
 network-settings-network-mask = Network mask
-network-settings-gateway = Gateway
+network-settings-gateway = Controller
 network-settings-done = Done
 network-settings-wifi-password =
     .placeholder = Password
@@ -482,7 +482,7 @@ icon = Icon
 unknown-state = Unknown state.
 error = Error
 errors = Errors
-gateway-unreachable = Gateway Unreachable
+gateway-unreachable = Controller Unreachable
 more-information = More Information
 invalid-file = Invalid file.
 failed-read-file = Failed to read file.
