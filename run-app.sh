@@ -1,6 +1,7 @@
 #!/bin/bash
 #set -e -x
 
+echo "in run-app.sh: starting gateway" >> /dev/kmsg
 echo "Preparing the Candle Controller for launch"
 
 # Paths
@@ -62,6 +63,12 @@ if [[ ${_desired_controller_version} != ${_current_controller_version} ]]; then
   # rebuild the controller
   echo
   echo "REBUILDING THE CONTROLLER!"
+  if [ -f /dev/kmsg ]; then
+    echo "Candle: run-app.sh: REBUILDING THE CONTROLLER!" >> /dev/kmsg
+  fi
+  if [ -f /boot/candle_log.txt ]; then
+    echo "Candle: run-app.sh: rebuilding the controller" >> /boot/candle_log.txt
+  fi
   echo
   nvm use ${_desired_controller_version}
   nvm alias default ${_desired_controller_version}
