@@ -58,7 +58,7 @@ if [[ ! -f "${WEBTHINGS_HOME}/.node_version" ]]; then
 fi
 
 # Check if big changes need to be made
-if [[ ${_desired_controller_version} != ${_current_controller_version} ]]; then
+if [ -f "/boot/candle_node_version.txt" ] && [ -f "$CONTROLLER_NODE_VERSION_FILE_PATH" ] && [[ ${_desired_controller_version} != ${_current_controller_version} ]]; then
 
   # rebuild the controller
   echo
