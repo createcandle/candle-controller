@@ -13,3 +13,6 @@ Candle is a slightly modified version of the Webthings Gateway, with full addon 
 If you want to manually install this, please visit:
 
 https://github.com/createcandle/install-scripts
+
+Specifically this script:
+https://github.com/createcandle/install-scripts/blob/main/install_candle_controller.sh
