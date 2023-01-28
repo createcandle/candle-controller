@@ -152,9 +152,7 @@
     "mobile-drag-drop": "^2.3.0-rc.2",
     "nock": "^13.0.9",
     "npm-run-all": "^4.1.5",
-    "optipng": "^4.1.0",
     "page": "^1.11.6",
-    "postcss": "^8.4.14",
     "prettier": "^2.2.1",
     "qrcode-svg": "^1.1.0",
     "selenium-standalone": "^6.23.0",
@@ -164,13 +162,12 @@
     "stylelint": "^13.11.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
-    "trim-newlines": "^4.0.2",
     "ts-jest": "^26.5.2",
     "ts-loader": "^8.4.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.7.4",
     "webdriverio": "^7.0.9",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.5.0"
   }
 }
