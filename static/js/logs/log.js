@@ -719,13 +719,19 @@ class Log {
       if (time > this.start.getTime()) {
         const x = this.timeToX(time);
         let tickHeight = 5;
+        let tickScaleFactor = 2;
         if ((time - flooredStart) % bigTickIncrement === 0) {
           // Big label of date
           const text = this.timeToLabel(time);
           const label = this.makeText(text, x, this.height - this.yMargin + 2, 'middle', 'hanging');
           label.classList.add('logs-graph-label');
+          // If it's two characters or less, then it must be a date number, and not a time
+          if(text.length <= 2){
+            tickScaleFactor = 32;
+            label.classList.add("logs-graph-label-day");
+          }
           this.graph.appendChild(label);
-          tickHeight *= 2;
+          tickHeight *= tickScaleFactor;
         } else if (tickWidth > 48) {
           // Big label if the small ticks are wider than expected
           const text = this.timeToLabel(time);
@@ -739,6 +745,9 @@ class Log {
           { x, y: this.height - this.yMargin - tickHeight },
         ]);
         tick.classList.add('logs-graph-tick');
+        if(tickScaleFactor>20){
+          tick.classList.add("logs-graph-tick-day");
+        }
         this.graph.appendChild(tick);
       }
 
