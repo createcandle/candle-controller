@@ -554,11 +554,14 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
+    let proc2 = child_process.spawnSync('echo', [hostname,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
+
     proc = child_process.spawnSync('sudo', ['hostname', hostname]);
     if (proc.status !== 0) {
       // Set the original hostname back
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+      child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
       return false;
     }
 
@@ -567,6 +570,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       // Set the original hostname back
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
+      child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
       child_process.spawnSync('sudo', ['hostname', original]);
 
       return false;
