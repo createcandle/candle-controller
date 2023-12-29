@@ -949,15 +949,35 @@
   <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:auto;font-family:sans-serif">
     <h2>Something's wrong</h2>
     <p>This page did not load correctly.</p>
-    <p>It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
+    <p>Here are some things you can try:</p>
     <ul>
-      <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
-      <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Provide new WiFi details</button></a><br/><br/></li>
-      <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue. If your controller has a touch screen you can also drag a finger down from the top of the display to reload the page.<br/><a href="/" onClick="window.location.reload(true)"><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Reload</button></a><br/><br/></li>
-    </ul>
-    <p>If you just performed a system update, then the update may have partially failed. Restarting the controller might solve this issue, as a working backup should automatically be put back into place.</p>
+       <li>
+          <h4>Reload this page</h4>
+          <p>This refreshes this webpage. If your controller has a touch screen, then you can also drag a finger down from the top of the display to reload a page at any time.</p>
+          <p><a href="/" onClick="window.location.reload(true)"><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Reload</button></a></p>
+       </li>
+       <li>
+          <h4>Try logging in (again)</h4>
+          <p>If logging in doesn't work, then reboot the controller.</p>
+          <p><a href="/login"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Login page</button></a></p>
+       </li>
+       <li>
+          <h4>Reboot the controller</h4>
+          <p>Unplug the power cable for 10 seconds.</p>
+       </li>
+       <li>
+          <h4>Network issues</h4>
+          <p>It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
+          <ul>
+            <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
+            <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Provide new WiFi details</button></a><br/><br/></li>
+            <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><br/></li>
+         </ul>
+       </li>
+    </ul> 
+    
      
-    <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;" style="position:absolute;top:0;right:1rem"><button class="text-button" style="padding:1rem;font-size:1.3rem;">Close warning</button></a><br/></p>
+    <p><br/><a href="" onclick="document.getElementById('candle-tools').style.display = 'none'; return false;" style="position:absolute;top:1rem;right:1rem"><button class="text-button" style="padding:1rem;font-size:1.3rem;">Close</button></a><br/></p>
   </div>
   <script type='text/javascript'>
     setTimeout(function(){
