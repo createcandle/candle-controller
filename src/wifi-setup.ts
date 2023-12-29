@@ -332,6 +332,15 @@ export function isWiFiConfigured(): Promise<boolean> {
         return Promise.resolve(true);
       }
 
+      // Pretend WiFi is connnected
+      if (fs.existsSync('/boot/firmware/candle_island.txt')) {
+        ensureAPStopped();
+        if (!startAP(config.get('wifi.ap.ipaddr'))) {
+            console.error('wifi-setup: isWiFiConfigured: failed to start AP');
+        }
+        return Promise.resolve(true);
+      }
+      
       // If wifi wasn't skipped, but there is an ethernet connection, just move on
       const addresses = Platform.getNetworkAddresses();
       if (addresses.lan) {
