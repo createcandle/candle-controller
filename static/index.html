@@ -948,26 +948,25 @@
     <div id="connectivity-scrim" class="hidden"></div>
   <div id="candle-tools" style="display:none;background-color: #374956; z-index:10001;color:#ccc;padding:2rem;font-size:1.6rem;line-height:3rem;border-radius:0.5rem;top:10rem;position:fixed;box-sizing:border-box;width:calc(100% - 4rem);max-height:calc(100vh - 20rem);overflow:auto;font-family:sans-serif">
     <h2>Something's wrong</h2>
-    <p>This page did not load correctly.</p>
-    <p>Here are some things you can try:</p>
+    <p>This page did not load correctly. Here are some things you can try:</p>
     <ul>
        <li>
-          <h4>Reload this page</h4>
-          <p>This refreshes this webpage. If your controller has a touch screen, then you can also drag a finger down from the top of the display to reload a page at any time.</p>
+          <h3 style="margin:0">Reload this page</h3>
+          <p style="margin:0">This refreshes this webpage. If your controller has a touch screen, then you can also drag a finger down from the top of the display to reload a page at any time.</p>
           <p><a href="/" onClick="window.location.reload(true)"><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Reload</button></a></p>
        </li>
        <li>
-          <h4>Try logging in (again)</h4>
-          <p>If logging in doesn't work, then reboot the controller.</p>
+          <h3 style="margin:0">Try logging in (again)</h3>
+          <p style="margin:0">If logging in doesn't work, then reboot the controller.</p>
           <p><a href="/login"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Login page</button></a></p>
        </li>
        <li>
-          <h4>Reboot the controller</h4>
-          <p>Unplug the power cable for 10 seconds.</p>
+          <h3 style="margin:0">Reboot the controller</h3>
+          <p style="margin-top:0">Unplug the power cable for 10 seconds.</p>
        </li>
        <li>
-          <h4>Network issues</h4>
-          <p>It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
+          <h3 style="margin:0">Network issues</h3>
+          <p style="margin:0">It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
           <ul>
             <li>If your router was temporarily down, fix the issue and then restart the Candle controller. It should then find your Wi-Fi again.<br/><br/></li>
             <li>If your Wi-Fi name or password changed, try using the WiFi setup page: <a href="/wifi-setup"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Provide new WiFi details</button></a><br/><br/></li>
@@ -989,8 +988,8 @@
       }
     }, 20000);
      
-     // Could be used in a tool that can scan for local controllers through brute force
-     parent.postMessage('Candle', '*');
+     // Could perhaps be used in a tool that can scan for local controllers through brute force
+     window.parent.postMessage('Candle', '*');
      
   </script>
   </body>
