@@ -279,132 +279,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     return { enabled, mode, options };
   }
 
-  /**
-   * Set the island mode and options.
-   *
-   * @param {boolean} enabled - whether or not island is enabled
-   * @param {string} mode - ap, sta, ...
-   * @param {Object?} options - options specific to wireless mode
-   * @returns {boolean} Boolean indicating success.
-   */
-  setIslandMode(enabled: string, mode = 'ap', options: Record<string, unknown> = {}): boolean {
-    const valid = ['ap', 'sta'];
-    if (enabled && !valid.includes(mode)) {
-      console.warn("setIslandMode: enabled was: ", enabled);
-      //return false;
-    }
 
-    mode = 'ap';
-    options.ipaddr = '192.168.9.1';
-    options.ssid = 'Candle Island';
-    options.key = 'iloveprivacy';
-    /*
-    const regex = ipRegex({ exact: true });
-    if (options.ipaddr && !regex.test(<string>options.ipaddr)) {
-      options.ipaddr = '192.168.9.1';
-      //return false;
-    }
-    */
-    /*
-    // First, remove existing networks
-    let proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
-      encoding: 'utf8',
-    });
-    if (proc.status === 0) {
-      const networks = proc.stdout
-        .split('\n')
-        .filter((l) => !l.startsWith('network'))
-        .map((l) => l.split(' ')[0])
-        .reverse();
-
-      for (const id of networks) {
-        proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'remove_network', id]);
-        if (proc.status !== 0) {
-          console.log('Failed to remove network with id:', id);
-        }
-      }
-    }
-    */
-    
-    // Then, stop hostapd. It will either need to be off or reconfigured, so
-    // this is valid in both modes.
-    proc = child_process.spawnSync('sudo', ['systemctl', 'stop', 'hostapd.service']);
-    if (proc.status !== 0) {
-      return false;
-    }
-    
-    if (!enabled) {
-      proc = child_process.spawnSync('sudo', ['systemctl', 'disable', 'hostapd.service']);
-      return proc.status === 0;
-    }
-
-    // Make sure Wi-Fi isn't blocked by rfkill
-    child_process.spawnSync('sudo', ['rfkill', 'unblock', 'wifi']);
-
-    // Now, set the IP address back to a sane state
-    proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', '0.0.0.0']);
-    if (proc.status !== 0) {
-      return false;
-    }
-
-    let config = 'interface=wlan0\n';
-    config += 'driver=nl80211\n';
-    config += 'hw_mode=g\n';
-    config += 'channel=6\n';
-    config += `ssid=${options.ssid}\n`;
-
-    if (options.key) {
-      config += 'wpa=2\n';
-      config += `wpa_passphrase=${options.key}\n`;
-      config += 'wpa_pairwise=CCMP\n';
-    }
-
-    fs.writeFileSync('/tmp/hostapd.conf', config);
-
-    proc = child_process.spawnSync('sudo', [
-      'mv',
-      '/tmp/hostapd.conf',
-      '/etc/hostapd/hostapd.conf',
-    ]);
-
-    if (proc.status !== 0) {
-      return false;
-    }
-
-    proc = child_process.spawnSync('sudo', ['systemctl', 'start', 'hostapd.service']);
-    if (proc.status !== 0) {
-      return false;
-    }
-
-    proc = child_process.spawnSync('sudo', ['systemctl', 'enable', 'hostapd.service']);
-    if (proc.status !== 0) {
-      return false;
-    }
-
-    if (options.ipaddr) {
-      proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', <string>options.ipaddr]);
-      if (proc.status !== 0) {
-        return false;
-      }
-
-      if (mode === 'ap') {
-        // set up a default route when running in AP mode. ignore errors here and
-        // just try to move on.
-        child_process.spawnSync('sudo', [
-          'ip',
-          'route',
-          'add',
-          'default',
-          'via',
-          <string>options.ipaddr,
-          'dev',
-          'wlan0',
-        ]);
-      }
-    }
-
-    return true;
-  }
 
 /**
    * Set the wireless mode and options.
@@ -865,8 +740,11 @@ class LinuxRaspbianPlatform extends BasePlatform {
       },
     };
 
-    const interfaces = os.networkInterfaces();
+    
+    const interfaces = os.networkInterfaces(); // This doesn't seem to work anymore on later node versions.
+    console.log("linux-raspian: getNetworkAddresses: interfaces: ", interfaces);
 
+    /*
     if (interfaces.eth0) {
       for (const addr of interfaces.eth0) {
         if (!addr.internal && addr.family === 'IPv4') {
@@ -875,7 +753,25 @@ class LinuxRaspbianPlatform extends BasePlatform {
         }
       }
     }
+    */
 
+    // get eth0 ip address via the command line instead
+    // ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1
+    const proc = child_process.spawnSync("ip", ["addr", "show","eth0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+
+    if (proc.status === 0) {
+      console.log("eth0 ip?:", proc.stdout);
+      if(typeof proc.stdout == 'string' && proc.stdout.indexOf('.') != -1){
+        let lan_ip = proc.stdout.split('\n')[0];
+        if(!lan_ip.startsWith('127.'){
+          result.lan = lan_ip;
+        }
+      }
+    }
+
+    
+   
+    /*
     if (interfaces.wlan0) {
       for (const addr of interfaces.wlan0) {
         if (!addr.internal && addr.family === 'IPv4') {
@@ -884,12 +780,36 @@ class LinuxRaspbianPlatform extends BasePlatform {
         }
       }
     }
+    */
 
+    /*
     const status = this.getWirelessMode();
     if (status.enabled && status.options) {
       result.wlan.ssid = <string>status.options.ssid;
     }
+    */
 
+    const proc = child_process.spawnSync("iwgetid", ["-r"], { encoding: 'utf8' });
+    if (proc.status === 0) {
+      console.log("wlan0 ssid?:", proc.stdout);
+      if(typeof proc.stdout == 'string'){
+        let wlan_ssid = proc.stdout.split('\n')[0];
+        if(wlan_ssid.length > 5){
+          
+          const proc2 = child_process.spawnSync("ip", ["addr", "show","wlan0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+          if (proc2.status === 0) {
+            console.log("wlan0 ip?:", proc2.stdout);
+            if(typeof proc2.stdout == 'string' && proc2.stdout.indexOf('.') != -1){
+              let wlan_ip = proc2.stdout.split('\n')[0];
+              if(!wlan_ip.startsWith('127.' && wlan_ip != '192.168.2.1'){
+                result.wlan.ip = wlan_ip;
+                result.wlan.ssid = wlan_ssid;
+              }
+            }
+          }
+        }
+      }
+    }
     return result;
   }
 
