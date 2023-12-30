@@ -321,8 +321,10 @@ switch (Platform.getOS()) {
       .then((configured) => {
         if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(UserProfile.addonsDir, 'hotspot')) ) { 
           console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.");
+          stopWiFiSetup();
           startGateway();
         } else {
+          console.log("Not skipping network check");
           if (!configured) {
             WiFiSetupApp.onConnection = () => {
               stopWiFiSetup();
@@ -345,12 +347,17 @@ function startGateway(): void {
   if (TunnelService.hasCertificates()) {
     serverStartup.promise = TunnelService.userSkipped().then(
       (skipped): Promise<unknown> => {
+        
         const promise = startHttpsGateway();
 
         // if the user opted to skip the tunnel, but still has certificates, go
         // ahead and start up the https server.
         if (skipped) {
+          console.log("user has skipped tunnel");
           return promise;
+        }
+        else{
+          console.log("user has not skipped tunnel");
         }
 
         // if they did not opt to skip, check if they have a tunnel token. if so,
@@ -370,6 +377,7 @@ function startGateway(): void {
       }
     );
   } else {
+    console.log("no (tunnel) certificates detected, starting http gateway")
     serverStartup.promise = startHttpGateway();
   }
 }
