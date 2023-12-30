@@ -350,9 +350,6 @@ export function isWiFiConfigured(): Promise<boolean> {
       // Pretend WiFi is connnected
       if (fs.existsSync('/boot/firmware/candle_island.txt')) {
         ensureAPStopped();
-        if (!startAP(config.get('wifi.ap.ipaddr'))) {
-            console.error('wifi-setup: isWiFiConfigured: failed to start AP');
-        }
         return Promise.resolve(true);
       }
       
