@@ -290,7 +290,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
   setIslandMode(enabled: string, mode = 'ap', options: Record<string, unknown> = {}): boolean {
     const valid = ['ap', 'sta'];
     if (enabled && !valid.includes(mode)) {
-      return false;
+      console.warn("setIslandMode: enabled was: ", enabled);
+      //return false;
     }
 
     mode = 'ap';
