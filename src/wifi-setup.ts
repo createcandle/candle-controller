@@ -32,7 +32,7 @@ app.get('/*', handleCaptive);
 app.get('/', handleRoot);
 app.get('/wifi-setup', handleWiFiSetup);
 app.post('/connecting', handleConnecting);
-app.post('/island', handleIsland);
+//app.post('/island', handleIsland);
 app.use(express.static(Constants.BUILD_STATIC_PATH));
 
 export const WiFiSetupApp: { onConnection: (() => void) | null; onRequest: express.Express } = {
@@ -191,7 +191,7 @@ function handleConnecting(request: express.Request, response: express.Response):
     })
     .then(() => {
       if (!defineNetwork(ssid, password)) {
-        console.error('wifi-setup: handleConnecting: failed to define network');
+        console.error('wifi-setup: handleConnecting: failed to define network.  ssid, password: ', ssid, password);
         throw new Error('failed to define network');
       } else {
         return waitForWiFi(20, 3000).then(() => {
@@ -206,74 +206,6 @@ function handleConnecting(request: express.Request, response: express.Response):
     });
 }
 
-
-/**
- * Handle requests to /island.
- */
-function handleIsland(request: express.Request, response: express.Response): void {
-  // We assume getHostname is implemented, since this is only used on Raspberry Pi right now.
-  const domain = Platform.getHostname();
-  const skip = true; //request.body.skip === '1';
-
-  if (skip) {
-    console.log('wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.');
-
-    Settings.setSetting('wifiskip', true)
-      .catch((e) => {
-        console.error('wifi-setup: handleConnecting: failed to store wifiskip:', e);
-      })
-      .then(() => {
-        response.render('connecting', {
-          skip: `${skip}`,
-          domain,
-        });
-        stopAP();
-        WiFiSetupApp.onConnection!();
-      });
-    return;
-  }
-
-  //const ssid = request.body.ssid.trim();
-  //const password = request.body.password.trim();
-
-  // XXX
-  // We can come back here from the status page if the user defines
-  // more than one network. We always need to call defineNetwork(), but
-  // only need to call stopAP() if we're actually in ap mode.
-  //
-  // Also, if we're not in AP mode, then we should just redirect to
-  // /status instead of sending the connecting template.
-  response.render('connecting', {
-    skip: `${skip}`,
-    domain,
-  });
-
-  // Wait before switching networks to make sure the response gets through.
-  // And also wait to be sure that the access point is fully down before
-  // defining the new network. If I only wait two seconds here, it seems
-  // like the Edison takes a really long time to bring up the new network
-  // but a 5 second wait seems to work better.
-  sleep(2000)
-    .then(() => {
-      stopAP();
-      return sleep(5000);
-    })
-    .then(() => {
-      if (!defineNetwork(ssid, password)) {
-        console.error('wifi-setup: handleConnecting: failed to define network');
-        throw new Error('failed to define network');
-      } else {
-        return waitForWiFi(20, 3000).then(() => {
-          WiFiSetupApp.onConnection!();
-        });
-      }
-    })
-    .catch((error) => {
-      if (error) {
-        console.error('wifi-setup: handleConnecting: general error:', error);
-      }
-    });
-}
 
 
 /**
