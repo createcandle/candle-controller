@@ -316,24 +316,24 @@ switch (Platform.getOS()) {
   case 'linux-raspbian':
     migration
       .then(() => {
-        return isWiFiConfigured();
-      })
-      .then((configured) => {
+
         if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(UserProfile.addonsDir, 'hotspot')) ) { 
           console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.");
-          stopWiFiSetup();
-          startGateway();
+          return True
         } else {
           console.log("Not skipping network check");
-          if (!configured) {
-            WiFiSetupApp.onConnection = () => {
-              stopWiFiSetup();
-              startGateway();
-            };
-            startWiFiSetup();
-          } else {
+          return isWiFiConfigured();
+        }
+      })
+      .then((configured) => {
+        if (!configured) {
+          WiFiSetupApp.onConnection = () => {
+            stopWiFiSetup();
             startGateway();
-          }
+          };
+          startWiFiSetup();
+        } else {
+          startGateway();
         }
       });
     break;
