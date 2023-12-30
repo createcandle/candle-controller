@@ -763,7 +763,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       console.log("eth0 ip?:", proc.stdout);
       if(typeof proc.stdout == 'string' && proc.stdout.indexOf('.') != -1){
         let lan_ip = proc.stdout.split('\n')[0];
-        if(!lan_ip.startsWith('127.'){
+        if(!lan_ip.startsWith('127.')){
           result.lan = lan_ip;
         }
       }
@@ -801,7 +801,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
             console.log("wlan0 ip?:", proc2.stdout);
             if(typeof proc2.stdout == 'string' && proc2.stdout.indexOf('.') != -1){
               let wlan_ip = proc2.stdout.split('\n')[0];
-              if(!wlan_ip.startsWith('127.' && wlan_ip != '192.168.2.1'){
+              if(!wlan_ip.startsWith('127.') && wlan_ip != '192.168.2.1'){
                 result.wlan.ip = wlan_ip;
                 result.wlan.ssid = wlan_ssid;
               }
