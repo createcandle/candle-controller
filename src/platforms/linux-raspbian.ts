@@ -757,7 +757,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     // get eth0 ip address via the command line instead
     // ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1
-    var proc = child_process.spawnSync("ip", ["addr", "show","eth0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+    var proc = child_process.spawnSync("ip", ["addr", "show","eth0","|","grep","'inet '","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
 
     if (proc.status === 0) {
       console.log("eth0 ip?:", proc.stdout);
