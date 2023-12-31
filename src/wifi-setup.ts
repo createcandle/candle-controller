@@ -315,17 +315,6 @@ function defineNetwork(ssid: string, password?: string): boolean {
 }
 
 /**
- * Define a new network and connect to it.
- *
- * @param {string} ssid - SSID to configure
- * @param {string?} password - PSK to configure
- * @returns {boolean} Boolean indicating success of the command.
- */
-function defineIsland(ssid: string, password?: string): boolean {
-  return Platform.setIslandMode(true, 'ap', { ssid, key: password });
-}
-
-/**
  * Determine whether or not we already have a connection.
  *
  * @returns {Promise} Promise which resolves to true/false, indicating whether
