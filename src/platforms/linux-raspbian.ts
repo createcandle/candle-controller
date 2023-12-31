@@ -732,7 +732,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    *                   }
    */
   getNetworkAddresses(): NetworkAddresses {
-    const result = {
+    let result = {
       lan: '',
       wlan: {
         ip: '',
@@ -757,7 +757,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     // get eth0 ip address via the command line instead
     // ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1
-    const proc = child_process.spawnSync("ip", ["addr", "show","eth0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+    var proc = child_process.spawnSync("ip", ["addr", "show","eth0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
 
     if (proc.status === 0) {
       console.log("eth0 ip?:", proc.stdout);
@@ -789,14 +789,14 @@ class LinuxRaspbianPlatform extends BasePlatform {
     }
     */
 
-    const proc = child_process.spawnSync("iwgetid", ["-r"], { encoding: 'utf8' });
+    proc = child_process.spawnSync("iwgetid", ["-r"], { encoding: 'utf8' });
     if (proc.status === 0) {
       console.log("wlan0 ssid?:", proc.stdout);
       if(typeof proc.stdout == 'string'){
         let wlan_ssid = proc.stdout.split('\n')[0];
         if(wlan_ssid.length > 5){
           
-          const proc2 = child_process.spawnSync("ip", ["addr", "show","wlan0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+          let proc2 = child_process.spawnSync("ip", ["addr", "show","wlan0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
           if (proc2.status === 0) {
             console.log("wlan0 ip?:", proc2.stdout);
             if(typeof proc2.stdout == 'string' && proc2.stdout.indexOf('.') != -1){
