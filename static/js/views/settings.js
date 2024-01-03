@@ -903,7 +903,8 @@ const SettingsScreen = {
         console.error(`Failed to scan for wireless networks: ${e}`);
       })
       .then(() => {
-        this.validateWlan();
+        // this.validateWlan();
+        this.validateWifi();
       });
   },
 
