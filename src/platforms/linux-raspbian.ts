@@ -290,6 +290,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success.
    */
   setWirelessMode(enabled: string, mode = 'ap', options: Record<string, unknown> = {}): boolean {
+    console.log("in setWirelessMode. enabled, mode, options: ", enabled, mode, options);
     const valid = ['ap', 'sta'];
     if (enabled && !valid.includes(mode)) {
       return false;
