@@ -319,7 +319,7 @@ switch (Platform.getOS()) {
 
         if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(UserProfile.addonsDir, 'hotspot')) ) { 
           console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.");
-          return True
+          return true
         } else {
           console.log("Not skipping network check");
           return isWiFiConfigured();
