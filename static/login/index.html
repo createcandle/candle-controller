@@ -30,6 +30,15 @@
         name="password"
         data-l10n-id="user-settings-input-password"
       />
+      <div id="remember-email-group">
+		    <input
+          type="checkbox"
+          id="remember-email"
+          name="remember-email"
+		    />
+      <label for="remember-email">Remember email</label>
+      </div>
+
       <div id="totp-prompt" data-l10n-id="login-enter-totp" class="hidden"></div>
       <input
         type="hidden"
@@ -44,4 +53,31 @@
       <button id="login-button" data-l10n-id="login-log-in" type="submit"></button>
     </form>
   </body>
+  <script type="text/javascript">
+  	
+	  const email_el = document.getElementById('email');
+	  const remember_email_el = document.getElementById('remember-email');
+	  
+	  let stored_email = localStorage.getItem('candle-login-page-email');
+	  if(stored_email){
+		  email_el.value = '' + stored_email;
+		  remember_email_el.checked = true;
+	  }
+	  
+	  email_el.addEventListener('input', () => {
+		  if(remember_email_el.checked){
+          localStorage.setItem('candle-login-page-email', email_el.value);
+		  }
+	  });
+	  
+	  remember_email_el.addEventListener('change', () => {
+		  if(remember_email_el.checked){
+          localStorage.setItem('candle-login-page-email', email_el.value);
+		  }
+		  else{
+          localStorage.removeItem('candle-login-page-email');
+		  }
+	  });
+	
+  </script>
 </html>
