@@ -13,6 +13,18 @@
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
     <link rel="stylesheet" href="/css/candle.css"/>
+    <style>
+      #remember-email-group{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #remember-email{
+        width:auto;
+        transform: scale(2);
+        margin-right: 1.5rem;
+    }
+  </style>
   </head>
   <body>
     <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
@@ -59,7 +71,7 @@
 	  const remember_email_el = document.getElementById('remember-email');
 	  
 	  let stored_email = localStorage.getItem('candle-login-page-email');
-	  if(stored_email && stored_email.length > 0){
+	  if(typeof stored_email == 'string' && stored_email.length > 0){
 		  email_el.value = '' + stored_email;
 		  remember_email_el.checked = true;
 	  }
