@@ -18,13 +18,89 @@
         display: flex;
         justify-content: center;
         align-items: center;
+		margin: .3rem 0 1rem 0;
       }
       #remember-email{
         width:auto;
         transform: scale(2);
         margin-right: 1.5rem;
-    }
+	  }
+	
+	  .flex{
+		  display:flex;
+		  align-items: center;
+		  justify-content:space-between;
+	  }
+
+	  #password{
+		  margin-right:2px;
+		  width: 22.8rem;
+	  }
+	  
+	  #password-visibility-button{
+		  margin-left:2px;
+		  background-color:#597285;
+		  border-radius:.5rem;
+		  font-size:125%;
+		  cursor:pointer;
+		  padding:.1rem .5rem;
+		  margin-right:auto;
+	  }
+
+      #screensaver {
+		display:none;
+        background: #000;
+	    position: absolute;
+	    top:0;
+	    left:0;
+	    width:100vw;
+	    height:100vh;
+      }
+
+      #screensaver-logo {
+        display: block;
+        position: absolute;
+  	    width:190px;
+  	    height:39px;
+        -webkit-animation: moveX 10s linear 0s infinite alternate, moveY 12.6s linear 0s infinite alternate;
+        -moz-animation: moveX 10s linear 0s infinite alternate, moveY 12.6s linear 0s infinite alternate;
+        -o-animation: moveX 10s linear 0s infinite alternate, moveY 12.6s linear 0s infinite alternate;
+        animation: moveX 10s linear 0s infinite alternate, moveY 12.6s linear 0s infinite alternate ;
+      }
+
+      /* animation keyframes */
+      @-webkit-keyframes moveX {
+        /* screen width - width of image */
+        from { left: 0; } to { left: calc(100% - 190px); }
+      }
+      @-moz-keyframes moveX {
+        from { left: 0; } to { left: calc(100% - 190px); }
+      }
+      @-o-keyframes moveX {
+        from { left: 0; } to { left: calc(100% - 190px); }
+      }
+      @keyframes moveX {
+        from { left: 0; } to { left: calc(100% - 190px); }
+      }
+      @-webkit-keyframes moveY {
+        /* screen height - height of image */
+        from { top: calc(100% - 39px); } to { top: 0; }
+      }
+      @-moz-keyframes moveY {
+        from { top: calc(100% - 39px); } to { top: 0; }
+      }
+      @-o-keyframes moveY {
+        from { top: calc(100% - 39px); } to { top: 0; }
+      }
+      @keyframes moveY {
+        from { top: calc(100% - 39px); } to { top: 0; }
+      }
+  
+	
   </style>
+  
+  
+  
   </head>
   <body>
     <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
@@ -33,15 +109,20 @@
         type="email"
         id="email"
         name="email"
+		placeholder="email"
         data-l10n-id="user-settings-input-email"
         autofocus
       />
-      <input
-        type="password"
-        id="password"
-        name="password"
-        data-l10n-id="user-settings-input-password"
-      />
+	  <div class="flex">
+        <input
+          type="password"
+          id="password"
+          name="password"
+		  placeholder="password"
+          data-l10n-id="user-settings-input-password"
+        />
+		<div id="password-visibility-button">🫣</div>
+	  </div>
       <div id="remember-email-group">
         <input
           type="checkbox"
@@ -64,6 +145,11 @@
       <div id="error-submission" class="error hidden"></div>
       <button id="login-button" data-l10n-id="login-log-in" type="submit"></button>
     </form>
+	
+	<div id="screensaver">
+		<img id="screensaver-logo" src="/images/webthings-gateway-lockup.svg" width="190" height="39">
+	</div>
+	
   </body>
   <script type="text/javascript">
   	
@@ -81,18 +167,51 @@
 	  
 	  email_el.addEventListener('input', () => {
 		  if(remember_email_el.checked){
-          localStorage.setItem('candle-login-page-email', email_el.value);
+            localStorage.setItem('candle-login-page-email', email_el.value);
 		  }
 	  });
 	  
 	  remember_email_el.addEventListener('change', () => {
 		  if(remember_email_el.checked){
-          localStorage.setItem('candle-login-page-email', email_el.value);
+            localStorage.setItem('candle-login-page-email', email_el.value);
 		  }
 		  else{
-          localStorage.removeItem('candle-login-page-email');
+            localStorage.removeItem('candle-login-page-email');
 		  }
 	  });
 	
+	
+	  const screensaver_el = document.getElementById('screensaver');
+
+	  function start_screensaver(){
+		  screensaver_el.style.dislay = 'block';
+		  window.screensaver_timeout = null;
+	  }
+	  
+	  function reset_screensaver(){
+		  screensaver_el.style.dislay = 'none';
+		  window.screensaver_timeout = null;
+		  window.screensaver_timeout = setTimeout(start_screensaver, 60000);
+	  }
+	  
+	  reset_screensaver();
+	  
+	  document.addEventListener("mousemove", reset_screensaver);
+	  document.addEventListener("keydown", reset_screensaver);
+	  document.addEventListener("scroll", reset_screensaver);
+	  screensaver_el.addEventListener("click", reset_screensaver);
+	  
+	  
+	  
+	  const password_el = document.getElementById('password');
+	  const password_visibility_button_el = document.getElementById('password-visibility-button');
+	  password_visibility_button_el.addEventListener("click", () =>{
+		  if (password_el.type === "password") {
+		      password_el.type = "text";
+		    } else {
+		      password_el.type = "password";
+		    }
+	  });
+	  
   </script>
 </html>
