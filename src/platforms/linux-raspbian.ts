@@ -757,6 +757,13 @@ class LinuxRaspbianPlatform extends BasePlatform {
     const interfaces = os.networkInterfaces(); // This doesn't seem to work anymore on later node versions.
     console.log("linux-raspian: getNetworkAddresses: interfaces: ", interfaces);
 
+    let dev_name = 'wlan0'; 
+    var wifi_dev_name_check_output = child_process.spawnSync("ifconfig", ["|","grep","'mlan0:'"], { shell: true, encoding: 'utf8' });
+    if(wifi_dev_name_check_output.indexOf('mlan0:') != -1){
+      dev_name = 'mlan0';
+    }
+
+    
     /*
     if (interfaces.eth0) {
       for (const addr of interfaces.eth0) {
@@ -804,14 +811,14 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     proc = child_process.spawnSync("iwgetid", ["-r"], { encoding: 'utf8' });
     if (proc.status === 0) {
-      console.log("wlan0 ssid?:", proc.stdout);
+      console.log("wlan ssid?:", proc.stdout);
       if(typeof proc.stdout == 'string'){
         let wlan_ssid = proc.stdout.split('\n')[0];
         if(wlan_ssid.length > 5){
           
-          let proc2 = child_process.spawnSync("ip", ["addr", "show","wlan0","|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
+          let proc2 = child_process.spawnSync("ip", ["addr", "show",dev_name,"|","grep","'inet\b'","|","awk","'{print $2}'","|","cut","-d/","-f1"], { shell: true, encoding: 'utf8' });
           if (proc2.status === 0) {
-            console.log("wlan0 ip?:", proc2.stdout);
+            console.log("wlan ip?:", proc2.stdout);
             if(typeof proc2.stdout == 'string' && proc2.stdout.indexOf('.') != -1){
               let wlan_ip = proc2.stdout.split('\n')[0];
               if(!wlan_ip.startsWith('127.') && wlan_ip != '192.168.2.1'){
