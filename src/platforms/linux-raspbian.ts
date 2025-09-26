@@ -160,7 +160,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     let dev_name = 'wlan0'; 
     var wifi_dev_name_check_output = child_process.spawnSync("ifconfig", ["|","grep","'mlan0:'"], { shell: true, encoding: 'utf8' });
-    if(wifi_dev_name_check_output.indexOf('mlan0:') != -1){
+    if(wifi_dev_name_check_output.stdout.indexOf('mlan0:') != -1){
       dev_name = 'mlan0';
     }
     let proc = child_process.spawnSync('systemctl', ['is-active', 'hostapd.service']);
@@ -308,7 +308,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     let dev_name = 'wlan0'; 
     var wifi_dev_name_check_output = child_process.spawnSync("ifconfig", ["|","grep","'mlan0:'"], { shell: true, encoding: 'utf8' });
-    if(wifi_dev_name_check_output.indexOf('mlan0:') != -1){
+    if(wifi_dev_name_check_output.stdout.indexOf('mlan0:') != -1){
       dev_name = 'mlan0';
     }
 
@@ -759,7 +759,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     let dev_name = 'wlan0'; 
     var wifi_dev_name_check_output = child_process.spawnSync("ifconfig", ["|","grep","'mlan0:'"], { shell: true, encoding: 'utf8' });
-    if(wifi_dev_name_check_output.indexOf('mlan0:') != -1){
+    if(wifi_dev_name_check_output.stdout.indexOf('mlan0:') != -1){
       dev_name = 'mlan0';
     }
 
