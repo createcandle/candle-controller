@@ -383,6 +383,9 @@ function startGateway(): void {
 }
 
 function gracefulExit(): void {
+  if (Platform.implemented('stop')) {
+    Platform.stop();
+  }
   AddonManager.unloadAddons();
   TunnelService.stop();
 }
