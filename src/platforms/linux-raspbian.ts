@@ -142,8 +142,15 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
-    proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'networking.service']);
+    if (fs.existsSync('/usr/lib/systemd/system/NetworkManager.service')) {
+        proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'NetworkManager.service']);
+    }
+    else{
+        proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'networking.service']);
+        
+    }
     return proc.status === 0;
+    
   }
 
   /**
@@ -478,15 +485,22 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating whether or not SSH is enabled.
    */
   getSshServerStatus(): boolean {
-    const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_ssh'], {
-      encoding: 'utf8',
-    });
 
-    if (proc.status !== 0) {
-      return false;
+    if (fs.existsSync('/boot/firmware/candle_ssh.txt')) {
+      return true
     }
-
-    return proc.stdout.trim() === '0';
+    else{
+      
+      const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_ssh'], {
+        encoding: 'utf8',
+      });
+  
+      if (proc.status !== 0) {
+        return false;
+      }
+  
+      return proc.stdout.trim() === '0';
+    }
   }
 
   /**
@@ -839,6 +853,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {Object} {available: <bool>, enabled: <bool>}
    */
   getSelfUpdateStatus(): SelfUpdateStatus {
+    /*
     const timer = 'webthings-gateway.check-for-update.timer';
     const timerExists = fs.existsSync(`/etc/systemd/system/${timer}`);
     const proc = child_process.spawnSync('systemctl', ['is-active', timer]);
@@ -846,6 +861,11 @@ class LinuxRaspbianPlatform extends BasePlatform {
     return {
       available: timerExists,
       enabled: proc.status === 0,
+    };
+    */
+    return {
+      available: true,
+      enabled: 1,
     };
   }
 
@@ -856,6 +876,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setSelfUpdateStatus(enabled: boolean): boolean {
+    /*
     const timer = 'webthings-gateway.check-for-update.timer';
 
     let proc = child_process.spawnSync('sudo', ['systemctl', enabled ? 'start' : 'stop', timer]);
@@ -865,6 +886,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     proc = child_process.spawnSync('sudo', ['systemctl', enabled ? 'enable' : 'disable', timer]);
     return proc.status === 0;
+    */
+    return 0
   }
 
   /**
@@ -922,13 +945,22 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setTimezone(zone: string): boolean {
+    
     const proc = child_process.spawnSync('sudo', [
       'raspi-config',
       'nonint',
       'do_change_timezone',
       zone,
     ]);
+    /*
+    const proc = child_process.spawnSync('sudo', [
+      'timedatectl',
+      'set-timezone',
+      zone,
+    ]);
+    */
     return proc.status === 0;
+    
   }
 
   /**
@@ -964,16 +996,25 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {string} Country.
    */
   getWirelessCountry(): string {
-    const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_wifi_country'], {
+    //const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_wifi_country'], {
+    //  encoding: 'utf8',
+    //});
+
+    // iw reg get | grep 'country' | awk '{print $2}' | head -1
+    const proc = child_process.spawnSync('iw', ['reg', 'get', '|', 'grep', '"country"', '|', 'awk', '"{print $2}"', '|', 'head', '-1'], {
       encoding: 'utf8',
     });
-
+    
     if (proc.status !== 0) {
       return '';
     }
 
-    const code = proc.stdout.trim();
+    const code = proc.stdout.trim().replace(':','');
 
+    if (code == '00' || code == '99'){
+      return '';
+    }
+    
     const fname = '/usr/share/zoneinfo/iso3166.tab';
     if (!fs.existsSync(fname)) {
       return '';
@@ -1028,10 +1069,18 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
+    /*
     const proc = child_process.spawnSync('sudo', [
       'raspi-config',
       'nonint',
       'do_wifi_country',
+      data[0],
+    ]);
+    */
+    const proc = child_process.spawnSync('sudo', [
+      'iw',
+      'reg',
+      'set',
       data[0],
     ]);
     return proc.status === 0;
