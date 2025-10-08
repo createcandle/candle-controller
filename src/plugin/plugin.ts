@@ -939,7 +939,6 @@ export default class Plugin {
 
   kill(): void {
     if (this.process) {
-      console.log(`Killing ${this.pluginId} plugin.`);
       this.process.p?.kill();
     }
   }
