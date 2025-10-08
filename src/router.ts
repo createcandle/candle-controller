@@ -30,6 +30,7 @@ import NotifiersController from './controllers/notifiers_controller';
 import OAuthClientsController from './controllers/oauthclients_controller';
 import OAuthController from './controllers/oauth_controller';
 import PingController from './controllers/ping_controller';
+import WellKnownController from './controllers/well-known_controller';
 import ProxyController, { WithProxyMethods } from './controllers/proxy_controller';
 import PushController from './controllers/push_controller';
 import RootController from './controllers/root_controller';
@@ -40,6 +41,7 @@ import GroupsController from './controllers/groups_controller';
 import UpdatesController from './controllers/updates_controller';
 import UploadsController from './controllers/uploads_controller';
 import UsersController from './controllers/users_controller';
+import APIRootController from './controllers/api_root_controller';
 
 const nocache = NoCache();
 const auth = jwtMiddleware.middleware();
@@ -87,8 +89,8 @@ class Router {
     app.use(Constants.UPLOADS_PATH, express.static(UserProfile.uploadsDir));
     app.use(Constants.EXTENSIONS_PATH, nocache, ExtensionsController());
     app.use((request, response, next) => {
-      if (request.path === '/' && request.accepts('html')) {
-        // We need this to hit RootController.
+      if (request.path === '/') {
+        // We need this to hit RootController or APIRootController.
         next();
       } else {
         staticHandler(request, response, next);
@@ -119,6 +121,7 @@ class Router {
       } else if (
         (!request.accepts('html') && request.accepts('json')) ||
         (!request.accepts('html') && request.accepts('text/event-stream')) ||
+        (!request.accepts('html') && request.accepts('application/td+json')) ||
         request.headers['content-type'] === 'application/json' ||
         request.get('Upgrade') === 'websocket' ||
         request.is('multipart/form-data') ||
@@ -151,10 +154,12 @@ class Router {
     app.use(`${APP_PREFIX}/*`, RootController());
 
     // Unauthenticated API routes
+    app.use(`${API_PREFIX}/`, nocache, APIRootController());
     app.use(API_PREFIX + Constants.LOGIN_PATH, nocache, LoginController());
     app.use(API_PREFIX + Constants.SETTINGS_PATH, nocache, SettingsController());
     app.use(API_PREFIX + Constants.USERS_PATH, nocache, UsersController());
     app.use(API_PREFIX + Constants.PING_PATH, nocache, PingController());
+    app.use(API_PREFIX + Constants.WELL_KNOWN_PATH, nocache, WellKnownController());
 
     // Authenticated API routes
     app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth, ThingsController());
