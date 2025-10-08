@@ -14,6 +14,7 @@ import LinuxArchPlatform from './platforms/linux-arch';
 import LinuxDebianPlatform from './platforms/linux-debian';
 import LinuxRaspbianPlatform from './platforms/linux-raspbian';
 import LinuxUbuntuPlatform from './platforms/linux-ubuntu';
+import LinuxUbuntuCorePlatform from './platforms/linux-ubuntu-core';
 import {
   LanMode,
   NetworkAddresses,
@@ -44,6 +45,7 @@ export function getOS(): string {
   if (platform !== 'linux') {
     return platform;
   }
+	
   const raspi = child_process.spawnSync('which', ['raspi-config']);
   if (raspi.status === 0) {
     const raspi_string = raspi.stdout.toString().trim();
@@ -51,6 +53,7 @@ export function getOS(): string {
       return 'linux-raspbian';
     }
   }
+	
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
     const lsb_release = proc.stdout.toString().trim();
@@ -66,6 +69,45 @@ export function getOS(): string {
       default:
         break;
     }
+  }
+
+  // If not running inside a snap, give up at this point.
+  if (!isSnap()) {
+    console.log('Unknown Linux distribution');
+    return 'linux-unknown';
+  }
+
+  // Otherwise try to detect Ubuntu or Ubuntu Core from inside a snap
+  try {
+    const osReleaseLines = fs
+      .readFileSync('/var/lib/snapd/hostfs/etc/os-release', {
+        encoding: 'utf8',
+      })
+      .split('\n');
+    // Iterate through the file
+    for (let line of osReleaseLines) {
+      // Trim whitespace
+      line = line.trim();
+      // Find the line containing ID
+      if (line.startsWith('ID=')) {
+        // Get the value of the ID
+        let id = line.substring(3, line.length);
+        // Remove any quotation marks
+        id = id.replace(/"/g, '');
+        switch (id) {
+          case 'ubuntu':
+            return 'linux-ubuntu';
+          case 'ubuntu-core':
+            return 'linux-ubuntu-core';
+          default:
+            console.log('Unknown host Linux distribution');
+            break;
+        }
+      }
+    }
+  } catch (error) {
+    console.log(`Error trying to read os-release file: ${error}`);
+    console.log('Check that the system-observe interface is connected');
   }
 
   return 'linux-unknown';
@@ -89,6 +131,19 @@ export function isContainer(): boolean {
       fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
     fs.existsSync('/pantavisor')
   );
+}
+
+/**
+ * Determine whether or not we're running inside a snap package.
+ *
+ * @returns boolean True if running inside snap, false if not.
+ */
+export function isSnap(): boolean {
+  if (process.env.SNAP_NAME == 'webthings-gateway') {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /**
@@ -153,6 +208,9 @@ switch (getOS()) {
   case 'linux-ubuntu':
     platform = LinuxUbuntuPlatform;
     break;
+  case 'linux-ubuntu-core':
+    platform = LinuxUbuntuCorePlatform;
+    break;
   default:
     platform = null;
     break;
@@ -163,20 +221,34 @@ export const setDhcpServerStatus = wrapPlatform<boolean>(platform, 'setDhcpServe
 export const getHostname = wrapPlatform<string>(platform, 'getHostname');
 export const setHostname = wrapPlatform<boolean>(platform, 'setHostname');
 export const getLanMode = wrapPlatform<LanMode>(platform, 'getLanMode');
+export const getLanModeAsync = wrapPlatform<Promise<LanMode>>(platform, 'getLanModeAsync');
 export const setLanMode = wrapPlatform<boolean>(platform, 'setLanMode');
+export const setLanModeAsync = wrapPlatform<Promise<boolean>>(platform, 'setLanModeAsync');
 export const getMacAddress = wrapPlatform<string | null>(platform, 'getMacAddress');
 export const getMdnsServerStatus = wrapPlatform<boolean>(platform, 'getMdnsServerStatus');
 export const setMdnsServerStatus = wrapPlatform<boolean>(platform, 'setMdnsServerStatus');
 export const getNetworkAddresses = wrapPlatform<NetworkAddresses>(platform, 'getNetworkAddresses');
+export const getNetworkAddressesAsync = wrapPlatform<Promise<NetworkAddresses>>(
+  platform,
+  'getNetworkAddressesAsync'
+);
 export const getSshServerStatus = wrapPlatform<boolean>(platform, 'getSshServerStatus');
 export const setSshServerStatus = wrapPlatform<boolean>(platform, 'setSshServerStatus');
 export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWirelessMode');
 export const setWirelessMode = wrapPlatform<boolean>(platform, 'setWirelessMode');
+export const setWirelessModeAsync = wrapPlatform<Promise<boolean>>(
+  platform,
+  'setWirelessModeAsync'
+);
 export const restartGateway = wrapPlatform<boolean>(platform, 'restartGateway');
 export const restartSystem = wrapPlatform<boolean>(platform, 'restartSystem');
 export const scanWirelessNetworks = wrapPlatform<WirelessNetwork[]>(
   platform,
   'scanWirelessNetworks'
+);
+export const scanWirelessNetworksAsync = wrapPlatform<Promise<WirelessNetwork[]>>(
+  platform,
+  'scanWirelessNetworksAsync'
 );
 export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
 export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
@@ -197,6 +269,7 @@ export const getNtpStatus = (): boolean => {
 
   return wrapPlatform<boolean>(platform, 'getNtpStatus')();
 };
+export const stop = wrapPlatform<string>(platform, 'stop');
 
 export const implemented = (fn: string): boolean => {
   if (platform === null) {
