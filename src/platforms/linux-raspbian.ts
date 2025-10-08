@@ -418,7 +418,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
         return false;
       }
 
-      onst saveProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
+      const saveProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
       if (saveProc.status !== 0) {
         return false;
       }
