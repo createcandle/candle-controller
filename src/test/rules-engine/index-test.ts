@@ -11,7 +11,7 @@ const thingLight1 = {
   id: 'light1',
   title: 'light1',
   type: 'onOffSwitch',
-  '@context': 'https://webthings.io/schemas',
+  '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   '@type': ['OnOffSwitch'],
   properties: {
     on: { type: 'boolean', value: false },
@@ -35,7 +35,7 @@ const thingLight2 = {
   id: 'light2',
   title: 'light2',
   type: 'onOffSwitch',
-  '@context': 'https://webthings.io/schemas',
+  '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   '@type': ['OnOffSwitch'],
   properties: {
     on: { type: 'boolean', value: false },
@@ -49,7 +49,7 @@ const thingLight3 = {
   id: 'light3',
   title: 'light3',
   type: 'onOffSwitch',
-  '@context': 'https://webthings.io/schemas',
+  '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   '@type': ['OnOffSwitch'],
   properties: {
     on: { type: 'boolean', value: false },
@@ -625,9 +625,9 @@ describe('rules engine', () => {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
       expect(res.status).toEqual(200);
-      expect(Array.isArray(res.body)).toBeTruthy();
-      expect(res.body.length).toEqual(1);
-      expect(res.body[0]).toHaveProperty('blink');
+      expect(Object.keys(res.body).length).toEqual(1);
+      expect(res.body).toHaveProperty('blink');
+      expect(Array.isArray(res.body.blink));
     });
 
     // dispatch event get action

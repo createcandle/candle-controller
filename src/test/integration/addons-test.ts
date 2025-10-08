@@ -54,7 +54,7 @@ function copyManifest<T>(manifest: T): T {
 
 async function loadSettingsAdapterWithManifestJson(
   manifest: Record<string, unknown>
-): Promise<void> {
+): Promise<Error | void> {
   // If the adapter is already loaded, then unload it.
   if (AddonManager.getAdapter('test-adapter')) {
     await AddonManager.unloadAdapter('test-adapter');
@@ -66,7 +66,7 @@ async function loadSettingsAdapterWithManifestJson(
   try {
     await AddonManager.loadAddon('test-adapter');
   } catch (err) {
-    return err;
+    return err as Error;
   }
 }
 
@@ -401,7 +401,7 @@ describe('addons', () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     (<Record<string, unknown>>(
       (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
-    )).strict_min_version = semver.inc(pkg.version, 'minor')!;
+    )).strict_min_version = semver.inc(pkg.version, 'major')!;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
