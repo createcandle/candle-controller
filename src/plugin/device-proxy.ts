@@ -31,7 +31,7 @@ export default class DeviceProxy extends Device {
     super(adapter, deviceDict.id);
 
     this.setTitle(deviceDict.title ?? '');
-    this['@context'] = deviceDict['@context'] || 'https://webthings.io/schemas';
+    this['@context'] = deviceDict['@context'] || Constants.DEFAULT_CONTEXT;
     this['@type'] = deviceDict['@type'] || [];
     this.setDescription(deviceDict.description ?? '');
     (<{ links: Link[] }>(<unknown>this)).links = deviceDict.links || [];
@@ -45,9 +45,8 @@ export default class DeviceProxy extends Device {
       (<{ pinPattern: string | null }>(<unknown>this)).pinPattern = null;
     }
 
-    (<{ credentialsRequired: boolean }>(
-      (<unknown>this)
-    )).credentialsRequired = !!deviceDict.credentialsRequired;
+    (<{ credentialsRequired: boolean }>(<unknown>this)).credentialsRequired =
+      !!deviceDict.credentialsRequired;
 
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
