@@ -764,8 +764,30 @@ export default class Plugin {
         return;
       }
 
+ 
+      // A Candle modification to later provide NVM_DIR as an 
+      // environment variable for the child process
+      var homePathParts = UserProfile.baseDir.split("/");
+      homePathParts = homePathParts.slice(0, homePathParts.length-1);
+      const homePath = homePathParts.join("/");
+      homePathParts.push('.nvm');
+      const nvmPath = homePathParts.join("/");
+      
+      // Candle modification to run the gateway on Node 16 but 
+      // still support Node 12 for older addons
+      // This means the gateway now relies on the existance of symlinks 
+      // called 'node12' and 'node16' in the home directory (e.g. /home/pi/node12)
+      var use_node_version = 'node12';
+      if(typeof savedSettings.schema != 'undefined'){
+        if(typeof savedSettings.schema.properties != 'undefined'){
+          if(typeof savedSettings.schema.properties.prefered_node_version != 'undefined'){
+            use_node_version = 'node18';
+          }
+        }
+      }
+      
       const execArgs = {
-        nodeLoader: `node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,
       };
@@ -779,6 +801,7 @@ export default class Plugin {
       const args = execCmd.split(' ');
       this.process.p = spawn(args[0], args.slice(1), {
         env: Object.assign(process.env, {
+          NVM_DIR: nvmPath,
           WEBTHINGS_HOME: UserProfile.baseDir,
           NODE_PATH: path.join(UserProfile.gatewayDir, 'node_modules'),
         }),
