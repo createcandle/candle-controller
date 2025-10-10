@@ -648,6 +648,7 @@ function build(): express.Router {
 
       // send initial property values
       for (const name in thing.getProperties()) {
+        console.log("things_controller.ts: asking for thing property from AddonManager: ", thing.getId(), name);
         AddonManager.getProperty(thing.getId(), name)
           .then((value) => {
             sendMessage({
