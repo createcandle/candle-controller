@@ -349,11 +349,13 @@ export class AddonManager extends EventEmitter {
   getThings(): DeviceSchema[] {
     const things = [];
     for (const thingId in this.devices) {
+      console.log("addon-manager.ts: getThings: looping over thingId in this.devices: ",thingId)
       const thing = this.getThing(thingId);
       if (thing) {
         things.push(thing);
       }
     }
+    console.log("addon-manager.ts: getThings: returning list of length: ", things.length);
     return things;
   }
 
