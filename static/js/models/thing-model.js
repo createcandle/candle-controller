@@ -102,6 +102,7 @@ class ThingModel extends Model {
    */
   initWebSocket(globalWs) {
     if (!this.hasOwnProperty('href')) {
+      console.error("thing-model.js: initWebSocket: thing had no href!");
       return;
     }
 
