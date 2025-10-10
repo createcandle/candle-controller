@@ -475,6 +475,8 @@ export class AddonManager extends EventEmitter {
    * Called when the indicated device has been added to an adapter.
    */
   handleDeviceAdded(device: Device): void {
+    console.log("in addon-manager.ts -> handleDeviceAdded.  device.getID:", device.getId());
+    console.log(" - Looking in this.devices keys: ", Object.keys(this.devices));
     this.devices[device.getId()] = device;
     const thing = device.asThing();
 
