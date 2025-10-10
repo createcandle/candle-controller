@@ -888,7 +888,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     */
     return {
       available: true,
-      enabled: 1,
+      enabled: true,
     };
   }
 
