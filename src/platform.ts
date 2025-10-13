@@ -94,6 +94,14 @@ export function getOS(): string {
     }
   }
 
+  const raspi = child_process.spawnSync('which', ['raspi-config']);
+  if (raspi.status === 0) {
+    const raspi_string = raspi.stdout.toString().trim();
+    if(raspi_string.indexOf('raspi-config') != -1){
+      return 'linux-raspbian';
+    }
+  }
+  
   // Check lsb_release for the name of a Linux distribution
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
