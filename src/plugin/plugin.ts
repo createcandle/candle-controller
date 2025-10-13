@@ -162,7 +162,7 @@ export default class Plugin {
   }
 
   onMsg(msg: Message): void {
-    DEBUG && console.log('Plugin: Rcvd Msg', msg);
+    console.log('Plugin/plugin.js: Rcvd Msg', msg);
 
     // The first switch manages action method resolved or rejected messages.
     switch (msg.messageType) {
