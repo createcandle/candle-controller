@@ -48,7 +48,7 @@ import Things from './models/things';
 import TunnelService from './tunnel-service';
 import { WiFiSetupApp, isWiFiConfigured } from './wifi-setup';
 import { AddressInfo } from 'net';
-import UserProfile from '../user-profile';
+//import UserProfile from '../user-profile';
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
