@@ -712,7 +712,7 @@ export default class Plugin {
       messageType: methodType,
       data: data,
     };
-    #DEBUG && console.log('plugin/plugin.js: sendMsg:', msg);
+    //DEBUG && console.log('plugin/plugin.js: sendMsg:', msg);
     console.log('Plugin: sendMsg:', msg);
 
     return this.ws?.send(JSON.stringify(msg));
