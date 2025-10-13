@@ -82,13 +82,13 @@ function validateObject(
  * @returns {string|null} Error string, or null if no error.
  */
 function validateManifestJson(manifest: Record<string, unknown>): string | null {
-  const manifestTemplate = {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const manifestTemplate: Record<string, any> = {
     author: '',
     description: '',
     gateway_specific_settings: {
       webthings: {
         primary_type: '',
-        exec: '',
       },
     },
     homepage_url: '',
@@ -235,21 +235,26 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
   let min = manifest.gateway_specific_settings.webthings.strict_min_version;
   let max = manifest.gateway_specific_settings.webthings.strict_max_version;
 
+  const gatewayVersion = semver.coerce(pkg.version, { includePrerelease: true });
+  if (gatewayVersion === null) {
+    throw new Error(`Unable to compare with non-semver gateway version ${pkg.version}`);
+  }
+
   if (typeof min === 'string' && min !== '*') {
-    min = semver.coerce(min);
-    if (semver.lt(pkg.version, min)) {
+    min = semver.coerce(min, { includePrerelease: true });
+    if (semver.lt(gatewayVersion, min)) {
       throw new Error(
         // eslint-disable-next-line max-len
-        `Gateway version ${pkg.version} is lower than minimum version ${min} supported by add-on ${packageId}`
+        `Gateway version ${gatewayVersion} is lower than minimum version ${min} supported by add-on ${packageId}`
       );
     }
   }
   if (typeof max === 'string' && max !== '*') {
-    max = semver.coerce(max);
-    if (semver.gt(pkg.version, max)) {
+    max = semver.coerce(max, { includePrerelease: true });
+    if (semver.gt(gatewayVersion, max)) {
       throw new Error(
         // eslint-disable-next-line max-len
-        `Gateway version ${pkg.version} is higher than maximum version ${max} supported by add-on ${packageId}`
+        `Gateway version ${gatewayVersion} is higher than maximum version ${max} supported by add-on ${packageId}`
       );
     }
   }

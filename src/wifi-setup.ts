@@ -4,7 +4,6 @@ import * as Constants from './constants';
 import express from 'express';
 import expressHandlebars from 'express-handlebars';
 import os from 'os';
-import fs from 'fs';
 import * as Platform from './platform';
 import * as Settings from './models/settings';
 import sleep from './sleep';
@@ -32,7 +31,6 @@ app.get('/*', handleCaptive);
 app.get('/', handleRoot);
 app.get('/wifi-setup', handleWiFiSetup);
 app.post('/connecting', handleConnecting);
-//app.post('/island', handleIsland);
 app.use(express.static(Constants.BUILD_STATIC_PATH));
 
 export const WiFiSetupApp: { onConnection: (() => void) | null; onRequest: express.Express } = {
@@ -191,7 +189,7 @@ function handleConnecting(request: express.Request, response: express.Response):
     })
     .then(() => {
       if (!defineNetwork(ssid, password)) {
-        console.error('wifi-setup: handleConnecting: failed to define network.  ssid, password: ', ssid, password);
+        console.error('wifi-setup: handleConnecting: failed to define network');
         throw new Error('failed to define network');
       } else {
         return waitForWiFi(20, 3000).then(() => {
@@ -205,8 +203,6 @@ function handleConnecting(request: express.Request, response: express.Response):
       }
     });
 }
-
-
 
 /**
  * Get the SSID of the hotspot.
@@ -336,12 +332,6 @@ export function isWiFiConfigured(): Promise<boolean> {
         return Promise.resolve(true);
       }
 
-      // Pretend WiFi is connnected
-      if (fs.existsSync('/boot/firmware/candle_island.txt')) {
-        ensureAPStopped();
-        return Promise.resolve(true);
-      }
-      
       // If wifi wasn't skipped, but there is an ethernet connection, just move on
       const addresses = Platform.getNetworkAddresses();
       if (addresses.lan) {
