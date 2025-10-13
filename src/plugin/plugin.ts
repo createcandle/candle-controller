@@ -703,6 +703,7 @@ export default class Plugin {
           break;
         }
         default:
+          console.error("plugin/plugin.js: unexpected MessageType");
           break;
       }
     }
@@ -711,7 +712,8 @@ export default class Plugin {
       messageType: methodType,
       data: data,
     };
-    DEBUG && console.log('Plugin: sendMsg:', msg);
+    #DEBUG && console.log('plugin/plugin.js: sendMsg:', msg);
+    console.log('Plugin: sendMsg:', msg);
 
     return this.ws?.send(JSON.stringify(msg));
   }
@@ -778,10 +780,10 @@ export default class Plugin {
       // This means the gateway now relies on the existance of symlinks 
       // called 'node12' and 'node16' in the home directory (e.g. /home/pi/node12)
       var use_node_version = 'node12';
-      if(typeof savedSettings.schema != 'undefined'){
+      if(savedSettings && typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
           if(typeof savedSettings.schema.properties.prefered_node_version != 'undefined'){
-            use_node_version = 'node18';
+            use_node_version = 'node20';
           }
         }
       }
@@ -793,7 +795,8 @@ export default class Plugin {
       };
       const execCmd = format(this.exec, execArgs);
 
-      DEBUG && console.log('  Launching:', execCmd);
+      //DEBUG && console.log('  Launching:', execCmd);
+      console.log('  Launching:', execCmd);
 
       // If we need embedded spaces, then consider changing to use the npm
       // module called splitargs
