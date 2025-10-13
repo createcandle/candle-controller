@@ -109,7 +109,7 @@ oauthClients.register(
     '/things:readwrite'
   )
 );
-/*
+
 oauthClients.register(
   new ClientRegistry(
     new URL('https://api.mycroft.ai/v1/auth/callback'),
@@ -129,5 +129,5 @@ oauthClients.register(
     '/things:readwrite'
   )
 );
-*/
+
 export default oauthClients;

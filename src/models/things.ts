@@ -275,7 +275,6 @@ class Things extends EventEmitter {
    */
   getThing(id: string): Promise<Thing> {
     return this.getThings().then((things) => {
-      console.log("models/things.ts: getThing called getThings. This is the list: ", )
       const thing = things.get(id);
       if (thing) {
         return thing;
