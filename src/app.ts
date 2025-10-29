@@ -312,35 +312,37 @@ export const serverStartup: {
   promise: Promise.resolve(),
 };
 
-switch (Platform.getOS()) {
-  case 'linux-raspbian':
-    migration
-      .then(() => {
-
-        if ( fs.existsSync('/boot/nohotspot.txt') == false && fs.existsSync('/boot/candle_skip_network.txt') && fs.existsSync(path.join(UserProfile.addonsDir, 'hotspot')) ) { 
-          console.log("SKIPPING NETWORK CHECK. HOTSPOT ADDON EXISTS.");
-          return true
-        } else {
-          console.log("Not skipping network check");
-          return isWiFiConfigured();
-        }
-      })
-      .then((configured) => {
-        if (!configured) {
-          WiFiSetupApp.onConnection = () => {
-            stopWiFiSetup();
-            startGateway();
-          };
-          startWiFiSetup();
-        } else {
-          startGateway();
-        }
-      });
-    break;
-  default:
-    startGateway();
-    break;
+if(fs.existsSync('/boot/firmware/candle_skip_network.txt')){
+  console.log("spotted /boot/firmware/candle_skip_network.txt, skipping all network setup and starting the controller");
+  startGateway();
 }
+else{
+  switch (Platform.getOS()) {
+    case 'linux-raspbian':
+      console.log("Running on a Raspberry Pi");
+      migration
+        .then(() => {
+          return isWiFiConfigured();
+        })
+        .then((configured) => {
+          if (!configured) {
+            WiFiSetupApp.onConnection = () => {
+              stopWiFiSetup();
+              startGateway();
+            };
+            startWiFiSetup();
+          } else {
+            startGateway();
+          }
+        });
+      break;
+    default:
+      startGateway();
+      break;
+  }
+}
+
+
 
 function startGateway(): void {
   // if we have the certificates installed, we start https
