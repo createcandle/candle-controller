@@ -32,6 +32,7 @@ export const INTERNAL_LOGS_PATH = '/internal-logs';
 export const LOGS_PATH = '/logs';
 export const PUSH_PATH = '/push';
 export const PING_PATH = '/ping';
+export const WELL_KNOWN_PATH = '/.well-known';
 export const PROXY_PATH = '/proxy';
 export const EXTENSIONS_PATH = '/extensions';
 // Remember we end up in the build/* directory so these paths looks slightly
@@ -82,13 +83,37 @@ export enum LogSeverity {
   PROMPT = 4,
 }
 
+// Thing description things
 export enum WoTOperation {
+  OBSERVE_PROPERTY = 'observeproperty',
+  UNOBSERVE_PROPERTY = 'unobserveproperty',
   READ_ALL_PROPERTIES = 'readallproperties',
   WRITE_MULTIPLE_PROPERTIES = 'writemultipleproperties',
+  OBSERVE_ALL_PROPERTIES = 'observeallproperties',
+  UNOBSERVE_ALL_PROPERTIES = 'unobserveallproperties',
   SUBSCRIBE_ALL_EVENTS = 'subscribeallevents',
   UNSUBSCRIBE_ALL_EVENTS = 'unsubscribeallevents',
   QUERY_ALL_ACTIONS = 'queryallactions',
 }
+export enum ActionStatusValues {
+  PENDING = 'pending',
+  RUNNING = 'running',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
+// Contexts
+export const MOZ_IOT_CONTEXT = 'https://iot.mozilla.org/schemas';
+export const WEBTHINGS_CONTEXT = 'https://webthings.io/schemas';
+export const WOT_TD_NS_CONTEXT = 'http://www.w3.org/ns/td';
+export const WOT_TD_1_CONTEXT = 'https://www.w3.org/2019/wot/td/v1';
+export const WOT_TD_1_1_CONTEXT = 'https://www.w3.org/2022/wot/td/v1.1';
+export const DEFAULT_CONTEXT = [WOT_TD_1_1_CONTEXT, WEBTHINGS_CONTEXT];
+
+// Profiles
+export const WOT_HTTP_BASIC_PROFILE = 'https://www.w3.org/2022/wot/profile/http-basic/v1';
+export const WOT_HTTP_SSE_PROFILE = 'https://www.w3.org/2022/wot/profile/http-sse/v1';
+
 export interface LogMessage {
   severity: LogSeverity;
   message: string;
