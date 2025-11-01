@@ -361,16 +361,16 @@ class Things extends EventEmitter {
    * Set the group for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} groupId ID of the group
+   * @param {string} group_id ID of the group
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingGroup(thing: Thing, groupId: string | null, emitModified = true): Promise<void> {
-    if (!groupId) {
-      groupId = null;
+  async setThingGroup(thing: Thing, group_id: string | null, emitModified = true): Promise<void> {
+    if (!group_id) {
+      group_id = null;
     }
 
     await this.setThingLayoutIndex(thing, Infinity, false);
-    await thing.setGroup(groupId);
+    await thing.setGroup(group_id);
     const index =
       Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup()).length - 1;
     await thing.setLayoutIndex(index);
@@ -384,19 +384,19 @@ class Things extends EventEmitter {
    * Set the group and layout index for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} groupId ID of the group
+   * @param {string} group_id ID of the group
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
   async setThingGroupAndLayoutIndex(
     thing: Thing,
-    groupId: string | null,
+    group_id: string | null,
     index: number
   ): Promise<void> {
-    if (!groupId) {
-      groupId = null;
+    if (!group_id) {
+      group_id = null;
     }
-    await this.setThingGroup(thing, groupId, false);
+    await this.setThingGroup(thing, group_id, false);
     await this.setThingLayoutIndex(thing, index, false);
     this.emit(Constants.LAYOUT_MODIFIED);
   }
@@ -415,13 +415,13 @@ class Things extends EventEmitter {
       }
 
       const index = thing.getLayoutIndex();
-      const groupId = thing.getGroup();
+      const group_id = thing.getGroup();
 
       thing.remove();
       this.things.delete(id);
 
       Array.from(this.things.values())
-        .filter((t) => t.getGroup() == groupId)
+        .filter((t) => t.getGroup() == group_id)
         .forEach((t) => {
           if (t.getLayoutIndex() > index) {
             t.setLayoutIndex(t.getLayoutIndex() - 1);
@@ -443,7 +443,7 @@ class Things extends EventEmitter {
       console.error('Error getting value for thingId:', thingId, 'property:', propertyName);
       console.error(e);
 
-      throw new HttpErrorWithCode((e as Error).message, 500);
+      throw new HttpErrorWithCode(e, 500);
     }
   }
 
@@ -461,7 +461,7 @@ class Things extends EventEmitter {
       throw new HttpErrorWithCode('Thing not found', 404);
     }
 
-    if (!thing.properties || !thing.properties.hasOwnProperty(propertyName)) {
+    if (!thing.properties.hasOwnProperty(propertyName)) {
       throw new HttpErrorWithCode('Property not found', 404);
     }
 
@@ -488,7 +488,7 @@ class Things extends EventEmitter {
         value
       );
 
-      throw new HttpErrorWithCode((e as Error).message, 500);
+      throw new HttpErrorWithCode(e, 500);
     }
   }
 
