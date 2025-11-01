@@ -24,6 +24,7 @@ import {
 } from 'gateway-addon/lib/schema';
 import Action from './action';
 import Event from './event';
+import * as Utils from '../utils';
 
 export interface Router {
   addProxyServer: (thingId: string, server: string) => void;
@@ -33,27 +34,28 @@ export interface Router {
 export interface ThingDescription {
   id: string;
   title: string;
-  '@context': string;
-  '@type': string[];
-  description: string;
-  base: string;
-  baseHref: string;
-  href: string;
-  properties: Record<string, PropertySchema>;
-  actions: Record<string, ActionSchema>;
-  events: Record<string, EventSchema>;
-  links: Link[];
-  forms: Form[];
-  floorplanVisibility: boolean;
-  floorplanX: number;
-  floorplanY: number;
-  layoutIndex: number;
-  selectedCapability: string;
-  iconHref: string | null;
-  iconData: IconData;
+  '@context': string | string[];
+  '@type'?: string | string[];
+  profile?: string | string[];
+  description?: string;
+  base?: string;
+  baseHref?: string;
+  href?: string;
+  properties?: Record<string, PropertySchema>;
+  actions?: Record<string, ActionSchema>;
+  events?: Record<string, EventSchema>;
+  links?: Link[];
+  forms?: Form[];
+  floorplanVisibility?: boolean;
+  floorplanX?: number;
+  floorplanY?: number;
+  layoutIndex?: number;
+  selectedCapability?: string;
+  iconHref?: string | null;
+  iconData?: IconData;
   security: string;
   securityDefinitions: SecurityDefinition;
-  group_id: string | null;
+  groupId?: string | null;
 }
 
 interface IconData {
@@ -78,9 +80,11 @@ export default class Thing extends EventEmitter {
 
   private title: string;
 
-  private '@context': string;
+  private '@context': string | string[];
 
-  private '@type': string[];
+  private '@type': string | string[];
+
+  private profile: string | string[];
 
   private description: string;
 
@@ -96,15 +100,15 @@ export default class Thing extends EventEmitter {
 
   private eventsDispatched: Event[];
 
-  private floorplanVisibility: boolean;
+  private floorplanVisibility: boolean | undefined;
 
-  private floorplanX: number;
+  private floorplanX: number | undefined;
 
-  private floorplanY: number;
+  private floorplanY: number | undefined;
 
   private layoutIndex: number;
 
-  private selectedCapability: string;
+  private selectedCapability: string | undefined;
 
   private links: Link[];
 
@@ -112,7 +116,7 @@ export default class Thing extends EventEmitter {
 
   private iconHref: string | null;
 
-  private group_id: string | null;
+  private groupId: string | null;
 
   /**
    * Thing constructor.
@@ -132,8 +136,32 @@ export default class Thing extends EventEmitter {
     // Parse the Thing Description
     this.id = id;
     this.title = description.title || (<Record<string, string>>(<unknown>description)).name || '';
-    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
+
+    // Set @context
+    if (description['@context']) {
+      this['@context'] = Utils.standardizeContext(description['@context']);
+    } else {
+      this['@context'] = Constants.DEFAULT_CONTEXT;
+    }
+
+    // Set @type
     this['@type'] = description['@type'] || [];
+
+    // Set profile (based on which interaction affordances are exposed)
+    this.profile = [];
+    if (
+      Object.keys(description.properties ?? {}).length > 0 ||
+      Object.keys(description.actions ?? {}).length > 0
+    ) {
+      this.profile.push(Constants.WOT_HTTP_BASIC_PROFILE);
+    }
+    if (
+      Object.keys(description.properties ?? {}).length > 0 ||
+      Object.keys(description.events ?? {}).length > 0
+    ) {
+      this.profile.push(Constants.WOT_HTTP_SSE_PROFILE);
+    }
+
     this.description = description.description || '';
     this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
     this.properties = {};
@@ -172,17 +200,21 @@ export default class Thing extends EventEmitter {
           property.forms = [];
         }
 
-        // Give the property a URL
-        // Conservative approach do not remove provided forms
+        // Add forms for the property (does not remove forms provided by add-on)
         property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+        });
+        property.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          op: [Constants.WoTOperation.OBSERVE_PROPERTY, Constants.WoTOperation.UNOBSERVE_PROPERTY],
+          subprotocol: 'sse',
         });
 
         this.properties[propertyName] = property;
       }
 
       // If there are properties, add a top level form for them
-      if (Object.keys(description.properties).length > 0) {
+      if (Object.keys(description.properties ?? {}).length > 0) {
         let ops;
         // If there are writable properties then add readallproperties and
         // writemultipleproperties operations as an array
@@ -199,6 +231,15 @@ export default class Thing extends EventEmitter {
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
           op: ops,
+        });
+
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: [
+            Constants.WoTOperation.OBSERVE_ALL_PROPERTIES,
+            Constants.WoTOperation.UNOBSERVE_ALL_PROPERTIES,
+          ],
+          subprotocol: 'sse',
         });
       }
     }
@@ -226,7 +267,11 @@ export default class Thing extends EventEmitter {
     this.floorplanVisibility = description.floorplanVisibility;
     this.floorplanX = description.floorplanX;
     this.floorplanY = description.floorplanY;
-    this.layoutIndex = description.layoutIndex;
+    if (typeof description.layoutIndex === 'undefined') {
+      this.layoutIndex = Infinity;
+    } else {
+      this.layoutIndex = description.layoutIndex;
+    }
     this.selectedCapability = description.selectedCapability;
     this.links = [];
 
@@ -240,11 +285,11 @@ export default class Thing extends EventEmitter {
       router.addProxyServer(this.id, description.baseHref);
     }
 
-    if (description.hasOwnProperty('links')) {
+    if (description.hasOwnProperty('links') && typeof description.links != 'undefined') {
       for (const link of description.links) {
         // For backwards compatibility
         if (link.mediaType) {
-          console.warn('The mediaType member of Link is deprecated, please use type instead. ThingID: ',this.id);
+          console.warn('The mediaType member of Link is deprecated, please use type instead');
           link.type = link.mediaType;
           delete link.mediaType;
         }
@@ -296,11 +341,10 @@ export default class Thing extends EventEmitter {
     }
 
     for (const eventName in this.events) {
-      const event = this.events[eventName];
+      let event = this.events[eventName];
 
-      if (event.hasOwnProperty('href')) {
-        delete event.href;
-      }
+      // Move legacy event data schema to standard location and remove href if present
+      event = Utils.standardizeEventDescription(event);
 
       if (event.forms) {
         event.forms = event.forms.map((form) => {
@@ -329,7 +373,7 @@ export default class Thing extends EventEmitter {
       this.setIcon(description.iconData, false);
     }
 
-    this.group_id = description.group_id || null;
+    this.groupId = description.groupId || null;
   }
 
   getId(): string {
@@ -345,7 +389,7 @@ export default class Thing extends EventEmitter {
   }
 
   getGroup(): string | null {
-    return this.group_id;
+    return this.groupId;
   }
 
   getHref(): string {
@@ -512,11 +556,11 @@ export default class Thing extends EventEmitter {
   /**
    * Set the group for a Thing in the overview.
    *
-   * @param {string} group_id ID of the group
+   * @param {string} groupId ID of the group
    * @return {Promise} A promise which resolves with the description set.
    */
-  setGroup(group_id: string | null): Promise<ThingDescription> {
-    this.group_id = group_id;
+  setGroup(groupId: string | null): Promise<ThingDescription> {
+    this.groupId = groupId;
     return Database.updateThing(this.id, this.getDescription()).then((descr) => {
       return descr;
     });
@@ -610,6 +654,7 @@ export default class Thing extends EventEmitter {
       title: this.title,
       '@context': this['@context'],
       '@type': this['@type'],
+      profile: this.profile,
       description: this.description,
       href: this.href,
       properties: this.properties,
@@ -623,7 +668,7 @@ export default class Thing extends EventEmitter {
       layoutIndex: this.layoutIndex,
       selectedCapability: this.selectedCapability,
       iconHref: this.iconHref,
-      group_id: this.group_id,
+      groupId: this.groupId,
     } as ThingDescription;
 
     if (typeof reqHost !== 'undefined') {
@@ -632,6 +677,9 @@ export default class Thing extends EventEmitter {
         href: `${reqSecure ? 'wss' : 'ws'}://${reqHost}${this.href}`,
       };
 
+      if (typeof desc.links === 'undefined') {
+        desc.links = [];
+      }
       desc.links.push(wsLink);
 
       desc.id = `${reqSecure ? 'https' : 'http'}://${reqHost}${this.href}`;
@@ -707,7 +755,11 @@ export default class Thing extends EventEmitter {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
-    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
+    if (description['@context']) {
+      this['@context'] = Utils.standardizeContext(description['@context']);
+    } else {
+      this['@context'] = Constants.DEFAULT_CONTEXT;
+    }
 
     // Update @type
     this['@type'] = description['@type'] || [];
@@ -744,15 +796,20 @@ export default class Thing extends EventEmitter {
           property.forms = [];
         }
 
-        // Give the property a URL
-        // Conservative approach do not remove provided forms
+        // Add forms for the property (does not remove forms provided by add-on)
         property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
+        property.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          op: [Constants.WoTOperation.OBSERVE_PROPERTY, Constants.WoTOperation.UNOBSERVE_PROPERTY],
+          subprotocol: 'sse',
+        });
+
         this.properties[propertyName] = property;
       }
 
-      // If there are properties, add a top level form for them
+      // If there are properties add top level forms for them
       if (Object.keys(description.properties).length > 0) {
         let ops;
         // If there are writable properties then add readallproperties and
@@ -770,6 +827,15 @@ export default class Thing extends EventEmitter {
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
           op: ops,
+        });
+
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: [
+            Constants.WoTOperation.OBSERVE_ALL_PROPERTIES,
+            Constants.WoTOperation.UNOBSERVE_ALL_PROPERTIES,
+          ],
+          subprotocol: 'sse',
         });
       }
     }
@@ -805,11 +871,10 @@ export default class Thing extends EventEmitter {
     // Update events
     this.events = description.events || {};
     for (const eventName in this.events) {
-      const event = this.events[eventName];
+      let event = this.events[eventName];
 
-      if (event.hasOwnProperty('href')) {
-        delete event.href;
-      }
+      // Move legacy event data schema to standard location and remove href if present
+      event = Utils.standardizeEventDescription(event);
 
       if (event.forms) {
         event.forms = event.forms.map((form) => {
@@ -870,6 +935,9 @@ export default class Thing extends EventEmitter {
     }
 
     // Update the UI href
+    if (typeof description.links === 'undefined') {
+      description.links = [];
+    }
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
         // For backwards compatibility
