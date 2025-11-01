@@ -6,11 +6,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+
+import child_process from 'child_process';
+import fs from 'fs';
+import ipRegex from 'ip-regex';
+import os from 'os';
 import ip from 'ip';
 import { Netmask } from 'netmask';
 import BasePlatform from './base';
 import NetworkManager, { ConnectionSettings } from './utilities/network-manager';
-import { LanMode, NetworkAddresses, WirelessNetwork } from './types';
+import {
+  LanMode,
+  NetworkAddresses,
+  SelfUpdateStatus,
+  WirelessMode,
+  WirelessNetwork,
+} from './types';
+
 
 export class LinuxRaspbianPlatform extends BasePlatform {
 
