@@ -201,7 +201,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       }
     } else {
       mode = 'sta';
-      const startProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'status'], {
+      const startProc = child_process.spawnSync('wpa_cli', ['-i', dev_name, 'status'], {
         encoding: 'utf8',
       });
 
@@ -313,7 +313,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       for (const id of networks) {
         const removeNetworkProc = child_process.spawnSync('wpa_cli', [
           '-i',
-          'wlan0',
+          dev_name,
           'remove_network',
           id,
         ]);
@@ -343,13 +343,13 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     child_process.spawnSync('sudo', ['rfkill', 'unblock', 'wifi']);
 
     // Now, set the IP address back to a sane state
-    const configProc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', '0.0.0.0']);
+    const configProc = child_process.spawnSync('sudo', ['ifconfig', dev_name, '0.0.0.0']);
     if (configProc.status !== 0) {
       return false;
     }
 
     if (mode === 'sta') {
-      const addProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'add_network'], {
+      const addProc = child_process.spawnSync('wpa_cli', ['-i', dev_name, 'add_network'], {
         encoding: 'utf8',
       });
       if (addProc.status !== 0) {
@@ -390,12 +390,12 @@ export class LinuxRaspbianPlatform extends BasePlatform {
         return false;
       }
 
-      const enableProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'enable_network', id]);
+      const enableProc = child_process.spawnSync('wpa_cli', ['-i', dev_name, 'enable_network', id]);
       if (enableProc.status !== 0) {
         return false;
       }
 
-      const saveProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
+      const saveProc = child_process.spawnSync('wpa_cli', ['-i', dev_name, 'save_config']);
       if (saveProc.status !== 0) {
         return false;
       }
@@ -451,7 +451,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     if (options.ipaddr) {
       const configProc = child_process.spawnSync('sudo', [
         'ifconfig',
-        'wlan0',
+        dev_name,
         <string>options.ipaddr,
       ]);
       if (configProc.status !== 0) {
