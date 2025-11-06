@@ -32,6 +32,30 @@ export class LinuxRaspbianPlatform extends BasePlatform {
   }
 
   /**
+   * Set DHCP server status.
+   *
+   * @param {boolean} enabled - Whether or not to enable the DHCP server
+   * @returns {boolean} Boolean indicating success of the command.
+   */
+  setDhcpServerStatus(enabled: boolean): boolean {
+    let proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'start' : 'stop',
+      'dnsmasq.service',
+    ]);
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'enable' : 'disable',
+      'dnsmasq.service',
+    ]);
+    return proc.status === 0;
+  }
+
+  /**
    * Get the LAN mode and options.
    *
    * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
