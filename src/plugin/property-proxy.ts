@@ -97,12 +97,13 @@ export default class PropertyProxy extends Property<Any> {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value: Any): Promise<Any> {
+  setValue(value: Any, origin: String): Promise<Any> {
     return new Promise((resolve, reject) => {
       this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
         deviceId: this.getDevice().getId(),
         propertyName: this.getName(),
         propertyValue: value,
+        origin: origin,
       });
 
       // TODO: Add a timeout
