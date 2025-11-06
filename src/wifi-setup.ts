@@ -347,6 +347,8 @@ export function isWiFiConfigured(): Promise<boolean> {
       if (addresses.lan) {
         ensureAPStopped();
         return Promise.resolve(true);
+      else{
+        console.log("wifi-setup.js: isWiFiConfigured: no ethernet connection detected")
       }
 
       // Wait until we have a working wifi connection. Retry every 3 seconds up
