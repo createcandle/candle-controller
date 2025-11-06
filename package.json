@@ -174,5 +174,11 @@
     "webdriverio": "^7.0.9",
     "webpack": "^5.76.0",
     "webpack-cli": "^4.5.0"
-  }
+  },
+  "overrides": {
+    "sqlite3": {
+      "node-gyp": "11.x"
+    },
+    "node-gyp": "11.x"
+  },
 }
