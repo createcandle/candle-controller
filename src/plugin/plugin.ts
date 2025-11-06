@@ -599,7 +599,7 @@ export default class Plugin {
         let message = `${adapter.getName()}`;
         if (data.deviceId) {
           device = adapter.getDevice(data.deviceId);
-          message += ` (${device.getTitle()})`;
+          message += `: (${device.getTitle()})`;
         }
 
         message += `: ${data.prompt}`;
