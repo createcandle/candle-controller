@@ -4,7 +4,7 @@ Candle is a smart home controller that puts privacy first. It explores and showc
 
 Learn more at: https://www.candlesmarthome.com/
 
-![Voco AI interface](https://github.com/createcandle/candle-controller/blob/master/screenshot.png?raw=true)
+![Candle Dashboard addon](https://github.com/createcandle/candle-controller/blob/master/screenshot.png?raw=true)
 
 
 ### Differences
