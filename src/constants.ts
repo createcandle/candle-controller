@@ -59,6 +59,7 @@ export const PROPERTY_STATUS = 'propertyStatus';
 export const REMOVED = 'removed';
 export const REQUEST_ACTION = 'requestAction';
 export const SET_PROPERTY = 'setProperty';
+export const GET_PROPERTIES = 'getProperties';
 export const THING_ADDED = 'thingAdded';
 export const THING_MODIFIED = 'thingModified';
 export const THING_REMOVED = 'thingRemoved';
