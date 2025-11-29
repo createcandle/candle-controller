@@ -788,6 +788,24 @@ function build(): express.Router {
           break;
         }
 
+        case Constants.GET_PROPERTIES: {
+          for (const name in device.getProperties()) {
+            AddonManager.getProperty(device.getId(), name)
+              .then((value) => {
+                sendMessage({
+                  id: device.getId(),
+                  messageType: Constants.PROPERTY_STATUS,
+                  data: {
+                    [name]: value,
+                  },
+                });
+              })
+              .catch((e: unknown) => {
+                console.error(`getProperties: failed to get property ${name}:`, e);
+              });
+          }
+        }
+
         case Constants.ADD_EVENT_SUBSCRIPTION: {
           for (const eventName in (<AddEventSubscriptionMessage>request).data) {
             subscribedEventNames[eventName] = true;
