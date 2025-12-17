@@ -468,6 +468,7 @@ function build(): express.Router {
     const options = request.body.options;
 
     if (Platform.implemented('setWirelessModeAsync') && mode == 'sta') {
+      console.log("OK, setWirelessModeAsync is implemented");
       Platform.setWirelessModeAsync(enabled, mode, options)
         .then((result) => {
           if (result === true) {
