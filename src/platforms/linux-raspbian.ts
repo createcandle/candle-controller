@@ -1395,7 +1395,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       // 'ap', //TODO: Implement ap mode
       'sta',
     ];
-    console.log("in setWirelessModeAsync.  enabled, mode, options: ", enabled, mode, options);
+    //console.log("in setWirelessModeAsync.  enabled, mode, options: ", enabled, mode, options);
     if (enabled && !valid.includes(mode)) {
       console.error(`Wireless mode ${mode} not supported on this platform`);
       return false;
