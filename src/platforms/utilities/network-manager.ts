@@ -140,7 +140,7 @@ class NetworkManager {
                       reject();
                       return;
                   }
-                  resolve(+value);
+                  resolve(value);
               });
           });
       });
