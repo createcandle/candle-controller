@@ -118,7 +118,34 @@ class NetworkManager {
       );
     });
   }
-
+  /**
+   * Get the interface name for a given network adapter.
+   *
+   * @param {string} path Object path for device.
+   * @returns {Promise<number>} Resolves with the interface name
+   * 
+   */
+  getInterfaceName(path) {
+      this.start();
+      return new Promise((resolve, reject) => {
+          this.systemBus.getInterface('org.freedesktop.NetworkManager', path, 'org.freedesktop.NetworkManager.Device', function (error, iface) {
+              if (error) {
+                  console.error(error);
+                  reject();
+                  return;
+              }
+              iface.getProperty('Interface', function (error, value) {
+                  if (error) {
+                      console.error(error);
+                      reject();
+                      return;
+                  }
+                  resolve(+value);
+              });
+          });
+      });
+  }
+  
   /**
    * Get a list of Ethernet network adapters from the system network manager.
    *
