@@ -158,6 +158,10 @@ class NetworkManager {
     const ethernetDevices: string[] = [];
     // Filter by type
     for (const device of devices) {
+      const interface_name = await this.getInterfaceName(device);
+			if(typeof interface_name == 'string' && interface_name == 'uap0'){
+				continue
+			}
       const type = await this.getDeviceType(device);
       if (type == 1) {
         ethernetDevices.push(device);
