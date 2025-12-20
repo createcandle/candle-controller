@@ -312,8 +312,8 @@ export const serverStartup: {
   promise: Promise.resolve(),
 };
 
-if(fs.existsSync('/boot/firmware/candle_skip_network.txt')){
-  console.log("spotted /boot/firmware/candle_skip_network.txt, skipping all network setup and starting the controller");
+if(fs.existsSync('/boot/firmware/candle_hotspot.txt')){
+  console.log("spotted /boot/firmware/candle_hotspot.txt. Starting the controller");
   startGateway();
 }
 else{
