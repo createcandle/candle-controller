@@ -24,7 +24,8 @@ export default class Gateway {
   static getDescription(reqHost?: string, reqSecure?: boolean): ThingDescription {
     const origin = `${reqSecure ? 'https' : 'http'}://${reqHost}`;
     const desc: ThingDescription = {
-      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://www.w3.org/2022/wot/discovery'],
+      //'@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://www.w3.org/2022/wot/discovery'],
+      '@context': 'https://webthings.io/schemas',
       '@type': 'ThingDirectory',
       id: origin,
       base: origin,
