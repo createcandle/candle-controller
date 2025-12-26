@@ -453,7 +453,7 @@ class Things extends EventEmitter {
    * @param {Any} value
    * @return {Promise<Any>} resolves to new value
    */
-  async setThingProperty(thingId: string, propertyName: string, value: Any): Promise<Any> {
+  async setThingProperty(thingId: string, propertyName: string, value: Any, meta: Any): Promise<Any> {
     let thing: ThingDescription;
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
@@ -475,7 +475,7 @@ class Things extends EventEmitter {
     }
 
     try {
-      const updatedValue = await AddonManager.setProperty(thingId, propertyName, value);
+      const updatedValue = await AddonManager.setProperty(thingId, propertyName, value, meta);
       // Note: it's possible that updatedValue doesn't match value.
       return updatedValue;
     } catch (e) {
@@ -485,7 +485,9 @@ class Things extends EventEmitter {
         'property:',
         propertyName,
         'value:',
-        value
+        value,
+        'meta:',
+        meta
       );
 
       throw new HttpErrorWithCode(e, 500);
