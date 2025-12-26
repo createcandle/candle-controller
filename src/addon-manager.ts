@@ -393,10 +393,10 @@ export class AddonManager extends EventEmitter {
    * @returns a promise which resolves to the updated value of `propertyName`
    *          for the thing identified by `thingId`.
    */
-  setProperty(thingId: string, propertyName: string, value: Any): Promise<Any> {
+  setProperty(thingId: string, propertyName: string, value: Any, meta: Any): Promise<Any> {
     const device = this.getDevice(thingId);
     if (device) {
-      return device.setProperty(propertyName, value);
+      return device.setProperty(propertyName, value, meta);
     }
 
     return Promise.reject(`setProperty: device: ${thingId} not found.`);
