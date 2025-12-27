@@ -83,7 +83,8 @@ class API {
     });
   }
 
-  putJsonWithEmptyResponse(url: string, data: Record<string, unknown>): Promise<void> {
+  putJsonWithEmptyResponse(url: string, data: Record<string, unknown>, meta: Record<string, unknown>): Promise<void> {
+    console.log('api.ts: putJsonWithEmptyResponse: meta: ', meta);
     const opts = {
       method: 'PUT',
       headers: {
