@@ -184,7 +184,7 @@ class ThingModel extends Model {
    *   (Note that the value is only returned for backwards compatibility and
    *   might not reflect the actual remote property value set)
    */
-  setProperty(name, value) {
+  setProperty(name, value, meta) {
     if (!this.propertyDescriptions.hasOwnProperty(name)) {
       return Promise.reject(`Unavailable property name ${name}`);
     }
@@ -209,7 +209,7 @@ class ThingModel extends Model {
       this.base
     );
 
-    return API.putJsonWithEmptyResponse(href, value)
+    return API.putJsonWithEmptyResponse(href, value, meta)
       .then(() => {
         const result = {};
         result[name] = value;
