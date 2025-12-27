@@ -103,6 +103,7 @@ export default class PropertyProxy extends Property<Any> {
         deviceId: this.getDevice().getId(),
         propertyName: this.getName(),
         propertyValue: value,
+        propertyMeta: meta,
       });
 
       // TODO: Add a timeout
@@ -118,7 +119,9 @@ export default class PropertyProxy extends Property<Any> {
             'to',
             value,
             'for device:',
-            this.getDevice().getId()
+            this.getDevice().getId(),
+            'meta:',
+            meta
           );
           console.error(error);
           reject(error);
