@@ -102,10 +102,10 @@ export default class Property extends EventEmitter {
    * @return {Promise} resolves when set is done
    */
   set(value: Any): Promise<Any> {
-    return Things.setThingProperty(this.thing, this.id, value)
+    return Things.setThingProperty(this.thing, this.id, value, {"origin":"rules"})
       .catch((e: unknown) => {
         console.warn('Rule set failed, retrying once', e);
-        return Things.setThingProperty(this.thing, this.id, value);
+        return Things.setThingProperty(this.thing, this.id, value, {"origin":"rules"});
       })
       .catch((e: unknown) => {
         console.warn('Rule set failed completely', e);
