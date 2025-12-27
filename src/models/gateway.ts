@@ -26,6 +26,7 @@ export default class Gateway {
     const desc: ThingDescription = {
       //'@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://www.w3.org/2022/wot/discovery'],
       '@context': 'https://webthings.io/schemas',
+      //'@type': 'ThingDirectory',
       '@type': ['ThingDirectory'],
       id: origin,
       base: origin,
