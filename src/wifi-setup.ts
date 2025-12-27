@@ -347,6 +347,7 @@ export function isWiFiConfigured(): Promise<boolean> {
       if (addresses.lan) {
         ensureAPStopped();
         return Promise.resolve(true);
+      }
       else{
         console.log("wifi-setup.js: isWiFiConfigured: no ethernet connection detected")
       }
