@@ -529,7 +529,7 @@ export default class Plugin {
       }
 
       case MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION: {
-        console.log('plugin.ts: DEVICE_PROPERTY_CHANGED_NOTIFICATION: msg: ', msg);
+        //console.log('plugin.ts: DEVICE_PROPERTY_CHANGED_NOTIFICATION: msg: ', msg);
         const data = msg.data as DevicePropertyChangedNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device && data.property.name) {
