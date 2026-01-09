@@ -328,10 +328,15 @@ function build(): express.Router {
       response.sendStatus(400);
       return;
     }
+    // forward any available meta data about the request, such as its origin
+    let meta = null;
+    if (typeof request.params.meta !== 'undefined') {
+      meta = request.params.meta;
+    }
     // An array of promises to set each property
     const promises = [];
     for (const propertyName of Object.keys(request.body)) {
-      promises.push(Things.setThingProperty(thingId, propertyName, request.body[propertyName]));
+      promises.push(Things.setThingProperty(thingId, propertyName, request.body[propertyName], meta));
     }
     Promise.all(promises)
       .then(() => {
@@ -365,13 +370,17 @@ function build(): express.Router {
   controller.put('/:thingId/properties/:propertyName', async (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
+    let meta = null;
+    if (typeof request.params.meta !== 'undefined') {
+      meta = request.params.meta;
+    }
     if (typeof request.body === 'undefined') {
       response.sendStatus(400);
       return;
     }
     const value = request.body;
     try {
-      await Things.setThingProperty(thingId, propertyName, value);
+      await Things.setThingProperty(thingId, propertyName, value, meta);
       response.sendStatus(204);
     } catch (err) {
       console.error('Error setting property:', err);
