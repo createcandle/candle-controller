@@ -954,16 +954,19 @@
           <h3 style="margin:0">Reload this page</h3>
           <p style="margin:0">This refreshes this webpage. If your controller has a touch screen, then you can also drag a finger down from the top of the display to reload a page at any time.<br/>
           <a href="/" onClick="window.location.reload(true)"><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Reload</button></a><br/></p>
+          <br>
        </li>
        <li>
           <h3 style="margin:0">Try logging in (again)</h3>
           <p style="margin:0">If logging in doesn't work, then reboot the controller.<br/>
           <a href="/login"><br/><button class="text-button" style="margin-top:.5rem;padding:1rem;font-size:1.6rem;">Login page</button></a><br/></p>
+          <br>
        </li>
        <li>
           <h3 style="margin:0">Reboot the controller</h3>
           <p style="margin-top:0">Unplug the power cable for 10 seconds.</p>
        </li>
+       <!--
        <li>
           <h3 style="margin:0">Network issues</h3>
           <p style="margin:0">It could be that your Candle Controller could not connect to Wi-Fi. Here are some options:</p>
@@ -973,6 +976,7 @@
             <li>Scan for a WiFi network called `Candle XXXX`, where the X's are random letters. Connect to that hotspot and provide the new WiFi details. Once that's complete, reload this page to continue.<br/><br/></li>
          </ul>
        </li>
+       -->
     </ul> 
     
      
@@ -982,11 +986,31 @@
     setTimeout(function(){
       if(document.body.classList.contains('hidden')){
         console.log("ERROR, body still has hidden class. Wifi issue?");
-        document.body.classList.remove('hidden');
-        document.getElementById('connectivity-scrim').classList.add('hidden');
-        document.getElementById('candle-tools').style.display = 'block';
+
+        const ping_url = window.location.origin + '/ping';
+	     fetch(ping_url)
+	     .then(response => {
+           if (response.status === 200 || response.status === 204) {
+			  
+           } else {
+              console.error("/ping: unexpected response code: ", response.status, response);
+              document.body.classList.remove('hidden');
+              document.getElementById('connectivity-scrim').classList.add('hidden');
+              document.getElementById('candle-tools').style.display = 'block';
+           }
+	     })
+	     .catch(err => {
+           console.error("/ping: caught an error: ", err);
+           document.body.classList.remove('hidden');
+           document.getElementById('connectivity-scrim').classList.add('hidden');
+           document.getElementById('candle-tools').style.display = 'block';
+        });
+         
+        
       }
-    }, 20000);
+    }, 30000);
+
+
      
      // Could perhaps be used in a tool that can scan for local controllers through brute force
      window.parent.postMessage('Candle', '*');
