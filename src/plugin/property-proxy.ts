@@ -99,12 +99,23 @@ export default class PropertyProxy extends Property<Any> {
    */
   setValue(value: Any, meta: Any): Promise<Any> {
     return new Promise((resolve, reject) => {
-      this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
-        deviceId: this.getDevice().getId(),
-        propertyName: this.getName(),
-        propertyValue: value,
-        propertyMeta: meta,
-      });
+
+      if(meta){
+        this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
+          deviceId: this.getDevice().getId(),
+          propertyName: this.getName(),
+          propertyValue: value,
+          propertyMeta: meta,
+        });
+      }
+      else{
+        this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
+          deviceId: this.getDevice().getId(),
+          propertyName: this.getName(),
+          propertyValue: value,
+        });
+      }
+      
 
       // TODO: Add a timeout
 
