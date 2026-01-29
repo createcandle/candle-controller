@@ -103,7 +103,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
         process.exit(Constants.DONT_RESTART_EXIT_CODE);
       }
 
-      console.log(`Loading add-on ${packageName} from ${addonPath}`);
+      console.log(`addon-loader: loading add-on ${packageName} from ${addonPath}`);
       try {
         // we try to link to a global gateway-addon module, because in some
         // cases, NODE_PATH seems to not work
@@ -133,7 +133,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
           sleep(500).then(() => process.exit(0));
         });
       } catch (e) {
-        console.error(e);
+        console.error("addon-loader: caught error: ", e);
         const message = `Failed to start add-on ${obj.name}: ${e
           .toString()
           .replace(/^Error:\s+/, '')}`;
