@@ -919,7 +919,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     proc = child_process.spawnSync('sudo', ['systemctl', enabled ? 'enable' : 'disable', timer]);
     return proc.status === 0;
     */
-    return 0
+    return true
   }
 
   /**
