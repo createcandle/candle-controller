@@ -617,6 +617,8 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
+      child_process.spawnSync('nmcli', [general,'hostname',hostname],{shell: true});
+        
       return false;
     }
 
@@ -627,6 +629,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
       child_process.spawnSync('sudo', ['hostname', original]);
+      child_process.spawnSync('nmcli', [general,'hostname',original],{shell: true});
 
       return false;
     }
