@@ -980,7 +980,6 @@ export class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setTimezone(zone: string): boolean {
-    
     const proc = child_process.spawnSync('sudo', [
       'raspi-config',
       'nonint',
@@ -995,7 +994,6 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     ]);
     */
     return proc.status === 0;
-    
   }
 
   /**
@@ -1201,12 +1199,28 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       console.log('Unable to detect an Ethernet IP address');
     }
     try {
-      const wifiDevices = await NetworkManager.getWifiDevices();
-      const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[0]);
-      const accessPoint = await NetworkManager.getActiveAccessPoint(wifiDevices[0]);
-      const ssid = await NetworkManager.getAccessPointSsid(accessPoint);
-      result.wlan.ip = wifiIp4Config[0].address;
-      result.wlan.ssid = ssid;
+      const wifiDevices = await network_manager.getWifiDevices();
+			console.log("getNetworkAddressesAsync: wifiDevices: ", wifiDevices);
+			let wifiDevice = null;
+      // Add some predictability to which wireless interface is chosen
+			if(wifiDevices.indexOf('wlan0') != -1){
+        wifiDevice = 'wlan0';
+      }
+      else {
+        for (let wd = 0; wd < wifiDevices.length; wd++) {
+          if (wifiDevices[wd] != 'uap0') {
+            wifiDevice = wifiDevices[wd];
+            break;
+          }
+        }
+      }
+			if(wifiDevice){
+			  const wifiIp4Config = await network_manager.getDeviceIp4Config(wifiDevice);
+			  const accessPoint = await network_manager.getActiveAccessPoint(wifiDevice);
+			  const ssid = await network_manager.getAccessPointSsid(accessPoint);
+			  result.wlan.ip = wifiIp4Config[0].address;
+			  result.wlan.ssid = ssid;
+			}
     } catch (error) {
       console.log('Unable to detect a Wi-Fi IP address and active SSID');
     }
@@ -1365,11 +1379,29 @@ export class LinuxRaspbianPlatform extends BasePlatform {
    *  ]
    */
   async scanWirelessNetworksAsync(): Promise<WirelessNetwork[]> {
-    const wifiDevices = await NetworkManager.getWifiDevices();
-    const wifiAccessPoints = await NetworkManager.getWifiAccessPoints(wifiDevices[0]);
+    const wifiDevices = await network_manager.getWifiDevices();
+    console.log("scanWirelessNetworksAsync: wifiDevices: ", wifiDevices);
+    let wifiDevice = null;
+    // Add some predictability to which wireless interface is chosen
+    if (wifiDevices.indexOf('wlan0') != -1) {
+      wifiDevice = 'wlan0';
+    }
+    else {
+      for (let wd = 0; wd < wifiDevices.length; wd++) {
+        if (wifiDevices[wd] != 'uap0') {
+          wifiDevice = wifiDevices[wd];
+          break;
+        }
+      }
+    }
+    if (wifiDevice == null) {
+      // Return empty response if no wifi device found
+      return [];
+    }
+    const wifiAccessPoints = await NetworkManager.getWifiAccessPoints(wifiDevice);
     let activeAccessPoint: string | null;
     try {
-      activeAccessPoint = await NetworkManager.getActiveAccessPoint(wifiDevices[0]);
+      activeAccessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
     } catch (error) {
       activeAccessPoint = null;
     }
@@ -1404,15 +1436,30 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
     const wifiDevices = await NetworkManager.getWifiDevices();
+    console.log("setWirelessModeAsync: wifiDevices: ", wifiDevices);
+    let wifiDevice = null;
+    // Add some predictability to which wireless interface is chosen
+    if (wifiDevices.indexOf('wlan0') != -1) {
+      wifiDevice = 'wlan0';
+    }
+    else {
+      for (let wd = 0; wd < wifiDevices.length; wd++) {
+        if (wifiDevices[wd] != 'uap0') {
+          wifiDevice = wifiDevices[wd];
+          break;
+        }
+      }
+    }
+    if (wifiDevice == null) {
+      // Return empty response if no wifi device found
+      return false;
+    }
+
 
     // If `enabled` set to false, disconnect wireless device
     if (enabled === false) {
-      // Return false if no wifi device found
-      if (!wifiDevices[0]) {
-        return false;
-      }
       try {
-        await NetworkManager.disconnectNetworkDevice(wifiDevices[0]);
+        await NetworkManager.disconnectNetworkDevice(wifiDevice);
       } catch (error) {
         console.error(`Error whilst attempting to disconnect wireless device: ${error}`);
         return false;
@@ -1436,7 +1483,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     }
     try {
       NetworkManager.connectToWifiAccessPoint(
-        wifiDevices[0],
+        wifiDevice,
         accessPoint,
         <string>options.ssid,
         secure,
