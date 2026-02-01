@@ -1371,16 +1371,16 @@ export class LinuxRaspbianPlatform extends BasePlatform {
    */
   async scanWirelessNetworksAsync(): Promise<WirelessNetwork[]> {
     const wifiDevices = await NetworkManager.getWifiDevices();
-	let wifiDevice = null;
-	for (let wd = 0; wd < wifiDevices.length; wd++) {
-		const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-		if(wifiIp4Config[0].address == '192.168.12.1'){
-			// Skip the hotspot on the uap0 interface
-			continue
-		}
-		wifiDevice = wifiDevices[wd];
-		break
-	}
+    let wifiDevice = null;
+    for (let wd = 0; wd < wifiDevices.length; wd++) {
+      const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
+      if(wifiIp4Config[0].address == '192.168.12.1'){
+        // Skip the hotspot on the uap0 interface
+        continue
+      }
+      wifiDevice = wifiDevices[wd];
+      break
+    }
     if (wifiDevice == null) {
       // Return empty response if no wifi device found
       return [];
