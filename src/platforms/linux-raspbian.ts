@@ -1202,15 +1202,23 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       const wifiDevices = await NetworkManager.getWifiDevices();
       for (let wd = 0; wd < wifiDevices.length; wd++) {
         const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-        if(wifiIp4Config[0].address == '192.168.12.1'){
+        if (!Array.isArray(wifiIp4Config)){
+          continue
+        }
+        if(wifiIp4Config.length == 0){
+          continue
+        }
+        if (wifiIp4Config[0].address === '192.168.12.1') {
           // Skip the hotspot on the uap0 interface
           continue
         }
         const accessPoint = await NetworkManager.getActiveAccessPoint(wifiDevices[wd]);
         const ssid = await NetworkManager.getAccessPointSsid(accessPoint);
-        result.wlan.ip = wifiIp4Config[0].address;
-        result.wlan.ssid = ssid;
-        break
+        if(Array.isArray(wifiIp4Config) && wifiIp4Config.length && typeof wifiIp4Config[0].address == 'string'){
+          result.wlan.ip = wifiIp4Config[0].address;
+          result.wlan.ssid = ssid;
+          break
+        }
       }
     } catch (error) {
       console.log('Unable to detect a Wi-Fi IP address and active SSID');
@@ -1374,7 +1382,13 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let wifiDevice = null;
     for (let wd = 0; wd < wifiDevices.length; wd++) {
       const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-      if (wifiIp4Config && wifiIp4Config.length && wifiIp4Config[0].address === '192.168.12.1') {
+      if (!Array.isArray(wifiIp4Config)){
+        continue
+      }
+      if(wifiIp4Config.length == 0){
+        continue
+      }
+      if (wifiIp4Config[0].address === '192.168.12.1') {
         // Skip the hotspot on the uap0 interface
         continue
       }
@@ -1426,7 +1440,13 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let wifiDevice = null;
     for (let wd = 0; wd < wifiDevices.length; wd++) {
       const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-      if (wifiIp4Config && wifiIp4Config.length && wifiIp4Config[0].address === '192.168.12.1') {
+      if (!Array.isArray(wifiIp4Config)){
+        continue
+      }
+      if(wifiIp4Config.length == 0){
+        continue
+      }
+      if (wifiIp4Config[0].address === '192.168.12.1') {
         // Skip the hotspot on the uap0 interface
         continue
       }
