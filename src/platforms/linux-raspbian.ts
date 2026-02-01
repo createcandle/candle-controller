@@ -1200,27 +1200,18 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     }
     try {
       const wifiDevices = await NetworkManager.getWifiDevices();
-			console.log("getNetworkAddressesAsync: wifiDevices: ", wifiDevices);
-			let wifiDevice = null;
-      // Add some predictability to which wireless interface is chosen
-			if(wifiDevices.indexOf('wlan0') != -1){
-        wifiDevice = 'wlan0';
-      }
-      else {
-        for (let wd = 0; wd < wifiDevices.length; wd++) {
-          if (wifiDevices[wd] != 'uap0') {
-            wifiDevice = wifiDevices[wd];
-            break;
-          }
-        }
-      }
-			if(wifiDevice){
-			  const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevice);
-			  const accessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
-			  const ssid = await NetworkManager.getAccessPointSsid(accessPoint);
-			  result.wlan.ip = wifiIp4Config[0].address;
-			  result.wlan.ssid = ssid;
+		for (let wd = 0; wd < wifiDevices.length; wd++) {
+			const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevice);
+			if(wifiIp4Config[0].address == '192.168.12.1'){
+				// Skip the hotspot on the uap0 interface
+				continue
 			}
+			const accessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
+			const ssid = await NetworkManager.getAccessPointSsid(accessPoint);
+			result.wlan.ip = wifiIp4Config[0].address;
+			result.wlan.ssid = ssid;
+			break
+		}
     } catch (error) {
       console.log('Unable to detect a Wi-Fi IP address and active SSID');
     }
