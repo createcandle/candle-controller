@@ -1423,26 +1423,20 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
     const wifiDevices = await NetworkManager.getWifiDevices();
-    console.log("setWirelessModeAsync: wifiDevices: ", wifiDevices);
     let wifiDevice = null;
-    // Add some predictability to which wireless interface is chosen
-    if (wifiDevices.indexOf('wlan0') != -1) {
-      wifiDevice = 'wlan0';
-    }
-    else {
-      for (let wd = 0; wd < wifiDevices.length; wd++) {
-        if (wifiDevices[wd] != 'uap0') {
-          wifiDevice = wifiDevices[wd];
-          break;
-        }
+    for (let wd = 0; wd < wifiDevices.length; wd++) {
+      const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
+      if(wifiIp4Config[0].address == '192.168.12.1'){
+        // Skip the hotspot on the uap0 interface
+        continue
       }
+      wifiDevice = wifiDevices[wd];
+      break
     }
     if (wifiDevice == null) {
       // Return empty response if no wifi device found
       return false;
     }
-
-
     // If `enabled` set to false, disconnect wireless device
     if (enabled === false) {
       try {
