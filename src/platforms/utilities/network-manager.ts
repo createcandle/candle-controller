@@ -1,6 +1,9 @@
 import DBus from 'dbus';
 import { WirelessNetwork } from '../types';
 
+// Documentation on the dBus NetworkManager interface can be found at:
+// https://people.freedesktop.org/~lkundrak/nm-docs/gdbus-org.freedesktop.NetworkManager.html
+
 export interface ConnectionSettings {
   connection: {
     id: string;
