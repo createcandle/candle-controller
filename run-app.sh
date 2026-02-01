@@ -13,7 +13,7 @@ source $NVM_DIR/nvm.sh
 
 #CONTROLLER_NODE_VERSION_FILE_PATH="${WEBTHINGS_HOME}/.node_version"
 use_node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
-
+echo "run-app.sh: use_node_version: $use_node_version"
 
 #AVAILABLE_NODE_VERSIONS=$(nvm list | grep  "lts/" | grep -v "N/A")
 #echo
@@ -23,9 +23,9 @@ use_node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
 
 
 # Optionally let the desired Node version be overridden with a file in /boot	
-if [ -f "/boot/candle_node_version.txt" ]; then	
-  use_node_version=$(cat /boot/candle_node_version.txt)	
-  echo "Candle node version file detected. Will use Node version: ${use_node_version}"	
+if [ -f "/boot/firmware/candle_node_version.txt" ]; then	
+  use_node_version=$(cat /boot/firmware/candle_node_version.txt)	
+  echo "Candle node version file detected. overriding Node version to use to: ${use_node_version}"	
 fi	
 
 
