@@ -617,7 +617,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       //child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
-      child_process.spawnSync('nmcli', [general,'hostname',hostname],{shell: true});
+      child_process.spawnSync('nmcli', ['general','hostname',hostname],{shell: true});
         
       return false;
     }
@@ -629,7 +629,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       child_process.spawnSync('echo', [original,'|','sudo','tee','/home/pi/.webthings/etc/hostname'],{shell: true});
       child_process.spawnSync('echo', [original,'|','sudo','tee','/boot/firmware/hostname.txt'],{shell: true});
       child_process.spawnSync('sudo', ['hostname', original]);
-      child_process.spawnSync('nmcli', [general,'hostname',original],{shell: true});
+      child_process.spawnSync('nmcli', ['general','hostname',original],{shell: true});
 
       return false;
     }
@@ -1199,7 +1199,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       console.log('Unable to detect an Ethernet IP address');
     }
     try {
-      const wifiDevices = await network_manager.getWifiDevices();
+      const wifiDevices = await NetworkManager.getWifiDevices();
 			console.log("getNetworkAddressesAsync: wifiDevices: ", wifiDevices);
 			let wifiDevice = null;
       // Add some predictability to which wireless interface is chosen
@@ -1215,9 +1215,9 @@ export class LinuxRaspbianPlatform extends BasePlatform {
         }
       }
 			if(wifiDevice){
-			  const wifiIp4Config = await network_manager.getDeviceIp4Config(wifiDevice);
-			  const accessPoint = await network_manager.getActiveAccessPoint(wifiDevice);
-			  const ssid = await network_manager.getAccessPointSsid(accessPoint);
+			  const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevice);
+			  const accessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
+			  const ssid = await NetworkManager.getAccessPointSsid(accessPoint);
 			  result.wlan.ip = wifiIp4Config[0].address;
 			  result.wlan.ssid = ssid;
 			}
@@ -1379,7 +1379,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
    *  ]
    */
   async scanWirelessNetworksAsync(): Promise<WirelessNetwork[]> {
-    const wifiDevices = await network_manager.getWifiDevices();
+    const wifiDevices = await NetworkManager.getWifiDevices();
     console.log("scanWirelessNetworksAsync: wifiDevices: ", wifiDevices);
     let wifiDevice = null;
     // Add some predictability to which wireless interface is chosen
