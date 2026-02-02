@@ -1404,6 +1404,24 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       apRequests.push(NetworkManager.getAccessPointDetails(ap, activeAccessPoint));
     });
     const responses = await Promise.all(apRequests);
+    // Sort responses by signal strength
+    responses.sort((a, b) => b.quality - a.quality);
+    // Filter out empty responses (hidden SSID's)
+    for (let er = responses.length -1; er >= 0; er--) {
+      if (responses[er]['ssid'] == '') {
+        responses.splice(er, 1);
+        continue
+      }
+    }
+    // Filter out responses with duplicate SSID's, keeping the first one (with the strongest signal)
+    let seen_ssids = [];
+    for (let dr = 0; dr < responses.length; dr++) {
+      if (seen_ssids.indexOf( responses[dr].ssid ) == -1) {
+        seen_ssids.push(responses[dr].ssid);
+      } else {
+        responses.splice(dr, 1);
+      }
+    }
     return responses;
   }
 
