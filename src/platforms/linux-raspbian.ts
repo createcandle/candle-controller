@@ -1382,14 +1382,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let wifiDevice = null;
     for (let wd = 0; wd < wifiDevices.length; wd++) {
       const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-      if (!Array.isArray(wifiIp4Config)){
-        continue
-      }
-      if(wifiIp4Config.length == 0){
-        continue
-      }
-      if (wifiIp4Config[0].address === '192.168.12.1') {
-        // Skip the hotspot on the uap0 interface
+      if (Array.isArray(wifiIp4Config) && wifiIp4Config.length && wifiIp4Config[0].address === '192.168.12.1'){
         continue
       }
       wifiDevice = wifiDevices[wd];
@@ -1440,14 +1433,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let wifiDevice = null;
     for (let wd = 0; wd < wifiDevices.length; wd++) {
       const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-      if (!Array.isArray(wifiIp4Config)){
-        continue
-      }
-      if(wifiIp4Config.length == 0){
-        continue
-      }
-      if (wifiIp4Config[0].address === '192.168.12.1') {
-        // Skip the hotspot on the uap0 interface
+      if (Array.isArray(wifiIp4Config) && wifiIp4Config.length && wifiIp4Config[0].address === '192.168.12.1'){
         continue
       }
       wifiDevice = wifiDevices[wd];
