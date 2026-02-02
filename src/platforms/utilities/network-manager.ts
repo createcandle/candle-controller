@@ -718,7 +718,6 @@ class NetworkManager {
             connection: {
               id: ssid,
               type: '802-11-wireless',
-			  ifname: 'wlan0',
             },
           };
 
