@@ -1477,28 +1477,52 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       console.log('Could not connect to wireless network because no SSID provided');
       return false;
     }
-    const accessPoint = await NetworkManager.getAccessPointbySsid(options.ssid as string);
-    if (accessPoint == null) {
-      console.log('No network with specified SSID found');
-      return false;
-    }
-    let secure = false;
-    if (options.key) {
-      secure = true;
-    }
+    const wifiAccessPoints = await NetworkManager.getWifiAccessPoints(wifiDevice); 
+    // If we're already connected to an accesspoint with the prefered SSID, then do nothing and return early
+    let activeAccessPoint;
     try {
-      NetworkManager.connectToWifiAccessPoint(
-        wifiDevice,
-        accessPoint,
-        <string>options.ssid,
-        secure,
-        <string>options.key
-      );
-    } catch (error) {
-      console.error(`Error connecting to Wi-Fi access point: ${error}`);
-      return false;
+      activeAccessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
+      activeAccessPointDetails = NetworkManager.getAccessPointDetails(activeAccessPoint, activeAccessPoint);
+      if (activeAccessPointDetails && typeof activeAccessPointDetails['ssid'] == 'string' && activeAccessPointDetails['ssid'] === options.ssid) {
+        // Already connected to an accesspoint with the provided SSID
+        return true;
+      }
     }
-    return true;
+    catch (error) {
+      console.log("setWirelessModeAsync: caught error while checking active accesspoint: ", error);
+      activeAccessPoint = null;
+    }
+    const apRequests = [];
+    wifiAccessPoints.forEach((ap) => {
+      apRequests.push(NetworkManager.getAccessPointDetails(ap, activeAccessPoint));
+    });
+    const responses = await Promise.all(apRequests);
+    // Sort responses by signal strength
+    responses.sort((a, b) => b.quality - a.quality);
+    // If the SSID the user wants to connect to is found again, connect to it
+    for (let dr = 0; dr < responses.length; dr++) {
+      if (responses[dr].ssid == options.ssid) {
+        let secure = false;
+        if (options.key) {
+          secure = true;
+        }
+        try {
+          NetworkManager.connectToWifiAccessPoint(
+            wifiDevice,
+            <string>responses[dr].path,
+            <string>options.ssid,
+            secure,
+            <string>options.key
+          );
+        }
+        catch (error) {
+          console.error(`Caught error connecting to Wi-Fi access point: ${error}`);
+          return false;
+        }
+        return true;
+      }
+    }
+    return false
   }
 }
 
