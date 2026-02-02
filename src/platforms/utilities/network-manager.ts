@@ -582,6 +582,7 @@ class NetworkManager {
       encryption: security,
       configured: connected, // Currently assumes only configured if connected
       connected: connected,
+      path: path, // dbus accessPoint
     };
     // Resolve with access point details
     return response;
