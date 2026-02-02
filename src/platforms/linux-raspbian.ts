@@ -1482,7 +1482,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let activeAccessPoint;
     try {
       activeAccessPoint = await NetworkManager.getActiveAccessPoint(wifiDevice);
-      activeAccessPointDetails = NetworkManager.getAccessPointDetails(activeAccessPoint, activeAccessPoint);
+      const activeAccessPointDetails = NetworkManager.getAccessPointDetails(activeAccessPoint, activeAccessPoint);
       if (activeAccessPointDetails && typeof activeAccessPointDetails['ssid'] == 'string' && activeAccessPointDetails['ssid'] === options.ssid) {
         // Already connected to an accesspoint with the provided SSID
         return true;
