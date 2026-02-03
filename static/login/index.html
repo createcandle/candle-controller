@@ -126,7 +126,7 @@
 		  placeholder="password"
           data-l10n-id="user-settings-input-password"
         />
-		<div id="password-visibility-button"><img id="candle-theme-login-password-privacy-eye" src="/images/candle_privacy_eye_closed.svg" alt="Show or hide password" width="32" height="32"></div>
+		<div id="password-visibility-button"><img id="candle-login-password-privacy-eye" src="/images/candle_privacy_eye_closed.svg" alt="Show or hide password" width="32" height="32"></div>
 	  </div>
       <div id="remember-email-group">
         <input
@@ -166,11 +166,12 @@
   </body>
   <script type="text/javascript">
 
-	  let kiosk = false;
+	  let on_kiosk = false;
 	  if(document.getElementById('virtualKeyboardChromeExtension') != null){
 		  document.getElementById('remember-password-group').style.display = 'block';
-		  kiosk = true;
+		  on_kiosk = true;
 	  }
+	  console.log("kiosk: ", kiosk);
 
 	  const email_el = document.getElementById('email');
 	  const remember_email_el = document.getElementById('remember-email');
@@ -220,9 +221,10 @@
 		  }
 	  });
 
-	  const password_visibility_button_el = document.getElementById('password-visibility-button');
-	  const password_visibility_button_image_el = document.getElementById('candle-theme-login-password-privacy-eye');
-	  if(kiosk){
+	  
+	  if(on_kiosk){
+		  const password_visibility_button_el = document.getElementById('password-visibility-button');
+		  const password_visibility_button_image_el = document.getElementById('candle-login-password-privacy-eye');
 		  password_visibility_button_el.addEventListener("click", () =>{
 			  if (password_el.type === "password") {
 			      password_el.type = "text";
