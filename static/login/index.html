@@ -41,10 +41,10 @@
 		  margin-left:2px;
 		  background-color:#597285;
 		  border-radius:.5rem;
-		  font-size:125%;
-		  cursor:pointer;
-		  padding:.1rem .5rem;
+		  /*font-size:125%;
+		  padding:.1rem .5rem;*/
 		  margin-right:auto;
+		  cursor:pointer;
 	  }
 
       #screensaver {
@@ -121,7 +121,7 @@
 		  placeholder="password"
           data-l10n-id="user-settings-input-password"
         />
-		<div id="password-visibility-button">🫣</div>
+		<div id="password-visibility-button"><img id="candle-theme-login-password-privacy-eye" src="/images/candle_privacy_eye_closed.svg" alt="Show or hide password" width="32" height="32"></div>
 	  </div>
       <div id="remember-email-group">
         <input
@@ -130,6 +130,14 @@
           name="remember-email"
         />
         <label for="remember-email">Remember email</label>
+      </div>
+	  <div id="remember-password-group" style="display:none">
+        <input
+          type="checkbox"
+          id="remember-password"
+          name="remember-password"
+        />
+        <label for="remember-password">Remember password</label>
       </div>
 
       <div id="totp-prompt" data-l10n-id="login-enter-totp" class="hidden"></div>
@@ -152,7 +160,13 @@
 	
   </body>
   <script type="text/javascript">
-  	
+
+	  let kiosk = false;
+	  if(document.getElementById('virtualKeyboardChromeExtension') != null){
+		  document.getElementById('remember-password-group').style.display = 'block';
+		  kiosk = true;
+	  }
+
 	  const email_el = document.getElementById('email');
 	  const remember_email_el = document.getElementById('remember-email');
 	  
@@ -179,7 +193,42 @@
             localStorage.removeItem('candle-login-page-email');
 		  }
 	  });
-	
+
+
+	  const password_el = document.getElementById('password');
+	  const remember_password_el = document.getElementById('remember-password');
+
+	  let stored_password = localStorage.getItem('candle-login-page-password');
+	  if(typeof stored_password == 'string' && stored_password.length > 0){
+		  password_el.value = '' + stored_password;
+		  remember_password_el.checked = true;
+	  }
+	  else{
+		  remember_password_el.checked = false;
+	  }
+	  remember_password_el.addEventListener('change', () => {
+		  if(remember_password_el.checked){
+            localStorage.setItem('candle-login-page-password', password_el.value);
+		  }
+		  else{
+            localStorage.removeItem('candle-login-page-password');
+		  }
+	  });
+
+	  const password_visibility_button_el = document.getElementById('password-visibility-button');
+	  const password_visibility_button_image_el = document.getElementById('candle-theme-login-password-privacy-eye');
+	  if(kiosk){
+		  password_visibility_button_el.addEventListener("click", () =>{
+			  if (password_el.type === "password") {
+			      password_el.type = "text";
+				  password_visibility_button_image_el.src = '/images/candle_privacy_eye_open.svg';
+			  } else {
+			      password_el.type = "password";
+				  password_visibility_button_image_el.src = '/images/candle_privacy_eye_closed.svg';
+			  }
+		  });
+	  }
+
 	
 	  const screensaver_el = document.getElementById('screensaver');
 
@@ -203,15 +252,7 @@
 	  
 	  
 	  
-	  const password_el = document.getElementById('password');
-	  const password_visibility_button_el = document.getElementById('password-visibility-button');
-	  password_visibility_button_el.addEventListener("click", () =>{
-		  if (password_el.type === "password") {
-		      password_el.type = "text";
-		    } else {
-		      password_el.type = "password";
-		    }
-	  });
+	  
 	  
   </script>
 </html>
