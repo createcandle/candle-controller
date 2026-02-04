@@ -166,13 +166,6 @@
   </body>
   <script type="text/javascript">
 
-	  let on_kiosk = false;
-	  if(document.getElementById('virtualKeyboardChromeExtension') != null){
-		  document.getElementById('remember-password-group').style.display = 'block';
-		  on_kiosk = true;
-	  }
-	  console.log("kiosk: ", kiosk);
-
 	  const email_el = document.getElementById('email');
 	  const remember_email_el = document.getElementById('remember-email');
 	  
@@ -201,40 +194,65 @@
 	  });
 
 
+
+
+	  let allow_login_password_remembering = false;
+	  if(document.getElementById('virtualKeyboardChromeExtension') != null){
+		  document.getElementById('remember-password-group').style.display = 'block';
+		  allow_login_password_remembering = true;
+	  }
+	  else if(localStorage.getItem('candle-login-allow-password-remembering')){
+		  document.getElementById('remember-password-group').style.display = 'block';
+		  allow_login_password_remembering = true;
+	  }
+	  console.log("allow_login_password_remembering: ", allow_login_password_remembering);
+
 	  const password_el = document.getElementById('password');
 	  const remember_password_el = document.getElementById('remember-password');
 
-	  let stored_password = localStorage.getItem('candle-login-page-password');
-	  if(typeof stored_password == 'string' && stored_password.length > 0){
-		  password_el.value = '' + stored_password;
-		  remember_password_el.checked = true;
-	  }
-	  else{
-		  remember_password_el.checked = false;
-	  }
-	  remember_password_el.addEventListener('change', () => {
-		  if(remember_password_el.checked){
-            localStorage.setItem('candle-login-page-password', password_el.value);
+	  if(allow_login_password_remembering){
+		  let stored_password = localStorage.getItem('candle-login-page-password');
+		  if(stored_password == null){
+			  remember_password_el.checked = false;
 		  }
-		  else{
-            localStorage.removeItem('candle-login-page-password');
+		  else if(typeof stored_password == 'string'){ //  && stored_password.length > 0
+			  password_el.value = '' + stored_password;
+			  remember_password_el.checked = true;
 		  }
-	  });
-
-	  
-	  if(on_kiosk){
-		  const password_visibility_button_el = document.getElementById('password-visibility-button');
-		  const password_visibility_button_image_el = document.getElementById('candle-login-password-privacy-eye');
-		  password_visibility_button_el.addEventListener("click", () =>{
-			  if (password_el.type === "password") {
-			      password_el.type = "text";
-				  password_visibility_button_image_el.src = '/images/candle_privacy_eye_open.svg';
-			  } else {
-			      password_el.type = "password";
-				  password_visibility_button_image_el.src = '/images/candle_privacy_eye_closed.svg';
+		  
+		  remember_password_el.addEventListener('change', () => {
+			  if(remember_password_el.checked){
+	            localStorage.setItem('candle-login-page-password', password_el.value);
+			  }
+			  else{
+	            localStorage.removeItem('candle-login-page-password');
+			  }
+		  });
+	
+		  password_el.addEventListener('blur', () => {
+			  if(remember_password_el.checked){
+	            localStorage.setItem('candle-login-page-password', password_el.value);
+			  }
+			  else{
+	            if(localStorage.getItem('candle-login-page-password')){
+	              localStorage.removeItem('candle-login-page-password');
+	            }
 			  }
 		  });
 	  }
+
+	  
+	  const password_visibility_button_el = document.getElementById('password-visibility-button');
+	  const password_visibility_button_image_el = document.getElementById('candle-login-password-privacy-eye');
+	  password_visibility_button_el.addEventListener("click", () =>{
+		  if (password_el.type === "password") {
+			  password_el.type = "text";
+			  password_visibility_button_image_el.src = '/images/candle_privacy_eye_open.svg';
+		  } else {
+			  password_el.type = "password";
+			  password_visibility_button_image_el.src = '/images/candle_privacy_eye_closed.svg';
+		  }
+	  });
 
 	
 	  const screensaver_el = document.getElementById('screensaver');
