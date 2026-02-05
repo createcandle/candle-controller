@@ -1389,6 +1389,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       break
     }
     if (wifiDevice == null) {
+      console.error("scanWirelessNetworksAsync: no wifiDevice found");
       // Return empty response if no wifi device found
       return [];
     }
@@ -1404,8 +1405,14 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       apRequests.push(NetworkManager.getAccessPointDetails(ap, activeAccessPoint));
     });
     const responses = await Promise.all(apRequests);
+    console.error("scanWirelessNetworksAsync: responses: ", responses);
     // Sort responses by signal strength
-    responses.sort((a, b) => b.quality - a.quality);
+    try{
+      responses.sort((a, b) => b.quality - a.quality);
+    }
+    catch(err){
+      console.error("scanWirelessNetworksAsync: caught error trying to sort wifi networks by signal strength: ", err);
+    }
     // Filter out empty responses (hidden SSID's)
     for (let er = responses.length -1; er >= 0; er--) {
       if (responses[er]['ssid'] == '') {
