@@ -1406,29 +1406,34 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     });
     const responses = await Promise.all(apRequests);
     console.error("scanWirelessNetworksAsync: responses: ", responses);
-    // Sort responses by signal strength
     try{
+      // Filter out empty responses (hidden SSID's)
+      for (let er = responses.length -1; er >= 0; er--) {
+        if (responses[er]['ssid'] == '') {
+          responses.splice(er, 1);
+          continue
+        }
+        if (typeof responses[er]['quality'] != 'number') {
+          console.warn("scanWirelessNetworksAsync: had to fix missing wifi network quality score for ssid: ", responses[er]['ssid']);
+          responses[er]['quality'] = 100;
+        }
+      }
+      // Sort responses by signal strength
       responses.sort((a, b) => b.quality - a.quality);
+      // Filter out responses with duplicate SSID's, keeping the first one (with the strongest signal)
+      let seen_ssids = [];
+      for (let dr = 0; dr < responses.length; dr++) {
+        if (seen_ssids.indexOf( responses[dr].ssid ) == -1) {
+          seen_ssids.push(responses[dr].ssid);
+        } else {
+          responses.splice(dr, 1);
+        }
+      }
     }
     catch(err){
-      console.error("scanWirelessNetworksAsync: caught error trying to sort wifi networks by signal strength: ", err);
+      console.error("scanWirelessNetworksAsync: caught error trying to filter wifi networks list: ", err);
     }
-    // Filter out empty responses (hidden SSID's)
-    for (let er = responses.length -1; er >= 0; er--) {
-      if (responses[er]['ssid'] == '') {
-        responses.splice(er, 1);
-        continue
-      }
-    }
-    // Filter out responses with duplicate SSID's, keeping the first one (with the strongest signal)
-    let seen_ssids = [];
-    for (let dr = 0; dr < responses.length; dr++) {
-      if (seen_ssids.indexOf( responses[dr].ssid ) == -1) {
-        seen_ssids.push(responses[dr].ssid);
-      } else {
-        responses.splice(dr, 1);
-      }
-    }
+    
     return responses;
   }
 
