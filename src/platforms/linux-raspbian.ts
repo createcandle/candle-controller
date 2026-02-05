@@ -1447,7 +1447,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
    */
   async setWirelessModeAsync(
     enabled: boolean,
-    mode = 'ap',
+    mode = 'sta',
     options: Record<string, unknown> = {}
   ): Promise<boolean> {
     const valid = [
@@ -1511,8 +1511,25 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       apRequests.push(NetworkManager.getAccessPointDetails(ap, activeAccessPoint));
     });
     const responses = await Promise.all(apRequests);
-    // Sort responses by signal strength
-    responses.sort((a, b) => b.quality - a.quality);
+    try {
+      // Filter out empty responses (hidden SSID's)
+      for (let er = responses.length -1; er >= 0; er--) {
+        if (responses[er]['ssid'] == '') {
+          responses.splice(er, 1);
+          continue
+        }
+        if (typeof responses[er]['quality'] != 'number') {
+          console.warn("setWirelessModeAsync: had to fix missing wifi network quality score for ssid: ", responses[er]['ssid']);
+          responses[er]['quality'] = 100;
+        }
+      }
+      // Sort responses by signal strength
+      responses.sort((a, b) => b.quality - a.quality);
+    }
+    catch (error) {
+      console.error("setWirelessModeAsync: caught error filtering and sorting wifi networks list: ", error);
+    }
+
     // If the SSID the user wants to connect to is found again, connect to it
     for (let dr = 0; dr < responses.length; dr++) {
       if (responses[dr].ssid == options.ssid) {
