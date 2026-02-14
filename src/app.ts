@@ -10,8 +10,8 @@
 
 // Set up the user profile.
 import UserProfile from './user-profile';
-import migrate from './migrate';
-const migration = migrate();
+//import migrate from './migrate';
+//const migration = migrate();
 
 // Causes a timestamp to be prepended to console log lines.
 import './log-timestamps';
@@ -119,11 +119,8 @@ function startHttpsGateway(): Promise<https.Server | null> {
   promises.push(
     new Promise<void>((resolve) => {
       servers.https!.listen(port, () => {
-        migration
-          .then(() => {
-            // load existing things from the database
-            return Things.getThings();
-          })
+        // load existing things from the database
+        Things.getThings()
           .then(() => {
             AddonManager.loadAddons();
           });
@@ -160,11 +157,8 @@ function startHttpGateway(): Promise<void> {
 
   return new Promise<void>((resolve) => {
     servers.http.listen(port, () => {
-      migration
-        .then(() => {
-          // load existing things from the database
-          return Things.getThings();
-        })
+      // load existing things from the database
+      Things.getThings();
         .then(() => {
           AddonManager.loadAddons();
         });
@@ -320,10 +314,7 @@ else{
   switch (Platform.getOS()) {
     case 'linux-raspbian':
       console.log("Running on a Raspberry Pi");
-      migration
-        .then(() => {
-          return isWiFiConfigured();
-        })
+      isWiFiConfigured()
         .then((configured) => {
           if (!configured) {
             WiFiSetupApp.onConnection = () => {
