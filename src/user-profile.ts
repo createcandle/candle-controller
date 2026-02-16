@@ -10,7 +10,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import os
+
 import config from 'config';
 import path from 'path';
 
@@ -18,7 +18,6 @@ const baseDir = path.resolve(process.env.WEBTHINGS_HOME || config.get('profileDi
 
 export default {
   baseDir,
-  homedir: os.homedir(),
   configDir: path.join(baseDir, 'config'),
   dataDir: path.join(baseDir, 'data'),
   sslDir: path.join(baseDir, 'ssl'),
