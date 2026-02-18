@@ -52,7 +52,7 @@ class Extension {
    *                            https://www.npmjs.com/package/page#context
    */
   show(_context) {
-    console.log(`Extension ${this.id} is being shown.`);
+    //console.log(`Extension ${this.id} is being shown.`);
   }
 
   /**
@@ -62,7 +62,7 @@ class Extension {
    * any required unloading steps.
    */
   hide() {
-    console.log(`Extension ${this.id} is being hidden.`);
+    //console.log(`Extension ${this.id} is being hidden.`);
   }
 
   /**
