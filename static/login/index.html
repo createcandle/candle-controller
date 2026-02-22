@@ -193,12 +193,15 @@
 	  var allow_login_password_remembering = false;
 	  const remember_password_group_el = document.getElementById('remember-password-group');
 	  if(remember_password_group_el){
+			/*
 			if(document.getElementById('virtualKeyboardChromeExtension')){
-			  document.getElementById('remember-password-group').style.display = 'block';
-			  allow_login_password_remembering = true;
-		  }
-			else if(localStorage.getItem('candle-login-allow-password-remembering')){
-			  document.getElementById('remember-password-group').style.display = 'block';
+				remember_password_group_el.style.display = 'block';
+				allow_login_password_remembering = true;
+			}
+			else 
+			*/
+			if(localStorage.getItem('candle-login-allow-password-remembering')){
+			  remember_password_group_el.style.display = 'block';
 			  allow_login_password_remembering = true;
 	  	}
 	  }
