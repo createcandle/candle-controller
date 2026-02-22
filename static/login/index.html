@@ -102,10 +102,7 @@
       }
   
 	
-  </style>
-  
-  
-  
+    </style>
   </head>
   <body>
     <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
@@ -186,31 +183,31 @@
 	  
 	  remember_email_el.addEventListener('change', () => {
 		  if(remember_email_el.checked){
-            localStorage.setItem('candle-login-page-email', email_el.value);
+			localStorage.setItem('candle-login-page-email', email_el.value);
 		  }
 		  else{
-            localStorage.removeItem('candle-login-page-email');
+			localStorage.removeItem('candle-login-page-email');
 		  }
 	  });
 
-
-
-
-	  let allow_login_password_remembering = false;
-	  if(document.getElementById('virtualKeyboardChromeExtension') != null){
-		  document.getElementById('remember-password-group').style.display = 'block';
-		  allow_login_password_remembering = true;
-	  }
-	  else if(localStorage.getItem('candle-login-allow-password-remembering')){
-		  document.getElementById('remember-password-group').style.display = 'block';
-		  allow_login_password_remembering = true;
+	  var allow_login_password_remembering = false;
+	  const remember_password_group_el = document.getElementById('remember-password-group');
+	  if(remember_password_group_el){
+			if(document.getElementById('virtualKeyboardChromeExtension')){
+			  document.getElementById('remember-password-group').style.display = 'block';
+			  allow_login_password_remembering = true;
+		  }
+			else if(localStorage.getItem('candle-login-allow-password-remembering')){
+			  document.getElementById('remember-password-group').style.display = 'block';
+			  allow_login_password_remembering = true;
+	  	}
 	  }
 	  console.log("allow_login_password_remembering: ", allow_login_password_remembering);
 
 	  const password_el = document.getElementById('password');
 	  const remember_password_el = document.getElementById('remember-password');
-
-	  if(allow_login_password_remembering){
+	
+	  if(remember_password_group_el && remember_password_el && allow_login_password_remembering){
 		  let stored_password = localStorage.getItem('candle-login-page-password');
 		  if(stored_password == null){
 			  remember_password_el.checked = false;
@@ -224,24 +221,21 @@
 			  if(remember_password_el.checked){
 	            localStorage.setItem('candle-login-page-password', password_el.value);
 			  }
-			  else{
+			  else if (localStorage.getItem('candle-login-page-password')){
 	            localStorage.removeItem('candle-login-page-password');
 			  }
 		  });
 	
 		  password_el.addEventListener('blur', () => {
 			  if(remember_password_el.checked){
-	            localStorage.setItem('candle-login-page-password', password_el.value);
+					localStorage.setItem('candle-login-page-password', password_el.value);
 			  }
-			  else{
-	            if(localStorage.getItem('candle-login-page-password')){
-	              localStorage.removeItem('candle-login-page-password');
-	            }
+			  else if(localStorage.getItem('candle-login-page-password')){
+					localStorage.removeItem('candle-login-page-password');
 			  }
 		  });
 	  }
 
-	  
 	  const password_visibility_button_el = document.getElementById('password-visibility-button');
 	  const password_visibility_button_image_el = document.getElementById('candle-login-password-privacy-eye');
 	  password_visibility_button_el.addEventListener("click", () =>{
@@ -254,7 +248,6 @@
 		  }
 	  });
 
-	
 	  const screensaver_el = document.getElementById('screensaver');
 
 	  function start_screensaver(){
@@ -274,10 +267,6 @@
 	  document.addEventListener("keydown", reset_screensaver);
 	  document.addEventListener("scroll", reset_screensaver);
 	  screensaver_el.addEventListener("click", reset_screensaver);
-	  
-	  
-	  
-	  
 	  
   </script>
 </html>
