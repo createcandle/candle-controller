@@ -158,7 +158,7 @@ function startHttpGateway(): Promise<void> {
   return new Promise<void>((resolve) => {
     servers.http.listen(port, () => {
       // load existing things from the database
-      Things.getThings();
+      Things.getThings()
         .then(() => {
           AddonManager.loadAddons();
         });
