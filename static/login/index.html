@@ -21,6 +21,12 @@
         align-items: center;
 		margin: .3rem 0 1rem 0;
       }
+	  #remember-email-group label,
+      #remember-password-group label{
+		  min-width:24rem;
+		  text-align:left;
+	  }
+		
       #remember-email,
       #remember-password{
         width:auto;
@@ -56,6 +62,7 @@
 
 	#login-button{
 		cursor:pointer;
+		margin-top:4rem;
 	}
 
       #screensaver {
@@ -185,6 +192,7 @@
 		  if(remember_email_el.checked){
             localStorage.setItem('candle-login-page-email', email_el.value);
 		  }
+		  reset_screensaver();
 	  });
 	  
 	  remember_email_el.addEventListener('change', () => {
@@ -194,6 +202,7 @@
 		  else{
 			localStorage.removeItem('candle-login-page-email');
 		  }
+		  reset_screensaver();
 	  });
 
 	  var allow_login_password_remembering = false;
@@ -209,7 +218,7 @@
 			if(localStorage.getItem('candle-login-allow-password-remembering')){
 			  remember_password_group_el.style.display = 'flex';
 			  allow_login_password_remembering = true;
-	  	}
+		  	}
 	  }
 	  console.log("allow_login_password_remembering: ", allow_login_password_remembering);
 
@@ -233,6 +242,7 @@
 			  else if (localStorage.getItem('candle-login-page-password')){
 	            localStorage.removeItem('candle-login-page-password');
 			  }
+			  reset_screensaver();
 		  });
 	
 		  password_el.addEventListener('blur', () => {
@@ -242,6 +252,7 @@
 			  else if(localStorage.getItem('candle-login-page-password')){
 					localStorage.removeItem('candle-login-page-password');
 			  }
+			  reset_screensaver();
 		  });
 	  }
 
@@ -255,18 +266,25 @@
 			  password_el.type = "password";
 			  password_visibility_button_image_el.src = '/images/candle_privacy_eye_closed.svg';
 		  }
+		  reset_screensaver();
 	  });
 
 	  const screensaver_el = document.getElementById('screensaver');
 
 	  function start_screensaver(){
 		  screensaver_el.style.display = 'block';
-		  window.screensaver_timeout = null;
+		  if(window.screensaver_timeout){
+			  clearTimeout(window.screensaver_timeout);
+			  window.screensaver_timeout = null;
+		  }
 	  }
 	  
 	  function reset_screensaver(){
 		  screensaver_el.style.display = 'none';
-		  window.screensaver_timeout = null;
+		  if(window.screensaver_timeout){
+			  clearTimeout(window.screensaver_timeout);
+			  window.screensaver_timeout = null;
+		  }
 		  window.screensaver_timeout = setTimeout(start_screensaver, 60000);
 	  }
 	  
