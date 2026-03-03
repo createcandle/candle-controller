@@ -2,7 +2,7 @@
 #set -e -x
 
 if [ -f /dev/kmsg ]; then
-  echo "in run-app.sh: starting gateway" | sudo tee -a /dev/kmsg
+  echo "in candle_controller.sh: starting gateway" | sudo tee -a /dev/kmsg
 fi
 echo "Preparing the Candle Controller for launch"
 
@@ -13,7 +13,7 @@ source $NVM_DIR/nvm.sh
 
 #CONTROLLER_NODE_VERSION_FILE_PATH="${WEBTHINGS_HOME}/.node_version"
 use_node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
-echo "run-app.sh: use_node_version: $use_node_version"
+echo "candle_controller.sh: use_node_version: $use_node_version"
 
 #AVAILABLE_NODE_VERSIONS=$(nvm list | grep  "lts/" | grep -v "N/A")
 #echo
