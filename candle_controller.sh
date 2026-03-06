@@ -11,6 +11,10 @@ NVM_DIR="/home/pi/.nvm"
 source $NVM_DIR/nvm.sh
 
 
+if [ ! -d /home/pi/.dbus/session-bus ]; then
+  export $(dbus-launch)
+fi
+
 #CONTROLLER_NODE_VERSION_FILE_PATH="${WEBTHINGS_HOME}/.node_version"
 use_node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
 echo "candle_controller.sh: use_node_version: $use_node_version"
