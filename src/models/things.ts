@@ -440,9 +440,7 @@ class Things extends EventEmitter {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
     } catch (e) {
-      console.error('Error getting value for thingId:', thingId, 'property:', propertyName);
-      console.error(e);
-
+      //console.error('Caught error getting value for:\n-thingId:', thingId, '\n-property:', propertyName, '\n-error: ',e);
       throw new HttpErrorWithCode(e, 500);
     }
   }
