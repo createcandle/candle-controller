@@ -89,7 +89,7 @@ const AddThingScreen = {
     };
 
     // Timeout, in seconds.
-    const timeout = 60;
+    const timeout = 120;
 
     API.startPairing(timeout)
       .then((json) => {
