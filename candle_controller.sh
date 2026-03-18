@@ -15,6 +15,35 @@ if [ ! -d /home/pi/.dbus/session-bus ]; then
   export $(dbus-launch)
 fi
 
+# Ensure that the Candle Store addon is enabled
+if [ -f "/boot/firmware/skip_candle_store_check.txt" ]; then	
+  if [ -f /home/pi/.webthings/config/db.sqlite3 ]; then
+    candleappstore_settings=$(sqlite3 /home/pi/.webthings/config/db.sqlite3 'SELECT value FROM settings WHERE key = "addons.candleappstore"')
+    if [[ "$candleappstore_settings" == *",\"enabled\":false,"* ]]; then
+      echo "Enabling candle store addon"
+      echo "----BEFORE----"
+      echo $candleappstore_settings
+      echo "----"
+    	new_candleappstore_settings="${candleappstore_settings//,\"enabled\":false,/,\"enabled\":true,}"
+    	#new_candleappstore_settings="${new_candleappstore_settings//\"/\\\"}"
+    	echo "----AFTER----"
+    	echo $new_candleappstore_settings
+    	echo "----"
+    	sqlite3 /home/pi/.webthings/config/db.sqlite3 "UPDATE settings SET value='$new_candleappstore_settings' WHERE key IS 'addons.candleappstore';"
+    else
+    	echo "OK, Candle store is enabled"
+    fi
+  fi
+
+  if [ ! -d "/home/pi/.webthings/addons/candleappstore" ] && [ -d "/home/pi/backups/candleappstore" ]; then	
+    cp -r /home/pi/backups/candleappstore /home/pi/.webthings/addons/candleappstore
+    chown -R pi:pi /home/pi/.webthings/addons/candleappstore
+  fi
+
+fi
+
+
+
 #CONTROLLER_NODE_VERSION_FILE_PATH="${WEBTHINGS_HOME}/.node_version"
 use_node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
 echo "candle_controller.sh: use_node_version: $use_node_version"
