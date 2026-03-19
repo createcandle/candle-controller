@@ -35,8 +35,8 @@ if [ ! -f "/boot/firmware/skip_candle_store_check.txt" ]; then
     fi
   fi
 
-  if [ ! -d "/home/pi/.webthings/addons/candleappstore" ] && [ -d "/home/pi/backups/candleappstore" ]; then	
-    cp -r /home/pi/backups/candleappstore /home/pi/.webthings/addons/candleappstore
+  if [ ! -d "/home/pi/.webthings/addons/candleappstore" ] && [ -d "/home/pi/.webthings/backups/addons/candleappstore" ]; then	
+    cp -r /home/pi/.webthings/backups/addons/candleappstore /home/pi/.webthings/addons/candleappstore
     chown -R pi:pi /home/pi/.webthings/addons/candleappstore
   fi
 
