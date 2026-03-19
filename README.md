@@ -6,7 +6,7 @@ Learn more at: https://www.candlesmarthome.com/
 
 .
 
-![Candle Dashboard addon](https://github.com/createcandle/candle-controller/blob/master/candle_main_menu.png?raw=true)
+![Candle Dashboard addon](https://github.com/createcandle/candle-controller/blob/master/screenshot.jpg?raw=true)
 
 ![Candle Dashboard addon](https://github.com/createcandle/candle-controller/blob/master/screenshot.png?raw=true)
 
