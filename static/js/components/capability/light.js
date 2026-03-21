@@ -250,18 +250,20 @@ class LightCapability extends BaseComponent {
       value = ON_FILL;
     }
 
-    this._icon.style.fill = value;
-
-    const r = parseInt(value.substr(1, 2), 16);
-    const g = parseInt(value.substr(3, 2), 16);
-    const b = parseInt(value.substr(5, 2), 16);
-
-    // From https://stackoverflow.com/questions/3942878
-    if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
-      this._icon.classList.add('bright');
-    } else {
-      this._icon.classList.remove('bright');
+    if(typeof value == 'string'){
+      this._icon.style.fill = value;
+      const r = parseInt(value.substr(1, 2), 16);
+      const g = parseInt(value.substr(3, 2), 16);
+      const b = parseInt(value.substr(5, 2), 16);
+  
+      // From https://stackoverflow.com/questions/3942878
+      if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+        this._icon.classList.add('bright');
+      } else {
+        this._icon.classList.remove('bright');
+      }
     }
+    
   }
 
   __onClick(e) {
