@@ -476,7 +476,19 @@ class Thing {
 
     for (const prop of Object.values(this.displayedProperties)) {
       if (prop.hasOwnProperty('detail')) {
-        detailsHTML += `<div class="thing-detail-container">${prop.detail.view()}</div>`;
+        let extra_classes = '';
+        if(typeof prop.property == 'object' && prop.property != null){
+          if(typeof prop.property.readOnly == 'boolean' && prop.property.readOnly == true){
+            extra_classes += ' has-read-only';
+          }
+          if(typeof prop.property.enum != 'undefined' && Array.isArray(prop.property.enum)){
+            extra_classes += ' has-enum';
+          }
+          if(typeof prop.property.type == 'string'){
+            extra_classes = extra_classes + ' has-type-' + prop.property.type;
+          }
+        }
+        detailsHTML += `<div class="thing-detail-container${extra_classes}">${prop.detail.view()}</div>`;
       }
     }
 
