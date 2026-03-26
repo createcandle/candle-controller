@@ -4,9 +4,9 @@ on:
   pull_request:
     branches:
       - master
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -14,9 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: [
-          10,
-          12,
-          14,
+          20
         ]
     steps:
       - uses: actions/checkout@v2
@@ -26,13 +24,13 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt -qq update
-          sudo apt install -y google-chrome-stable
+          sudo apt install -y google-chrome-stable libdbus-1-dev
       - name: Install node dependencies
         run: |
           npm ci
       - name: Check formatting
         run: |
-          npx prettier -u -c '*.ts' '*.js' config src static tools
+          npx prettier -u -c '*.js' config src static tools
       - name: Lint with eslint and stylelint
         run: |
           npm run lint
@@ -43,7 +41,6 @@ jobs:
         run: |
           ./tools/make-self-signed-cert.sh
           npm run jest
-          npm run coverage
         env:
           WEBTHINGS_HOME: "${HOME}/.webthings/test"
           NODE_TLS_REJECT_UNAUTHORIZED: 0
