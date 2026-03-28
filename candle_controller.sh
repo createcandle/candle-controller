@@ -11,9 +11,56 @@ NVM_DIR="/home/pi/.nvm"
 source $NVM_DIR/nvm.sh
 
 
-if [ ! -d /home/pi/.dbus/session-bus ]; then
-  export $(dbus-launch)
+#if [ ! -d /home/pi/.dbus/session-bus ]; then
+#  export $(dbus-launch)
+#fi
+
+#echo "BEFORE:"
+#echo "XDG_RUNTIME_DIR: $XDG_RUNTIME_DIR"
+#echo "DBUS_SESSION_BUS_ADDRESS: $DBUS_SESSION_BUS_ADDRESS"
+#echo "--"
+#printenv
+#echo "--"
+
+if [ -n "$XDG_RUNTIME_DIR" ] ; then
+  export XDG_RUNTIME_DIR=/run/user/$(id -u)
 fi
+
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
+  if [ -d /home/pi/.dbus/session-bus ] ; then
+    SESSION_FILE=$(ls -tp /home/pi/.dbus/session-bus | grep -v /$ | head -1)
+    if ps aux | grep -q '/dbus-daemon'; then
+      if [ -n "$SESSION_FILE" ] && [ -f "/home/pi/.dbus/session-bus/$SESSION_FILE" ]; then
+        echo "sourcing:  /home/pi/.dbus/session-bus/$SESSION_FILE"
+        source "/home/pi/.dbus/session-bus/$SESSION_FILE"
+      fi
+    fi
+  else
+    echo "calling dbus-launch"
+    export $(dbus-launch)
+  fi
+fi
+
+if [ -n "$DISPLAY" ] ; then
+  export DISPLAY=:0
+fi
+
+
+XDG_RUNTIME_DIR="/run/user/1000"
+export XDG_RUNTIME_DIR="/run/user/1000"
+DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+
+
+
+#echo "AFTER:"
+echo "XDG_RUNTIME_DIR: $XDG_RUNTIME_DIR"
+echo "DBUS_SESSION_BUS_ADDRESS: $DBUS_SESSION_BUS_ADDRESS"
+#echo "--"
+#printenv
+#echo "--"
+
+
 
 # Ensure that the Candle Store addon is enabled
 if [ ! -f "/boot/firmware/skip_candle_store_check.txt" ]; then	
