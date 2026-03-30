@@ -15,12 +15,13 @@ function build(): express.Router {
   controller.get('/refresh', async (_request, response) => {
     try {
       const obj = await AddonManager.updateAddons({
-      forceUpdateBinary: true,
-      skipLoad: true,
-    });
-    response.status(200).json(obj);
+        forceUpdateBinary: true,
+        skipLoad: true,
+      });
+      response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
     } catch (e) {
-      console.error(`Caught error refreshing addons list ${e}`);
+      console.error(`Caught error refreshing addons list`);
+      console.error(e);
       response.status(400).send(e);
     }
   });
