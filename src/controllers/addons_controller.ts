@@ -12,20 +12,6 @@ function build(): express.Router {
     response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
   });
   
-  controller.get('/refresh', async (_request, response) => {
-    try {
-      const obj = await AddonManager.updateAddons({
-        forceUpdateBinary: true,
-        skipLoad: true,
-      });
-      response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
-    } catch (e) {
-      console.error(`Caught error refreshing addons list`);
-      console.error(e);
-      response.status(400).send(e);
-    }
-  });
-  
   controller.get('/:addonId/license', async (request, response) => {
     const addonId = request.params.addonId;
     const addonDir = path.join(UserProfile.addonsDir, addonId);
