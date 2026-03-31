@@ -23,6 +23,8 @@ source $NVM_DIR/nvm.sh
 #echo "--"
 
 if [ -n "$XDG_RUNTIME_DIR" ] ; then
+  XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  DBUS_SESSION_BUS_ADDRESS="$XDG_RUNTIME_DIR/bus"
   export XDG_RUNTIME_DIR=/run/user/$(id -u)
 fi
 
@@ -41,15 +43,17 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
   fi
 fi
 
+#eval $(dbus-launch --sh-syntax)
+
 if [ -n "$DISPLAY" ] ; then
   export DISPLAY=:0
 fi
 
 
-XDG_RUNTIME_DIR="/run/user/1000"
-export XDG_RUNTIME_DIR="/run/user/1000"
-DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
-export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+#XDG_RUNTIME_DIR="/run/user/1000"
+#export XDG_RUNTIME_DIR="/run/user/1000"
+#DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+#export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
 
 
 
