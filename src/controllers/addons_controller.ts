@@ -15,7 +15,7 @@ function build(): express.Router {
   controller.post('/:addonId/load', async (request, response) => {
     const addonId = request.params.addonId;
 		try {
-			await addon_manager.loadAddon(addonId);
+			await AddonManager.loadAddon(addonId);
 			response.status(200).json({});
 		}
     catch (e) {
