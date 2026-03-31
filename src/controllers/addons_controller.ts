@@ -11,6 +11,19 @@ function build(): express.Router {
   controller.get('/', async (_request, response) => {
     response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
   });
+
+  controller.post('/:addonId/load', async (request, response) => {
+    const addonId = request.params.addonId;
+		try {
+			await addon_manager.loadAddon(addonId);
+			response.status(200).json({});
+		}
+    catch (e) {
+      console.error(`Failed to load add-on ${addonId}`);
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
   
   controller.get('/:addonId/license', async (request, response) => {
     const addonId = request.params.addonId;
