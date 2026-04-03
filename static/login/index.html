@@ -14,6 +14,15 @@
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
     <link rel="stylesheet" href="/css/candle.css"/>
     <style>
+
+      #refresh-button{
+        position:fixed;
+		    top:2rem;
+        right:2rem;
+				cursor:pointer;
+        opacity:0;
+				transition: opacity 10s;
+      }
 		
       #login-form.user-form{
         top:30%;
@@ -24,7 +33,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-		margin: .3rem 0 1rem 0;
+				margin: .3rem 0 1rem 0;
       }
 		
 	  #remember-email-group label,
@@ -72,8 +81,8 @@
 	}
 
       #screensaver {
-		display:none;
-        background: #000;
+	    display:none;
+	    background: #000;
 	    position: absolute;
 	    top:0;
 	    left:0;
@@ -125,6 +134,8 @@
   </head>
   <body>
     <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
+
+	<img id="refresh-button" src="/images/refresh.svg" alt="Reload this page" width="30" height="30">
     <form id="login-form" class="user-form" method="post">
       <input
         type="email"
@@ -300,6 +311,17 @@
 	  document.addEventListener("keydown", reset_screensaver);
 	  document.addEventListener("scroll", reset_screensaver);
 	  screensaver_el.addEventListener("click", reset_screensaver);
+
+
+		const refresh_button_el = document.getElementById('refresh-button');
+		refresh_button_el.addEventListener('click', () => {
+			refresh_button_el.style.display = 'none';
+			window.location.reload(true);
+		}
+
+		setTimeout(() => {
+			refresh_button_el.style.opacity = '1';
+		},15000);
 	  
   </script>
 </html>
