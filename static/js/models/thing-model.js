@@ -128,25 +128,25 @@ class ThingModel extends Model {
       if (message.hasOwnProperty('id') && message.id !== this.id) {
         return;
       }
+      if(typeof window.snoopers != 'undefined' && 
+         typeof this.id == 'string' && 
+         typeof window.snoopers[this.id] == 'object' &&
+         Array.isArray(window.snoopers[this.id])
+      ){
+        for(let f = 0; f < window.snoopers[this.id].length; f++){
+          if (typeof window.snoopers[this.id][f] === 'function') {
+            try{
+              window.snoopers[this.id][f](message);
+            }
+            catch(err){
+              console.error("thing-model: caught error passing message to snooper for this.id: ", this.id, err);
+            }
+          }
+        }
+      }
       switch (message.messageType) {
         case 'propertyStatus':
           this.onPropertyStatus(message.data);
-          if(typeof window.snoopers != 'undefined' && 
-             typeof this.id == 'string' && 
-             typeof window.snoopers[this.id] == 'object' &&
-             Array.isArray(window.snoopers[this.id])
-          ){
-            for(let f = 0; f < window.snoopers[this.id].length; f++){
-              if (typeof window.snoopers[this.id][f] === 'function') {
-                try{
-                  window.snoopers[this.id][f](message.data);
-                }
-                catch(err){
-                  console.error("thing-model: caught error passing message to snooper for this.id: ", this.id, err);
-                }
-              }
-            }
-          }
           break;
         case 'event':
           this.onEvent(message.data);
