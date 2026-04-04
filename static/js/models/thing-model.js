@@ -128,18 +128,18 @@ class ThingModel extends Model {
       if (message.hasOwnProperty('id') && message.id !== this.id) {
         return;
       }
-      if(typeof window.snoop != 'undefined' && 
+      if(typeof window.snoop_thing != 'undefined' && 
          typeof this.id == 'string' && 
-         typeof window.snoop[this.id] == 'object' &&
-         Array.isArray(window.snoop[this.id])
+         typeof window.snoop_thing[this.id] == 'object' &&
+         Array.isArray(window.snoop_thing[this.id])
       ){
-        for(let f = 0; f < window.snoop[this.id].length; f++){
-          if (typeof window.snoop[this.id][f] === 'function') {
+        for(let f = 0; f < window.snoop_thing[this.id].length; f++){
+          if (typeof window.snoop_thing[this.id][f] === 'function') {
             try{
-              window.snoop[this.id][f](message);
+              window.snoop_thing[this.id][f](message);
             }
             catch(err){
-              console.error("thing-model: caught error passing message to snooper for this.id: ", this.id, err);
+              console.error("thing-model: caught error passing message to snoop_thinger for this.id: ", this.id, err);
             }
           }
         }
