@@ -30,7 +30,7 @@ export default class Gateway {
       '@type': ['ThingDirectory'],
       id: origin,
       base: origin,
-      title: 'WebThings Gateway',
+      title: 'Candle controller',
       securityDefinitions: {
         oauth2_sc: {
           scheme: 'oauth2',
