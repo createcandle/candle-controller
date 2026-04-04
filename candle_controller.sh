@@ -65,6 +65,8 @@ echo "DBUS_SESSION_BUS_ADDRESS: $DBUS_SESSION_BUS_ADDRESS"
 #echo "--"
 
 
+systemctl --user restart pipewire pipewire-pulse
+
 
 # Ensure that the Candle Store addon is enabled
 if [ ! -f "/boot/firmware/skip_candle_store_check.txt" ]; then	
