@@ -128,15 +128,15 @@ class ThingModel extends Model {
       if (message.hasOwnProperty('id') && message.id !== this.id) {
         return;
       }
-      if(typeof window.snoopers != 'undefined' && 
+      if(typeof window.snoop != 'undefined' && 
          typeof this.id == 'string' && 
-         typeof window.snoopers[this.id] == 'object' &&
-         Array.isArray(window.snoopers[this.id])
+         typeof window.snoop[this.id] == 'object' &&
+         Array.isArray(window.snoop[this.id])
       ){
-        for(let f = 0; f < window.snoopers[this.id].length; f++){
-          if (typeof window.snoopers[this.id][f] === 'function') {
+        for(let f = 0; f < window.snoop[this.id].length; f++){
+          if (typeof window.snoop[this.id][f] === 'function') {
             try{
-              window.snoopers[this.id][f](message);
+              window.snoop[this.id][f](message);
             }
             catch(err){
               console.error("thing-model: caught error passing message to snooper for this.id: ", this.id, err);
