@@ -774,15 +774,15 @@ export default class Plugin {
       homePathParts.push('.nvm');
       const nvmPath = homePathParts.join("/");
       
-      // Candle modification to run the gateway on Node 16 but 
+      // Candle modification to run the gateway on Node 24 but 
       // still support Node 12 for older addons
-      // This means the gateway now relies on the existance of symlinks 
-      // called 'node12' and 'node16' in the home directory (e.g. /home/pi/node12)
+      // This means the gateway now relies on the existence of symlinks 
+      // called 'node12' and 'node24' in the home directory (e.g. /home/pi/node12)
       var use_node_version = 'node12';
       if(typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
           if(typeof savedSettings.schema.properties.prefered_node_version != 'undefined'){
-            use_node_version = 'node20';
+            use_node_version = 'node24';
           }
         }
       }
