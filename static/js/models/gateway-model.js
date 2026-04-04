@@ -152,7 +152,18 @@ class GatewayModel extends Model {
 
   onMessage(event) {
     const message = JSON.parse(event.data);
-
+    if(typeof window.snoop_gateway != 'undefined' && Array.isArray(window.snoop_gateway)){
+        for(let g = 0; g < window.snoop_gateway.length; g++){
+          if (typeof window.snoop_gateway[g] === 'function') {
+            try{
+              window.snoop_gateway[g](message);
+            }
+            catch(err){
+              console.error("gateway-model: caught error passing message to snoop_gateway: ", err);
+            }
+          }
+        }
+      }
     switch (message.messageType) {
       case 'connected':
         this.connectedThings.set(message.id, message.data);
