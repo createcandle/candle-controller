@@ -139,7 +139,7 @@ class ThingModel extends Model {
               window.snoop_thing[this.id][f](message);
             }
             catch(err){
-              console.error("thing-model: caught error passing message to snoop_thinger for this.id: ", this.id, err);
+              console.error("thing-model: caught error passing message to snoop_thing for this.id: ", this.id, err);
             }
           }
         }
