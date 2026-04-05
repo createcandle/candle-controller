@@ -134,11 +134,14 @@
         from { top: calc(100% - 45px); } to { top: 0; }
       }
 
-		@media screen and (min-width: 640px) {
-		  body{
-		  	pading-top:10rem;
-		  }
-		}
+			@media screen and (max-width: 640px) {
+		  	body{
+		  		pading-top:4rem;
+		  	}
+				#refresh-button{
+					display:none;
+				}
+			}
 	
     </style>
   </head>
@@ -203,6 +206,14 @@
   </body>
   <script type="text/javascript">
 
+		const refresh_button_el = document.getElementById('refresh-button');
+		refresh_button_el.addEventListener('click', () => {
+			refresh_button_el.style.display = 'none';
+			window.location.reload(true);
+		});
+
+		
+	  	
 	  const email_el = document.getElementById('email');
 	  const remember_email_el = document.getElementById('remember-email');
 	  
@@ -213,6 +224,14 @@
 	  }
 	  else{
 		  remember_email_el.checked = false;
+	  }
+
+	  email_el.addEventListener('focus', () => {
+		  setTimeout(() => {
+				if(email_el.value == ''){
+					refresh_button_el.style.opacity = '1';
+				}
+			},15000);
 	  }
 	  
 	  email_el.addEventListener('input', () => {
@@ -247,7 +266,7 @@
 			  allow_login_password_remembering = true;
 		  	}
 	  }
-	  console.log("allow_login_password_remembering: ", allow_login_password_remembering);
+	  //console.log("allow_login_password_remembering: ", allow_login_password_remembering);
 
 	  const password_el = document.getElementById('password');
 	  const remember_password_el = document.getElementById('remember-password');
@@ -261,13 +280,21 @@
 			  password_el.value = '' + stored_password;
 			  remember_password_el.checked = true;
 		  }
+
+			password_el.addEventListener('focus', () => {
+		  	setTimeout(() => {
+					if(password_el.value == ''){
+						refresh_button_el.style.opacity = '1';
+					}
+				},15000);
+	  	}
 		  
 		  remember_password_el.addEventListener('change', () => {
 			  if(remember_password_el.checked){
-	            localStorage.setItem('candle-login-page-password', password_el.value);
+	        localStorage.setItem('candle-login-page-password', password_el.value);
 			  }
 			  else if (localStorage.getItem('candle-login-page-password')){
-	            localStorage.removeItem('candle-login-page-password');
+	        localStorage.removeItem('candle-login-page-password');
 			  }
 			  reset_screensaver();
 		  });
@@ -323,15 +350,5 @@
 	  screensaver_el.addEventListener("click", reset_screensaver);
 
 
-		const refresh_button_el = document.getElementById('refresh-button');
-		refresh_button_el.addEventListener('click', () => {
-			refresh_button_el.style.display = 'none';
-			window.location.reload(true);
-		});
-
-		setTimeout(() => {
-			refresh_button_el.style.opacity = '1';
-		},15000);
-	  
   </script>
 </html>
