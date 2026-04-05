@@ -419,11 +419,12 @@ class Thing {
         action.attached = true;
       }
     }
-
+    /*
     this.layout = new ThingDetailLayout(
       this,
       this.element.querySelectorAll('.thing-detail-container')
     );
+    */
   }
 
   /**
@@ -828,10 +829,10 @@ class Thing {
 
     if (this.format === Constants.ThingFormat.EXPANDED) {
       if (connected) {
-        this.layout.svg.classList.add('connected');
+        //this.layout.svg.classList.add('connected');
         App.hidePersistentMessage();
       } else {
-        this.layout.svg.classList.remove('connected');
+        //this.layout.svg.classList.remove('connected');
         App.showPersistentMessage(fluent.getMessage('disconnected'));
       }
     }
