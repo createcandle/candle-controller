@@ -17,11 +17,11 @@
 
       #refresh-button{
         position:fixed;
-		    top:2rem;
+        top:2rem;
         right:2rem;
-				cursor:pointer;
+        cursor:pointer;
         opacity:0;
-				transition: opacity 10s;
+        transition: opacity 10s;
       }
 		
       #login-form.user-form{
@@ -33,7 +33,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-				margin: .3rem 0 1rem 0;
+        margin: .3rem 0 1rem 0;
       }
 		
 	  #remember-email-group label,
@@ -128,7 +128,12 @@
       @keyframes moveY {
         from { top: calc(100% - 45px); } to { top: 0; }
       }
-  
+
+		@media screen and (min-width: 640px) {
+		  body{
+		  	pading-top:10rem;
+		  }
+		}
 	
     </style>
   </head>
