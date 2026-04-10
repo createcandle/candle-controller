@@ -451,7 +451,7 @@ class Things extends EventEmitter {
    * @param {Any} value
    * @return {Promise<Any>} resolves to new value
    */
-  async setThingProperty(thingId: string, propertyName: string, value: Any, meta: Any): Promise<Any> {
+  async setThingProperty(thingId: string, propertyName: string, value: Any, meta=null: Any): Promise<Any> {
     let thing: ThingDescription;
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
