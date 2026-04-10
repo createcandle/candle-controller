@@ -789,6 +789,7 @@ function build(): express.Router {
             
             if(device.setProperty.length == 3 || function_input.indexOf(', value, meta') != -1){
               return device.setProperty(property, value, meta);
+            }
             else{
               return device.setProperty(property, value);
             }
