@@ -393,7 +393,7 @@ export class AddonManager extends EventEmitter {
    * @returns a promise which resolves to the updated value of `propertyName`
    *          for the thing identified by `thingId`.
    */
-  setProperty(thingId: string, propertyName: string, value: Any, meta=null: Any): Promise<Any> {
+  setProperty(thingId: string, propertyName: string, value: Any, meta: Any = null): Promise<Any> {
     const device = this.getDevice(thingId);
     if (device) {
       return device.setProperty(propertyName, value, meta);
