@@ -70,7 +70,7 @@ systemctl --user restart pipewire pipewire-pulse
 
 
 # Ensure that the Candle Store addon is enabled
-if [ ! -f "/boot/firmware/skip_candle_store_check.txt" ]; then	
+if [ ! -f "/boot/firmware/candle_skip_store_check.txt" ]; then	
   if [ -f /home/pi/.webthings/config/db.sqlite3 ]; then
     candleappstore_settings=$(sqlite3 /home/pi/.webthings/config/db.sqlite3 'SELECT value FROM settings WHERE key = "addons.candleappstore"')
     if [[ "$candleappstore_settings" == *",\"enabled\":false,"* ]]; then
