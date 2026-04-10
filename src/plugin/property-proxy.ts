@@ -97,24 +97,15 @@ export default class PropertyProxy extends Property<Any> {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value: Any, meta: Any): Promise<Any> {
+  setValue(value: Any, meta=null: Any): Promise<Any> {
     return new Promise((resolve, reject) => {
 
-      if(meta){
-        this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
+      this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
           deviceId: this.getDevice().getId(),
           propertyName: this.getName(),
           propertyValue: value,
           propertyMeta: meta,
         });
-      }
-      else{
-        this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
-          deviceId: this.getDevice().getId(),
-          propertyName: this.getName(),
-          propertyValue: value,
-        });
-      }
       
 
       // TODO: Add a timeout
