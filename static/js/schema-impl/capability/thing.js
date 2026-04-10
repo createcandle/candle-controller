@@ -538,7 +538,7 @@ class Thing {
    * @param {String} name Name of the property
    * @param {*} value Value of the property
    */
-  setProperty(name, value) {
+  setProperty(name, value, meta=null) {
     // Convert units, if necessary
     value = Units.convert(
       value,
@@ -550,7 +550,7 @@ class Thing {
     const property = this.displayedProperties[name].property;
     value = Utils.adjustInputValue(value, property);
 
-    this.model.setProperty(name, value);
+    this.model.setProperty(name, value, meta);
   }
 
   /**
