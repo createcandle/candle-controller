@@ -543,7 +543,7 @@ function build(): express.Router {
         return;
       }
 
-      property.getValue().then((value) => {
+      property.get().then((value) => {
         sendMessage({
           id: property.getDevice().getId(),
           messageType: Constants.PROPERTY_STATUS,
