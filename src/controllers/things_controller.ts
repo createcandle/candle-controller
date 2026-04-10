@@ -539,11 +539,11 @@ function build(): express.Router {
     }
 
     function onPropertyChanged(property: Property<Any>): void {
-      if (typeof thingId !== 'undefined' && property.getDevice().getId() !== thingId) {
+      if (typeof thingId !== 'undefined' && Device().getId() !== thingId) {
         return;
       }
 
-      property.get().then((value) => {
+      property.getValue().then((value) => {
         sendMessage({
           id: property.getDevice().getId(),
           messageType: Constants.PROPERTY_STATUS,
