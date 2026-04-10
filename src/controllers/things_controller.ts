@@ -776,11 +776,22 @@ function build(): express.Router {
         return;
       }
 
+      let meta = request.meta || null;
+      
       switch (request.messageType) {
         case Constants.SET_PROPERTY: {
           const setRequests = Object.keys((<SetPropertyMessage>request).data).map((property) => {
             const value = (<SetPropertyMessage>request).data[property];
-            return device.setProperty(property, value);
+            
+            const function_input = ('' + device.setProperty).split(')')[0];
+            console.log("things_controller.js: device.setProperty.length: ", device.setProperty.length);
+            console.log("things_controller.js: device.setProperty function_input: ", function_input);
+            
+            if(device.setProperty.length == 3 || function_input.indexOf(', value, meta') != -1){
+              return device.setProperty(property, value, meta);
+            else{
+              return device.setProperty(property, value);
+            }
           });
           Promise.all(setRequests).catch((err) => {
             // If any set fails, send an error
