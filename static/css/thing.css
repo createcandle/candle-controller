@@ -15,7 +15,7 @@
 
 .thing.connected {
   opacity: 1;
-}
+} 
 
 .thing-ui-link {
   box-sizing: border-box;
@@ -54,12 +54,19 @@
   margin-top: -4rem;
 }
 
-.thing-detail-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -5rem;
-  margin-top: -5rem;
+#things.single-thing > .thing {
+  width:100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#things.single-thing > .thing > * {
+  display: flex;
+  padding: 1rem;
+  min-height: 14rem;
+  min-width: 14rem;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .thing-detail {
