@@ -7,6 +7,7 @@
  */
 'use strict';
 
+const Constants = require('./constants');
 const App = require('./app');
 const Menu = require('./views/menu');
 
