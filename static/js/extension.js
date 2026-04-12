@@ -88,7 +88,7 @@ class Extension {
   }
   
   /**
-   * Allow extensions to subscribe to  updates from Things so that
+   * Allow extensions to subscribe to updates from Things so that
    * they don't need to create and manage their own websocket clients
    */
   subscribeToThingProperties(thingId,handler) {
