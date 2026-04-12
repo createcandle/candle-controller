@@ -56,8 +56,8 @@
 
 #things.single-thing > .thing {
   width:100%;
-  display: flex;
-  flex-wrap: wrap;
+  /*display: flex;
+  flex-wrap: wrap;*/
 }
 
 #things.single-thing > .thing > * {
