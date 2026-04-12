@@ -93,15 +93,13 @@ class Extension {
    */
   subscribeToThingProperties(thingId,handler) {
     if (typeof thingId !== 'string' || typeof handler !== 'function') {
+      console.error("extension: subscribeToThingProperties: invalid thingId or handler");
       return false
     }
     App.gatewayModel.getThingModel(thingId).then((thingModel) => {
-      this.subscriptions[thingId] = ThingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+      this.subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
     }
   }
-
-  
-
   
 }
 
