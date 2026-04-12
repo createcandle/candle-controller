@@ -1194,7 +1194,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     try {
       const ethernetDevices = await NetworkManager.getEthernetDevices();
       const ethernetIp4Config = await NetworkManager.getDeviceIp4Config(ethernetDevices[0]);
-      result.lan = ethernetIp4Config[0].address;
+      result.lan = ethernetIp4Config[0].address || '';
     } catch (error) {
       console.log('Unable to detect an Ethernet IP address');
     }
