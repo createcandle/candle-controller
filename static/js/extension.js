@@ -99,7 +99,9 @@ class Extension {
       return false
     }
     App.gatewayModel.getThingModel(thingId).then((thingModel) => {
-      this.property_subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+      if(thingModel){
+        this.property_subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+      }
     });
   }
 
@@ -113,7 +115,9 @@ class Extension {
       return false
     }
     App.gatewayModel.getThingModel(thingId).then((thingModel) => {
-      this.event_subscriptions[thingId] = thingModel.subscribe(Constants.EVENT_OCCURRED, handler);
+      if(thingModel){
+        this.event_subscriptions[thingId] = thingModel.subscribe(Constants.EVENT_OCCURRED, handler);
+      }
     });
   }
 }
