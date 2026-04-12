@@ -19,6 +19,7 @@ class Extension {
       timezone: App.TIMEZONE,
       units: App.UNITS,
     };
+    this.subscriptions = {};
     this.view = App.registerExtension(this);
   }
 
