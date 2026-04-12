@@ -19,6 +19,7 @@ class Extension {
       units: App.UNITS,
     };
     this.view = App.registerExtension(this);
+    this.subscriptions = {};
   }
 
   /**
@@ -85,6 +86,23 @@ class Extension {
     backButton.href = href;
     backButton.classList.remove('hidden');
   }
+  
+  /**
+   * Allow extensions to subscribe to  updates from Things so that
+   * they don't need to create and manage their own websocket clients
+   */
+  subscribeToThingProperties(thingId,handler) {
+    if (typeof thingId !== 'string' || typeof handler !== 'function') {
+      return false
+    }
+    App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+      this.subscriptions[thingId] = ThingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+    }
+  }
+
+  
+
+  
 }
 
 // Elevate this to the window level.
