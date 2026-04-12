@@ -85,6 +85,20 @@ class Extension {
     backButton.href = href;
     backButton.classList.remove('hidden');
   }
+
+  /**
+   * Allow extensions to subscribe to updates from Things so that
+   * they don't need to create and manage their own websocket clients
+   */
+  subscribeToThingProperties(thingId,handler) {
+    if (typeof thingId !== 'string' || typeof handler !== 'function') {
+      console.error("extension: subscribeToThingProperties: invalid thingId or handler");
+      return false
+    }
+    App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+      this.subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+    }
+  }
 }
 
 // Elevate this to the window level.
