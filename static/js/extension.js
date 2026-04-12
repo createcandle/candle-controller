@@ -97,7 +97,7 @@ class Extension {
     }
     App.gatewayModel.getThingModel(thingId).then((thingModel) => {
       this.subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
-    }
+    });
   }
 }
 
