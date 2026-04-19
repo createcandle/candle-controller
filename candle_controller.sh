@@ -56,7 +56,7 @@ fi
 #DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
 #export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
 
-
+export DBUS_SESSION_BUS_ADDRESS="$XDG_RUNTIME_DIR/bus"
 
 #echo "AFTER:"
 echo "XDG_RUNTIME_DIR: $XDG_RUNTIME_DIR"
