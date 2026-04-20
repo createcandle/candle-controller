@@ -779,20 +779,20 @@ export default class Plugin {
       // still support Node 12 for older addons
       // This means the gateway now relies on the existence of symlinks 
       // called 'node12' and 'node24' in the home directory (e.g. /home/pi/node12)
-      var use_node_version = 'node12';
+      var use_node_version = '12';
       if(typeof savedSettings.schema != 'undefined'){
         if(typeof savedSettings.schema.properties != 'undefined'){
           if(typeof savedSettings.schema.properties.prefered_node_version != 'undefined'){
-            use_node_version = 'node24';
+            use_node_version = '24';
           }
         }
-        if(use_node_version == 'node12'){
+        if(use_node_version == '12'){
           try {
             const addon_manifest_path = path.join(UserProfile.addonsDir, this.pluginId, 'manifest.json');
             if (fs.existsSync(addon_manifest_path)) {
               const raw_manifest = fs.readFileSync(addon_manifest_path, 'utf8');
               if(typeof raw_manifest == 'string' && raw_manifest.indexOf('"strict_min_version": "2.') != -1){
-                use_node_version = 'node20';
+                use_node_version = '20';
               }
             }
           } catch (e) {
@@ -802,21 +802,27 @@ export default class Plugin {
       }
       
       console.log("plugin: start: loading addon with node version: ", this.pluginId, use_node_version);
-      
+
+      const nvmPath = `${path.join(homePath, '.nvm','nvm-exec')}`
       const execArgs = {
-        nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        nodeLoader: `${path.join(homePath, '.nvm','nvm-exec')} ${use_node_version} node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,
       };
       const execCmd = format(this.exec, execArgs);
-
-      DEBUG && console.log('  Launching:', execCmd);
+      const nvmCmd = `${use_node_version} ${execCmd}`
+      console.log('  Launching:', execCmd);
       
       // If we need embedded spaces, then consider changing to use the npm
       // module called splitargs
       this.restart = true;
       const args = execCmd.split(' ');
-      this.process.p = spawn(args[0], args.slice(1), {
+      //console.log('  execCmd as split args: ', args);
+
+      console.log('  Really launching:\n', `${nvmPath} ${use_node_version} ${execCmd}`);
+      
+      this.process.p = spawn(nvmPath, nvmCmd, {
+        shell: true,
         env: Object.assign(process.env, {
           NVM_DIR: nvmPath,
           WEBTHINGS_HOME: UserProfile.baseDir,
