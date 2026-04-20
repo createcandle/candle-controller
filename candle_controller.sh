@@ -23,10 +23,11 @@ source $NVM_DIR/nvm.sh
 #echo "--"
 
 if [ -n "$XDG_RUNTIME_DIR" ] ; then
+  echo "XDG_RUNTIME_DIR was empty"
   XDG_RUNTIME_DIR="/run/user/$(id -u)"
-  DBUS_SESSION_BUS_ADDRESS="$XDG_RUNTIME_DIR/bus"
-  export XDG_RUNTIME_DIR=/run/user/$(id -u)
-  export DBUS_SESSION_BUS_ADDRESS="$XDG_RUNTIME_DIR/bus"
+  DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  export DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
 fi
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
