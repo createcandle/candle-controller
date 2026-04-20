@@ -771,7 +771,12 @@ export default class Plugin {
       // environment variable for the child process
       const homePath = path.dirname(UserProfile.baseDir);
       const nvmPath = path.join(homePath,'.nvm');
-      
+      const nvmShPath = path.join(nvmPath,'nvm.sh');
+      const nvmExecPath = path.join(nvmPath,'nvm-exec')
+
+      // node12
+      // node20
+      // node24
       // Candle modification to run the gateway on Node 24 but 
       // still support Node 12 and 20 for older addons
       var use_node_version = '12';
@@ -798,7 +803,7 @@ export default class Plugin {
       
       console.log("plugin: start: loading addon with node version: ", this.pluginId, use_node_version);
 
-      const nvmExecPath = `${path.join(homePath, '.nvm','nvm-exec')}`
+      
       const execArgs = {
         nodeLoader: `node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
@@ -806,14 +811,14 @@ export default class Plugin {
       };
       const execCmd = format(this.exec, execArgs);
       //const nvmCmd = `${use_node_version} ${execCmd}`
-      console.log('  initial execCmd:', execCmd);
+      //console.log('  initial execCmd:', execCmd);
       
       // If we need embedded spaces, then consider changing to use the npm
       // module called splitargs
       this.restart = true;
       //const args = execCmd.split(' ');
       //console.log('  execCmd as split args: ', args);
-      const shellCommand = `${nvmExecPath} ${use_node_version} ${execCmd}`;
+      const shellCommand = `source ${nvmShPath}; ${nvmExecPath} ${execCmd}`;
       console.log('  Launching:\n', shellCommand);
 
       if(use_node_version == '24'){
@@ -821,6 +826,7 @@ export default class Plugin {
           shell: true,
           env: Object.assign(process.env, {
             NVM_DIR: nvmPath,
+            NODE_VERSION: use_node_version,
             WEBTHINGS_HOME: UserProfile.baseDir,
             NODE_PATH: path.join(UserProfile.gatewayDir, 'node_modules'),
           }),
@@ -831,6 +837,7 @@ export default class Plugin {
           shell: true,
           env: Object.assign(process.env, {
             NVM_DIR: nvmPath,
+            NODE_VERSION: use_node_version,
             WEBTHINGS_HOME: UserProfile.baseDir,
           }),
         });
