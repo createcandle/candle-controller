@@ -786,19 +786,21 @@ export default class Plugin {
           }
         }
         if(use_node_version == 'node12'){
-          if(typeof savedSettings.schema.gateway_specific_settings != 'undefined'){
-            if(typeof savedSettings.schema.gateway_specific_settings.webthings != 'undefined'){
-              if(typeof savedSettings.schema.gateway_specific_settings.webthings.strict_min_version == 'string'){
-                if(savedSettings.schema.gateway_specific_settings.webthings.strict_min_version.startsWith('2.'){
-                  use_node_version = 'node20';
-                }
+          try {
+            const addon_manifest_path = path.join(UserProfile.addonsDir, this.pluginId, 'manifest.json');
+            if (fs.existsSync(addon_manifest_path)) {
+              raw_manifest = fs.readFileSync(addon_manifest_path, 'utf8');
+              if(typeof raw_manifest == 'string' && raw_manifest.indexOf('"strict_min_version": "2.') != -1){
+                use_node_version = 'node20';
               }
             }
+          } catch (e) {
+            console.error(`plugin: start: failed to load manifest.json for pluginId ${this.pluginId}: ${e}`);
           }
         }
       }
       
-      console.log("loading addon with node version: ", this.pluginId, use_node_version);
+      DEBUG && console.log("plugin: start: loading addon with node version: ", this.pluginId, use_node_version);
       
       const execArgs = {
         nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
