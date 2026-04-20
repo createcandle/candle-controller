@@ -20,6 +20,7 @@ import format from 'string-format';
 import NotifierProxy from './notifier-proxy';
 import OutletProxy from './outlet-proxy';
 import PropertyProxy from './property-proxy';
+import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import * as Settings from '../models/settings';
