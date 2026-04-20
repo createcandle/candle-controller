@@ -816,12 +816,12 @@ export default class Plugin {
       // If we need embedded spaces, then consider changing to use the npm
       // module called splitargs
       this.restart = true;
-      const args = execCmd.split(' ');
+      //const args = execCmd.split(' ');
       //console.log('  execCmd as split args: ', args);
-
-      console.log('  Really launching:\n', `${nvmPath} ${use_node_version} ${execCmd}`);
+      const shellCommand = `${nvmPath} ${use_node_version} ${execCmd}`;
+      console.log('  Really launching:\n', shellCommand);
       
-      this.process.p = spawn(nvmPath, nvmCmd, {
+      this.process.p = spawn(shellCommand, {
         shell: true,
         env: Object.assign(process.env, {
           NVM_DIR: nvmPath,
