@@ -772,8 +772,8 @@ export default class Plugin {
       var homePathParts = UserProfile.baseDir.split("/");
       homePathParts = homePathParts.slice(0, homePathParts.length-1);
       const homePath = homePathParts.join("/");
-      homePathParts.push('.nvm');
-      const nvmPath = homePathParts.join("/");
+      //homePathParts.push('.nvm');
+      //const nvmPath = homePathParts.join("/");
       
       // Candle modification to run the gateway on Node 24 but 
       // still support Node 12 for older addons
