@@ -539,7 +539,7 @@ function build(): express.Router {
     }
 
     function onPropertyChanged(property: Property<Any>): void {
-      if (typeof thingId !== 'undefined' && Device().getId() != thingId) {
+      if (typeof thingId !== 'undefined' && property.getDevice().getId() != thingId) {
         return;
       }
 
