@@ -790,7 +790,7 @@ export default class Plugin {
           try {
             const addon_manifest_path = path.join(UserProfile.addonsDir, this.pluginId, 'manifest.json');
             if (fs.existsSync(addon_manifest_path)) {
-              raw_manifest = fs.readFileSync(addon_manifest_path, 'utf8');
+              const raw_manifest = fs.readFileSync(addon_manifest_path, 'utf8');
               if(typeof raw_manifest == 'string' && raw_manifest.indexOf('"strict_min_version": "2.') != -1){
                 use_node_version = 'node20';
               }
