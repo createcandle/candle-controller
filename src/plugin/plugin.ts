@@ -785,8 +785,19 @@ export default class Plugin {
             use_node_version = 'node24';
           }
         }
+        if(use_node_version == 'node12'){
+          if(typeof savedSettings.schema.gateway_specific_settings != 'undefined'){
+            if(typeof savedSettings.schema.gateway_specific_settings.webthings != 'undefined'){
+              if(typeof savedSettings.schema.gateway_specific_settings.webthings.strict_min_version == 'string'){
+                if(savedSettings.schema.gateway_specific_settings.webthings.strict_min_version.startsWith('2.'){
+                  use_node_version = 'node20';
+                }
+              }
+            }
+          }
+        }
       }
-
+      
       console.log("loading addon with node version: ", this.pluginId, use_node_version);
       
       const execArgs = {
