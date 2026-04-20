@@ -801,7 +801,7 @@ export default class Plugin {
         }
       }
       
-      DEBUG && console.log("plugin: start: loading addon with node version: ", this.pluginId, use_node_version);
+      console.log("plugin: start: loading addon with node version: ", this.pluginId, use_node_version);
       
       const execArgs = {
         nodeLoader: `${path.join(homePath, use_node_version)} ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
