@@ -31,18 +31,20 @@ if [ -n "$XDG_RUNTIME_DIR" ] ; then
 fi
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
-  if [ -d /home/pi/.dbus/session-bus ] ; then
-    SESSION_FILE=$(ls -tp /home/pi/.dbus/session-bus | grep -v /$ | head -1)
-    if ps aux | grep -q '/dbus-daemon'; then
-      if [ -n "$SESSION_FILE" ] && [ -f "/home/pi/.dbus/session-bus/$SESSION_FILE" ]; then
-        echo "sourcing:  /home/pi/.dbus/session-bus/$SESSION_FILE"
-        source "/home/pi/.dbus/session-bus/$SESSION_FILE"
-      fi
-    fi
-  else
-    echo "calling dbus-launch"
-    export $(dbus-launch)
-  fi
+  #if [ -d /home/pi/.dbus/session-bus ] ; then
+  #  SESSION_FILE=$(ls -tp /home/pi/.dbus/session-bus | grep -v /$ | head -1)
+  #  if ps aux | grep -q '/dbus-daemon'; then
+  #    if [ -n "$SESSION_FILE" ] && [ -f "/home/pi/.dbus/session-bus/$SESSION_FILE" ]; then
+  #      echo "sourcing:  /home/pi/.dbus/session-bus/$SESSION_FILE"
+  #      source "/home/pi/.dbus/session-bus/$SESSION_FILE"
+  #    fi
+  #  fi
+  #else
+  #  echo "calling dbus-launch"
+  #  export $(dbus-launch)
+  #fi
+  echo "DBUS_SESSION_BUS_ADDRESS was (still) empty, calling export dbus-launch"
+  export $(dbus-launch)
 fi
 
 #eval $(dbus-launch --sh-syntax)
