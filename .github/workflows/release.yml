@@ -64,8 +64,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/candle_controller_${{ env.RELEASE_VERSION }}.img.zip
-          asset_name: candle_controller_${{ env.RELEASE_VERSION }}.img.zip
+          asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip
+          asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip
           asset_content_type: application/zip
       - name: Upload image checksum
         id: upload-release-asset-image-checksum
@@ -74,7 +74,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/candle_controller_${{ env.RELEASE_VERSION }}.img.zip.sha256sum
-          asset_name: candle_controller_${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+          asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+          asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
           asset_content_type: text/plain
       
