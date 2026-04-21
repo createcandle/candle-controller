@@ -14,7 +14,7 @@ _temp=$(mktemp -d)
 cp -a "${here}/.." "${_temp}"
 
 # get a fresh copy of pi-gen
-git clone https://github.com/RPi-Distro/pi-gen.git
+git clone https://github.com/RPi-Distro/pi-gen.git --depth=1
 
 # replace stage3 and add our config and the gateway source
 rm -rf pi-gen/stage3
@@ -50,7 +50,7 @@ mv pi-gen/deploy/*.zip "gateway-${_version}.img.zip"
 shasum --algorithm 256 "gateway-${_version}.img.zip" > "gateway-${_version}.img.zip.sha256sum"
 
 # copy the built gateway out of the docker image
-docker cp "pigen_work:/pi-gen/work/${_image_name}/stage3/rootfs/home/pi/webthings/gateway" .
+#docker cp "pigen_work:/pi-gen/work/${_image_name}/stage3/rootfs/home/pi/webthings/gateway" .
 
 makeContentAddressedArchive() {
   base_name="$1"
@@ -59,11 +59,11 @@ makeContentAddressedArchive() {
 }
 
 # generate the OTA release files
-mv gateway/node_modules node_modules
-tar czf gateway.tar.gz gateway
-tar czf node_modules.tar.gz node_modules
-makeContentAddressedArchive node_modules
-makeContentAddressedArchive gateway
+#mv gateway/node_modules node_modules
+#tar czf gateway.tar.gz gateway
+#tar czf node_modules.tar.gz node_modules
+#makeContentAddressedArchive node_modules
+#makeContentAddressedArchive gateway
 
 # clean up
 rm -rf gateway node_modules pi-gen
