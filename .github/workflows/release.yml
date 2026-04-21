@@ -1,0 +1,80 @@
+name: Build and push release images
+
+on:
+  push:
+    tags:
+    - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: true
+    - name: Dump upload url to file
+      run: echo '${{ steps.create_release.outputs.upload_url }}' > upload_url
+    - name: Upload upload_url
+      uses: actions/upload-artifact@v4
+      with:
+        name: upload_url
+        path: upload_url
+
+  build-raspbian-image:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install qemu
+        run: |
+          sudo apt update
+          sudo apt install -y qemu-system qemu-user-static binfmt-support kpartx --no-install-recommends
+      - name: Setup qemu-user-static
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Build the image
+        run: |
+          cd image
+          ./build.sh
+      - name: Download upload_url
+        uses: actions/download-artifact@v8
+        with:
+          name: upload_url
+      - name: Set upload_url
+        run: echo "UPLOAD_URL=$(cat upload_url)" >> $GITHUB_ENV
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
+        
+      - name: Upload upload_url
+        uses: actions/upload-artifact@v7
+        with:
+          name: upload_url
+          path: upload_url
+          
+      - name: Upload image
+        id: upload-release-asset-image
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ env.UPLOAD_URL }}
+          asset_path: ./image/candle_controller_${{ env.RELEASE_VERSION }}.img.zip
+          asset_name: candle_controller_${{ env.RELEASE_VERSION }}.img.zip
+          asset_content_type: application/zip
+      - name: Upload image checksum
+        id: upload-release-asset-image-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ env.UPLOAD_URL }}
+          asset_path: ./image/candle_controller_${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+          asset_name: candle_controller_${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+          asset_content_type: text/plain
+      
