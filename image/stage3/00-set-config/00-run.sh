@@ -90,4 +90,6 @@ END
 cat >> "${ROOTFS_DIR}/etc/modules" <<END
 
 i2c-dev
+snd-soc-seeed-voicecard
+snd-soc-wm8960
 END
