@@ -751,7 +751,11 @@ export default class Plugin {
       this.apiRequestPromises.delete(key);
     });
   }
-
+  
+/*
+  // This higly modified version was needed to allow addons to run with different (read: newer) versions of Node than the controller itself was using.  
+  // But currently everything is on Node 24, so the simpler original code has been restored.
+  
   start(): Promise<void> {
     const key = `addons.${this.pluginId}`;
 
@@ -842,7 +846,41 @@ export default class Plugin {
           }),
         });
       }
-      
+*/
+  
+  start(): Promise<void> {
+    const key = `addons.${this.pluginId}`;
+
+    this.startPromise = Settings.getSetting(key).then((savedSettings) => {
+      if (
+        !this.forceEnable &&
+        (!savedSettings || !(<boolean>(<Record<string, unknown>>savedSettings).enabled))
+      ) {
+        console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
+        this.restart = false;
+        this.process.p = null;
+        return;
+      }
+
+      const execArgs = {
+        nodeLoader: `node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
+        name: this.pluginId,
+        path: this.execPath,
+      };
+      const execCmd = format(this.exec, execArgs);
+
+      DEBUG && console.log('  Launching:', execCmd);
+
+      // If we need embedded spaces, then consider changing to use the npm
+      // module called splitargs
+      this.restart = true;
+      const args = execCmd.split(' ');
+      this.process.p = spawn(args[0], args.slice(1), {
+        env: Object.assign(process.env, {
+          WEBTHINGS_HOME: UserProfile.baseDir,
+          NODE_PATH: path.join(UserProfile.gatewayDir, 'node_modules'),
+        }),
+      });
 
       this.process.p.on('error', (err) => {
         // We failed to spawn the process. This most likely means that the
