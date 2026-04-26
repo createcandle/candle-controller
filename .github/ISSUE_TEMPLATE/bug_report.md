@@ -23,9 +23,9 @@ Steps to reproduce the behavior:
 
 
 **Your Candle Controller:**
- - Candle version: 2.0.0?
- - Raspberry Pi version: 4B?
- - Raspberry Pi memory: 2GB?
+ - Candle version: 3.0.0?
+ - Raspberry Pi version: 5B?
+ - Raspberry Pi memory: 4GB?
 - Touch screen?
 
 **Device used to acces Candle (if relevant):**
@@ -33,8 +33,7 @@ Steps to reproduce the behavior:
  - Browser [e.g. stock browser, safari]
 
 
-**Installed addons besides the defaults**
-Hotspot
+**Installed addons besides the defaults, if relevant**
 Voco
 Etc
 
