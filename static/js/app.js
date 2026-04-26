@@ -177,7 +177,6 @@ const App = {
     this.ws = new ReopeningWebSocket(path);
     this.ws.addEventListener('message', (msg) => {
       const message = JSON.parse(msg.data);
-      console.log("app.js WS internal message: ", message);
       if (message && message.message) {
         this.showMessage(message.message, 5000, message.url);
       }
