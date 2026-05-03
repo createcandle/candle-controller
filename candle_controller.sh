@@ -25,12 +25,12 @@ source $NVM_DIR/nvm.sh
 if [ -n "$XDG_RUNTIME_DIR" ] ; then
   echo "XDG_RUNTIME_DIR was empty"
   XDG_RUNTIME_DIR="/run/user/$(id -u)"
-  DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
+  #DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
   export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-  export DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
+  #export DBUS_SESSION_BUS_ADDRESS="/run/user/$(id -u)/bus"
 fi
 
-if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
+#if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
   #if [ -d /home/pi/.dbus/session-bus ] ; then
   #  SESSION_FILE=$(ls -tp /home/pi/.dbus/session-bus | grep -v /$ | head -1)
   #  if ps aux | grep -q '/dbus-daemon'; then
@@ -43,9 +43,9 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] ; then
   #  echo "calling dbus-launch"
   #  export $(dbus-launch)
   #fi
-  echo "DBUS_SESSION_BUS_ADDRESS was (still) empty, calling export dbus-launch"
-  export $(dbus-launch)
-fi
+  #echo "DBUS_SESSION_BUS_ADDRESS was (still) empty, calling export dbus-launch"
+  #export $(dbus-launch)
+#fi
 
 #eval $(dbus-launch --sh-syntax)
 
@@ -69,7 +69,7 @@ echo "DBUS_SESSION_BUS_ADDRESS: $DBUS_SESSION_BUS_ADDRESS"
 #echo "--"
 
 
-systemctl --user restart pipewire pipewire-pulse
+#systemctl --user restart pipewire pipewire-pulse
 
 
 # Ensure that the Candle Store addon is enabled
@@ -130,5 +130,6 @@ echo
 echo "Starting Candle Controller!"	
 echo "Node version: $use_node_version"
 echo	
-nvm exec ${use_node_version} node build/app.js
+#nvm exec ${use_node_version} node build/app.js
+exec dbus-launch node build/app.js
 
