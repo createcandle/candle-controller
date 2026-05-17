@@ -1382,11 +1382,13 @@ export class LinuxRaspbianPlatform extends BasePlatform {
     let wifiDevice = null;
     for (let wd = 0; wd < wifiDevices.length; wd++) {
       const wifiIp4Config = await NetworkManager.getDeviceIp4Config(wifiDevices[wd]);
-      if (Array.isArray(wifiIp4Config) && wifiIp4Config.length && wifiIp4Config[0].address.startsWith('172.16.') && wifiIp4Config[0].address.endsWith('.1')){
-        continue
+      if (Array.isArray(wifiIp4Config) && wifiIp4Config.length){
+        if(wifiIp4Config[0].address.startsWith('172.16.') && wifiIp4Config[0].address.endsWith('.1')){
+          continue
+        }
+        wifiDevice = wifiDevices[wd];
+        break
       }
-      wifiDevice = wifiDevices[wd];
-      break
     }
     if (wifiDevice == null) {
       console.error("scanWirelessNetworksAsync: no wifiDevice found");
