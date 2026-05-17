@@ -1386,6 +1386,10 @@ export class LinuxRaspbianPlatform extends BasePlatform {
         if(wifiIp4Config[0].address.startsWith('172.16.') && wifiIp4Config[0].address.endsWith('.1')){
           continue
         }
+      }
+      
+      const testWifiAccessPoints = await NetworkManager.getWifiAccessPoints(wifiDevices[wd]);
+      if(testWifiAccessPoints && testWifiAccessPoints.length){
         wifiDevice = wifiDevices[wd];
         break
       }
@@ -1407,7 +1411,7 @@ export class LinuxRaspbianPlatform extends BasePlatform {
       apRequests.push(NetworkManager.getAccessPointDetails(ap, activeAccessPoint));
     });
     const responses = await Promise.all(apRequests);
-    console.error("scanWirelessNetworksAsync: responses: ", responses);
+    //console.error("scanWirelessNetworksAsync: responses: ", responses);
     try{
       // Filter out empty responses (hidden SSID's)
       for (let er = responses.length -1; er >= 0; er--) {
