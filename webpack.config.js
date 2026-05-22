@@ -187,7 +187,7 @@ const webpackWeb = {
             loader: 'css-loader',
             options: {
               url: false,
-              sourceMap: true,
+              sourceMap: false,
               esModule: false,
             },
           },
@@ -204,7 +204,7 @@ const webpackWeb = {
             loader: 'css-loader',
             options: {
               url: false,
-              sourceMap: true,
+              sourceMap: false,
               esModule: false,
             },
           },
