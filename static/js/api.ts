@@ -175,7 +175,9 @@ class API {
         this.jwt = jwt;
       })
       .catch(() => {
-        throw new Error('Repeating signup not permitted');
+        const baseUrl = window.location.protocol + "//" + window.location.host;
+        window.location.replace(baseUrl);
+        //throw new Error('Repeating signup not permitted');
       });
   }
 
