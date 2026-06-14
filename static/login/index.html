@@ -206,6 +206,22 @@
   </body>
   <script type="text/javascript">
 
+	  	this.kiosk = false;
+		if(document.getElementById('virtualKeyboardChromeExtension') != null){
+			document.body.classList.add('kiosk');
+			this.kiosk = true;
+		}
+	  	else{
+			const switch_to_https = localStorage.getItem('extension_power_settings_switch_to_https');
+			if(typeof switch_to_https == 'string' && switch_to_https == 'true' && window.location.hash != '#disable_encryption'){
+				if(location.protocol == 'http:'){
+					console.warn("login page: upgrading to https");
+					location.replace(location.href.replace('http:','https:'));
+				}
+			}
+		}
+	  	
+
 		const refresh_button_el = document.getElementById('refresh-button');
 		refresh_button_el.addEventListener('click', () => {
 			refresh_button_el.style.display = 'none';
