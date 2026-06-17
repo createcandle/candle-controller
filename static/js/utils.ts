@@ -194,20 +194,20 @@ export function sortCapabilities(capabilities: string[]): string[] {
     'OnOffSwitch',
     'ColorControl',
     'ColorSensor',
-    'EnergyMonitor',
     'DoorSensor',
     'MotionSensor',
     'OccupancySensor',
     'LeakSensor',
     'SmokeSensor',
     'PushButton',
+    'AirQualitySensor',
     'TemperatureSensor',
     'HumiditySensor',
+    'EnergyMonitor',
     'MultiLevelSensor',
     'Alarm',
     'BinarySensor',
     'BarometricPressureSensor',
-    'AirQualitySensor',
   ];
 
   list.sort((a, b) => {
