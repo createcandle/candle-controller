@@ -161,13 +161,16 @@ class MultiLevelSwitchCapability extends BaseComponent {
 
     let bar, blank;
 
+    bar = OFF_BAR;
+    blank = OFF_BLANK;
+    
     if (this._on) {
-      bar = ON_BAR;
-      blank = ON_BLANK;
+      //bar = ON_BAR;
+      //blank = ON_BLANK;
       this._label.innerHTML = `${this._level.toFixed(this.precision)}${this.unit}`;
     } else {
-      bar = OFF_BAR;
-      blank = OFF_BLANK;
+      //bar = OFF_BAR;
+      //blank = OFF_BLANK;
     }
 
     const percent = ((this.level - this.min) / (this.max - this.min)) * 100;
