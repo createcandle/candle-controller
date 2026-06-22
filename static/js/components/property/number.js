@@ -332,7 +332,23 @@ class NumberProperty extends BaseComponent {
 
   __onRangeInput(e) {
     e.preventDefault();
-    this._input.value = e.target.value;
+    
+    let value = e.target.value;
+    
+    if(value){
+      value = parseFloat(value);
+      let step = this.step;
+      if (step !== '' && step !== 'any') {
+        step = parseFloat(step);
+        value = Math.round(value / step) * step;
+      }
+      else{
+        value = parseFloat(value.toFixed(3));
+      }
+      
+      this.value = value;
+      this._input.value = value;
+    }
   }
 }
 
