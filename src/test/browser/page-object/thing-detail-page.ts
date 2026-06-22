@@ -196,6 +196,12 @@ class NumberPropertySection extends InputPropertySection {
       input.focus();
       input.value = ${value};
       input.blur();
+      const slider = root.shadowRoot.querySelector('input[type="range"]');
+      if(slider){
+        slider.focus();
+        slider.value = '${value}';
+        slider.blur();
+      }
     `);
   }
 
