@@ -68,6 +68,15 @@ class NumberProperty extends BaseComponent {
       margin: 0;
     }
 
+    input[type="number"]:disabled + input[type="range"]{
+      pointer-events:none;
+    }
+
+    input[type="range"]:not([min],
+    input[type="range"]:not([max]{
+      display:none!important;
+    }
+
     .webthing-number-property-input.hide-spinner::-webkit-inner-spin-button,
     .webthing-number-property-input.hide-spinner::-webkit-outer-spin-button {
       -webkit-appearance: textfield;
@@ -89,12 +98,16 @@ class NumberProperty extends BaseComponent {
       background-color: #5d9bc7;
       display: inline-block;
     }
+    
   </style>
   <div id="container-${BaseComponent.count}" class="webthing-number-property-container">
     <div id="contents-${BaseComponent.count}" class="webthing-number-property-contents">
       <form id="form-${BaseComponent.count}" class="webthing-number-property-form">
         <input type="number" id="input-${BaseComponent.count}"
           class="webthing-number-property-input hide-spinner">
+        <input type="range" id="range-${BaseComponent.count}"
+          class="webthing-number-property-range-input hide-spinner" 
+          part="webthing-number-property-range-input">
       </form>
       <div id="unit-${BaseComponent.count}" class="webthing-number-property-unit"></div>
     </div>
@@ -106,6 +119,7 @@ class NumberProperty extends BaseComponent {
     this._contents = this.shadowRoot.querySelector('.webthing-number-property-contents');
     this._form = this.shadowRoot.querySelector('.webthing-number-property-form');
     this._input = this.shadowRoot.querySelector('.webthing-number-property-input');
+    this._range = this.shadowRoot.querySelector('.webthing-number-property-range-input');
     this._unit = this.shadowRoot.querySelector('.webthing-number-property-unit');
     this._name = this.shadowRoot.querySelector('.webthing-number-property-name');
 
@@ -131,6 +145,8 @@ class NumberProperty extends BaseComponent {
 
     this._form.addEventListener('submit', this._onSubmit);
     this._input.addEventListener('blur', this._onBlur);
+    this._range.addEventListener('input', this._onRangeInput);
+    this._range.addEventListener('change', this._onBlur);
 
     if (this._oneLine) {
       this._contents.classList.add('one-line');
@@ -152,6 +168,7 @@ class NumberProperty extends BaseComponent {
 
   set min(value) {
     this._input.min = value;
+    this._range.min = value;
     this._setInputClass();
   }
 
@@ -161,6 +178,7 @@ class NumberProperty extends BaseComponent {
 
   set max(value) {
     this._input.max = value;
+    this._range.max = value;
     this._setInputClass();
   }
 
@@ -170,6 +188,7 @@ class NumberProperty extends BaseComponent {
 
   set step(value) {
     this._input.step = value;
+    this._range.step = value;
     this._setInputClass();
   }
 
@@ -192,6 +211,7 @@ class NumberProperty extends BaseComponent {
     }
 
     this._input.value = value;
+    this._range.value = value;
   }
 
   get readOnly() {
@@ -202,11 +222,14 @@ class NumberProperty extends BaseComponent {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._input.setAttribute('disabled', '');
+      this._range.setAttribute('disabled', '');
     } else {
       this._input.removeAttribute('disabled');
+      this._range.removeAttribute('disabled');
     }
 
     this._input.disabled = isDisabled;
+    this._range.disabled = isDisabled;
   }
 
   get name() {
@@ -306,6 +329,10 @@ class NumberProperty extends BaseComponent {
       })
     );
   }
+
+  __onRangeInput(e) {
+    e.preventDefault();
+    this._input.value = e.target.value;
 }
 
 window.customElements.define('webthing-number-property', NumberProperty);
