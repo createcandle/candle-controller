@@ -72,8 +72,8 @@ class NumberProperty extends BaseComponent {
       pointer-events:none;
     }
 
-    input[type="range"]:not([min],
-    input[type="range"]:not([max]{
+    input[type="range"]:not([min]),
+    input[type="range"]:not([max]){
       display:none!important;
     }
 
@@ -107,7 +107,7 @@ class NumberProperty extends BaseComponent {
           class="webthing-number-property-input hide-spinner">
         <input type="range" id="range-${BaseComponent.count}"
           class="webthing-number-property-range-input hide-spinner" 
-          part="webthing-number-property-range-input">
+          part="slider-level">
       </form>
       <div id="unit-${BaseComponent.count}" class="webthing-number-property-unit"></div>
     </div>
