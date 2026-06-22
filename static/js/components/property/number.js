@@ -333,6 +333,7 @@ class NumberProperty extends BaseComponent {
   __onRangeInput(e) {
     e.preventDefault();
     this._input.value = e.target.value;
+  }
 }
 
 window.customElements.define('webthing-number-property', NumberProperty);
