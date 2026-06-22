@@ -346,7 +346,7 @@ class NumberProperty extends BaseComponent {
         value = parseFloat(value.toFixed(3));
       }
       
-      this.value = value;
+      //this.value = value;
       this._input.value = value;
     }
   }
