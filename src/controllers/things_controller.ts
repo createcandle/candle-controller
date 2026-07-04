@@ -312,7 +312,7 @@ function build(): express.Router {
         const value = await AddonManager.getProperty(thingId, name);
         result[name] = value;
       } catch (e) {
-        console.error(`Failed to get property ${name}:`, e);
+        //console.error(`Failed to get property ${name}:`, e);
       }
     }
 
